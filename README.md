@@ -5,7 +5,10 @@ It includes methods to solve, manipulate and analyse RBA-models and to export mo
 
 ## Repository structure
 ### rbatools
+This is the library with all the necessary classes for the usage of RBA_tools.
 ### html_documentation
+This is a directory with html-files, serving as documentation of the rbatools library.
+It can be viewed by navigating into this folder and opening the index.html file in a browser (via double click).
 ### Example_workflow_rba_tools.ipynb
 
 ## Model availability
