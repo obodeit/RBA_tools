@@ -4,5 +4,8 @@ This tool serves as an interface to resource-allocation modelling with the RBA-m
 It includes methods to solve, manipulate and analyse RBA-models and to export model information and simulation results into various formats.
 
 ## Repository structure
+### rbatools
+### html_documentation
+### Example_workflow_rba_tools.ipynb
 
 ## Model availability
