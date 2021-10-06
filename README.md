@@ -17,4 +17,5 @@ This is a Jupyter notebook with example applications and workflows of rbatools.
 
 ## Model availability
 RBA models can be obtained from the repository https://github.com/SysBioInra/Bacterial-RBA-models
+
 The Example_workflow_rba_tools notebook requires the previosly mentioned Bacterial-RBA-models repository to be placed in the same location, as this repository.
