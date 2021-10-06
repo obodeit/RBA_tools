@@ -10,5 +10,8 @@ This is the library with all the necessary classes for the usage of RBA_tools.
 This is a directory with html-files, serving as documentation of the rbatools library.
 It can be viewed by navigating into this folder and opening the index.html file in a browser (via double click).
 ### Example_workflow_rba_tools.ipynb
+This is a Jupyter notebook with example applications and workflows of rbatools.
 
 ## Model availability
+RBA models can be obtained from the repository https://github.com/SysBioInra/Bacterial-RBA-models.git
+The Example_workflow_rba_tools notebook requires the previosly mentioned Bacterial-RBA-models repository to be placed in the same location, as this repository.
