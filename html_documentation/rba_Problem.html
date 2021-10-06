@@ -1,0 +1,3720 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.5.3" />
+<title>rbatools.rba_Problem API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.name small{font-weight:normal}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title"><code>rbatools.rba_Problem</code> module</h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from __future__ import division, print_function
+import numpy
+import scipy
+import copy
+import cplex
+from rbatools.rba_Matrix import RBA_Matrix
+from rbatools.rba_LP import RBA_LP
+from rbatools.rba_LogBook import RBA_LogBook
+
+
+class RBA_Problem(object):
+    &#34;&#34;&#34;
+    Class holding RBA-problem as mathematical manifestation of the RBA-model.
+
+    Attributes
+    ----------
+    classicRBA : boolean
+        Indicates that the problem is a classic RBA-problem (as defined in RBApy)
+    ClassicRBAmatrix : rba.solver.matrix object
+    Mu : float
+        Current Growth rate as numeric value
+    LP : rbatools.LP object
+    Enzyme_FWcapacities : list
+        List of constraint IDs, which represent forward efficiencies of enzymes
+        Created by method &#39;extractConstraintTypes&#39;
+    Enzyme_BWcapacities : list
+        List of constraint IDs, which represent backward efficiencies of enzymes
+        Created by method &#39;extractConstraintTypes&#39;
+    ProcessCapacities : list
+        List of constraint IDs, which represent net efficiencies of processes
+        Created by method &#39;extractConstraintTypes&#39;
+    Metabolites : list
+        List of constraint IDs, which represent mass balances of metabolites
+        Created by method &#39;extractConstraintTypes&#39;
+    CompartmentDensities : list
+        List of constraint IDs, which represent compartment capacities
+        Created by method &#39;extractConstraintTypes&#39;
+    Reactions : list
+        List of constraint IDs, which represent metabolic reactions
+        Created by method &#39;extractVariableTypes&#39;
+    Enzymes : list
+        List of constraint IDs, which represent enzymes, associated with metabolic reactions
+        Created by method &#39;extractVariableTypes&#39;
+    Processes : list
+        List of constraint IDs, which represent process machineries
+        Created by method &#39;extractVariableTypes&#39;
+    MuDepIndices_A : list
+        List of tuples holding rows (constraint IDs) and columns (variable IDs) of
+        constraint-matrix coefficients (LHS), which depend on the growth rate.
+        Created by method &#39;findMudependencies&#39;
+    MuDepIndices_b: list
+        List of constraint IDs, whos RHS depend on the growth rate
+        Created by method &#39;findMudependencies&#39;
+    MuDepIndices_LB: list
+        List of variable IDs, whos lower-bounds depend on the growth rate
+        Created by method &#39;findMudependencies&#39;
+    MuDepIndices_UB: list
+        List of variable IDs, whos upper-bounds depend on the growth rate
+        Created by method &#39;findMudependencies&#39;
+    Solved: bool
+        Booelean indicating wheter Problem has been successfully solved,
+        according to the acceptable solution statuses provided to the solveLP-method.
+        Created by method &#39;solveLP&#39;
+    SolutionStatus: int
+        Numerical value indicating the solution-status of the problem.
+        Consult CPLEX documentation for their meaning.
+        Created by method &#39;solveLP&#39;
+    ObjectiveValue: float
+        Numeric value of the objective function after optimisation by CPLEX.
+        Created by method &#39;solveLP&#39;
+    SolutionValues: dict
+        Solution vector after optimisation by CPLEX.
+        (Dictionary with variable IDs as keys and numeric values as values)
+        Created by method &#39;solveLP&#39;
+    DualValues: dict
+        Vector of dual-values after optimisation by CPLEX.
+        (Dictionary with constraint IDs as keys and numeric values as values)
+        Created by method &#39;solveLP&#39;
+
+    Methods
+    ----------
+    __init__(solver)
+        Initiates rba_Problem from supplied rba.solver object.
+
+    extractConstraintTypes()
+        Extracts information on the different constraint types in the standard RBA-matrix.
+
+    extractVariableTypes()
+        Extracts information on the different variable types in the standard RBA-matrix.
+
+    findMudependencies()
+        Extracts information on the growth-rate dependent LP-coefficients.
+
+    BuildClassicMatrix(Mu)
+        Builds standard RBA-matrix according to growth-rate
+
+    solveLP(feasibleStatuses=[1])
+        Solves Linear RBA problem.
+
+    setMu(Mu, keepParameters=None)
+        Changes growth-rate of problem and sets all associated coefficients.
+
+    resetCPLEXparams()
+        Sets cplex.Cplex() parameters to predefined values.
+
+    setConstraintType(inputDict)
+        Sets objective function coefficients.
+
+    getConstraintType(*constraints)
+        Returns type of constraints.
+
+    getObjective(*variables)
+        Returns objective coefficient of variables in problem.
+
+    setObjectiveCoefficients(inputDict)
+        Sets objective function coefficients.
+
+    clearObjective()
+        Sets all coefficients of the objective function to zero.
+
+    invertObjective()
+        Changes sign (optimisation-sense) of objective function.
+
+    getRighthandSideValue(*constraints)
+        Extracts coefficients of problem&#39;s righthand side (B-vector).
+
+    setRighthandSideValue(inputDict)
+        Set coefficients of the problems&#39; RHS (b-vector).
+
+    calculateLefthandSideValue(*constraints)
+        Calculates value of problem&#39;s lefthand side
+        (after multiplying with solution-vector).
+
+    getProblemCoefficients(*inputTuples)
+        Returns coefficients of LHS of problem.
+
+    setProblemCoefficients(inputDict)
+        Set coefficients of the problems&#39; LHS (constraint matrix).
+
+    getUB(*variables)
+        Returns upper bounds of problem variables.
+
+    setUB(inputDict)
+        Set upper-bounds of the problem variables.
+
+    getLB(*variables)
+        Returns lower bounds of problem variables.
+
+    setLB(inputDict)
+        Set lower-bounds of the problem variables.
+
+    getEnzymeCapacities(*Enzyme)
+        Returns of capacity coefficients oof enzymes in problem.
+
+    getProcessCapacities(*Process)
+        Returns of capacity coefficients of process machineries in problem.
+
+    getCompartmentCapacities(*Compartment)
+        Returns of capacity coefficients of compartments in problem.
+
+    &#34;&#34;&#34;
+
+    def __init__(self, solver):
+        &#34;&#34;&#34;
+        Initiates rba_Problem from supplied rba.solver object.
+
+        Makes sure the problem is consistent and optimisable.
+
+        Parameters
+        ----------
+        solver : rba.solver
+        &#34;&#34;&#34;
+
+        self.classicRBA = True
+        ## Import solver-object information ##
+        self.ClassicRBAmatrix = solver.matrix
+        self.Mu = 0
+        ## Set Mu of solver to 0 ##
+        self.LogBook = RBA_LogBook(&#39;Problem&#39;)
+        self.BuildClassicMatrix(Mu=self.Mu)
+        ## Initiate LP-object ##
+        self.LP = RBA_LP()
+        ## Transfer solver information to LP-object ##
+        self.LP.loadMatrix(matrix=self.ClassicRBAmatrix)
+        self.LP.buildCPLEX_LP()
+
+        ## Solve for Mu=0 to check if problem is consistent##
+        self.LogBook.addEntry(&#39;Problem initiated.&#39;)
+        self.solveLP()
+        if not self.Solved:
+            ## Problem is wrongly defined and can not be solved ##
+            print(&#39; INCONSISTENT RBA-PROBLEM; NOT SOLVABLE!\n&#39;)
+            self.LogBook.addEntry(&#39;Problem inconsistent at growth-rate 0.&#39;)
+        ## Growth-rate dependent indices ##
+        ## and constraint/variable types are extractet ##
+        self.findMudependencies()
+        self.extractConstraintTypes()
+        self.extractVariableTypes()
+
+    def extractConstraintTypes(self):
+        &#34;&#34;&#34;
+        Extracts information on the different constraint types in the standard RBA-matrix.
+
+        AddsAttributes: Enzyme_FWcapacities, Enzyme_BWcapacities, ProcessCapacities,
+                        Metabolites and CompartmentDensities
+        &#34;&#34;&#34;
+
+        self.Enzyme_FWcapacities = [i for i in self.LP.row_names if i.endswith(
+            &#39;_forward_capacity&#39;) and i.startswith(&#39;R_&#39;)]
+        self.Enzyme_BWcapacities = [i for i in self.LP.row_names if i.endswith(
+            &#39;_backward_capacity&#39;) and i.startswith(&#39;R_&#39;)]
+        self.ProcessCapacities = [i for i in self.LP.row_names if i.endswith(
+            &#39;_capacity&#39;) and i.startswith(&#39;P_&#39;)]
+        self.Metabolites = [i for i in self.LP.row_names if i.startswith(&#39;M_&#39;)]
+        self.CompartmentDensities = [i for i in self.LP.row_names if i.endswith(&#39;_density&#39;)]
+
+    def extractVariableTypes(self):
+        &#34;&#34;&#34;
+        Extracts information on the different variable types in the standard RBA-matrix.
+
+        AddsAttributes: Enzymes, Reactions and Processes
+        &#34;&#34;&#34;
+
+        self.Enzymes = [i for i in self.LP.col_names if i.endswith(&#39;_enzyme&#39;)]
+        self.Processes = [i for i in self.LP.col_names if i.startswith(
+            &#39;P_&#39;) and i.endswith(&#39;_machinery&#39;)]
+
+    def findMudependencies(self):
+        &#34;&#34;&#34;
+        Extracts information on the growth-rate dependent LP-coefficients.
+
+        AddsAttributes: MuDepIndices_A, MuDepIndices_b, MuDepIndices_LB
+                        and MuDepIndices_UB
+        &#34;&#34;&#34;
+
+        ## Construct 2 rba.solver.matrix objects for growth-rate 0 and 1.1 ##
+        MuOneMatrix = copy.deepcopy(self.ClassicRBAmatrix)
+        MuOneMatrix.build_matrices(1.0)
+        self.MuOneMatrix = RBA_LP()
+        self.MuOneMatrix.loadMatrix(MuOneMatrix)
+
+        M0 = copy.deepcopy(self.ClassicRBAmatrix)
+        M11 = copy.deepcopy(self.ClassicRBAmatrix)
+        M0.build_matrices(0)
+        M11.build_matrices(1.1)
+        ## Build arrays from matrices ##
+        A_0 = M0.A.toarray()
+        A_11 = M11.A.toarray()
+        ## Find index pairs at which the two constraint-matrices differ ##
+        MuDeps = numpy.where(A_11 != A_0)
+        ## Transform list of numeric indices in list of tuples with row- and col names ##
+        MuDepIndices_A = list(zip([self.ClassicRBAmatrix.row_names[i] for i in MuDeps[0]], [
+            self.ClassicRBAmatrix.col_names[j] for j in MuDeps[1]]))
+        ## Find rows at which the two righthandsides differ ##
+        MuDepIndices_b = [n for n in self.ClassicRBAmatrix.row_names if M0.b[self.ClassicRBAmatrix.row_names.index(
+            n)] != M11.b[self.ClassicRBAmatrix.row_names.index(n)]]
+        ## Find columns at which the variable bounds differ ##
+        MuDepIndices_LB = [n for n in self.ClassicRBAmatrix.col_names if M0.LB[self.ClassicRBAmatrix.col_names.index(
+            n)] != M11.LB[self.ClassicRBAmatrix.col_names.index(n)]]
+        MuDepIndices_UB = [n for n in self.ClassicRBAmatrix.col_names if M0.UB[self.ClassicRBAmatrix.col_names.index(
+            n)] != M11.UB[self.ClassicRBAmatrix.col_names.index(n)]]
+        self.MuDependencies = {&#39;FromMatrix&#39;: {&#39;A&#39;: MuDepIndices_A, &#39;b&#39;: MuDepIndices_b, &#39;LB&#39;: MuDepIndices_LB, &#39;UB&#39;: MuDepIndices_UB},
+                               &#39;FromParameters&#39;: {&#39;A&#39;: {}, &#39;b&#39;: {}, &#39;LB&#39;: {}, &#39;UB&#39;: {}}}
+
+    def BuildClassicMatrix(self, Mu):
+        &#34;&#34;&#34;
+        Builds standard RBA-matrix according to growth-rate
+
+        Parameters
+        ----------
+        Mu : float
+            Growth rate
+        &#34;&#34;&#34;
+
+        self.Mu = Mu
+        self.ClassicRBAmatrix.build_matrices(Mu)
+
+    def solveLP(self, feasibleStatuses=[1], try_unscaling_if_sol_status_is_five=True, logging=True):
+        &#34;&#34;&#34;
+        Solves Linear RBA problem.
+
+        Optimises RBA-LP with CPLEX.
+        When cplex-solution status is amongst the user-defined feasible statuses;
+        boolean &#39;Solved&#39; is set to True and &#39;ObjectiveValue&#39;, &#39;SolutionValues&#39; and &#39;DualValues&#39;
+        are stored as attributes.
+
+        Parameters
+        ----------
+        feasibleStatuses : list of int
+            List with identifiers of acceptable solution statuses.
+            (consult ILOG-CPLEX documentation for information on them).
+            Default: feasibleStatuses=[1]
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+
+        self.Solved = False
+        try:
+            ## Solve cplex LP ##
+            self.LP.cplexLP.solve()
+            ## Determin solution-status ##
+            self.SolutionStatus = self.LP.cplexLP.solution.get_status()
+            ## Check if solution status is amongst acceptable ones ##
+            if logging:
+                self.LogBook.addEntry(
+                    &#39;Problem solved with solution status: {}&#39;.format(self.SolutionStatus))
+            if self.SolutionStatus in feasibleStatuses:
+                ## Extract solution-data ##
+                self.Solved = True
+                self.ObjectiveValue = self.LP.cplexLP.solution.get_objective_value()
+                self.SolutionValues = dict(
+                    zip(self.LP.col_names, self.LP.cplexLP.solution.get_values()))
+                self.DualValues = dict(
+                    zip(self.LP.row_names, self.LP.cplexLP.solution.get_dual_values()))
+            else:
+                if try_unscaling_if_sol_status_is_five:
+                    if self.SolutionStatus == 5:
+                        self.LP.cplexLP.parameters.read.scale.set(-1)
+                        self.LP.cplexLP.solve()
+                        self.SolutionStatus = self.LP.cplexLP.solution.get_status()
+                        if self.SolutionStatus in feasibleStatuses:
+                            ## Extract solution-data ##
+                            self.Solved = True
+                            self.ObjectiveValue = self.LP.cplexLP.solution.get_objective_value()
+                            self.SolutionValues = dict(
+                                zip(self.LP.col_names, self.LP.cplexLP.solution.get_values()))
+                            self.DualValues = dict(
+                                zip(self.LP.row_names, self.LP.cplexLP.solution.get_dual_values()))
+
+        except:
+            self.ObjectiveValue = None
+            self.SolutionValues = None
+            self.DualValues = None
+
+    def updateMu(self, Mu, keepParameters=None, logging=True, ModifiedProblem=False):
+        &#34;&#34;&#34;
+        Changes growth-rate of problem and sets all associated coefficients.
+
+        Can be provided with &#39;keepParameters&#39; argument
+        to define problem coefficients which should remain unchanged.
+
+        Parameters
+        ----------
+        Mu : float
+            Growth rate
+        keepParameters : dict
+            Dictionary indicating which elements of the linear problem should
+            not be affected when setting growth-rate. Possible keys of dictionary:
+                &#39;LHS&#39;: List of index-tuples (constraint-ID,variable-ID),
+                       indicating elements of the lefthandside (constraint-matrix).
+                &#39;RHS&#39;: List of constraint IDs, indicating elements of the righthandside (b-vector).
+                &#39;LB&#39;: List of variable-IDs, indicating elements of the lower-bound vector.
+                &#39;UB&#39;: List of variable-IDs, indicating elements of the upper-bound vector.
+            Default: keepParameters=None
+        logging : bool
+            Wheter to write change to log-file or not
+                &#34;&#34;&#34;
+        if keepParameters is None:
+            A_idxs = self.MuDependencies[&#39;FromMatrix&#39;][&#39;A&#39;]
+            B_idxs = self.MuDependencies[&#39;FromMatrix&#39;][&#39;b&#39;]
+            LB_idxs = self.MuDependencies[&#39;FromMatrix&#39;][&#39;LB&#39;]
+            UB_idxs = self.MuDependencies[&#39;FromMatrix&#39;][&#39;UB&#39;]
+        else:
+            ## If indices are passed, which define elements to be not changed when setting Mu ##
+            ## these indices are removed from the update-from-new-to-old indices ##
+            if &#39;LHS&#39; in list(keepParameters.keys()):
+                A_idxs = set(self.MuDependencies[&#39;FromMatrix&#39;][&#39;A&#39;])-set(keepParameters[&#39;LHS&#39;])
+            if &#39;RHS&#39; in list(keepParameters.keys()):
+                B_idxs = set(self.MuDependencies[&#39;FromMatrix&#39;][&#39;b&#39;])-set(keepParameters[&#39;RHS&#39;])
+            if &#39;LB&#39; in list(keepParameters.keys()):
+                LB_idxs = set(self.MuDependencies[&#39;FromMatrix&#39;][&#39;LB&#39;])-set(keepParameters[&#39;LB&#39;])
+            if &#39;UB&#39; in list(keepParameters.keys()):
+                UB_idxs = set(self.MuDependencies[&#39;FromMatrix&#39;][&#39;UB&#39;])-set(keepParameters[&#39;UB&#39;])
+        ## Pass new matrix and indices of elements to update to LP.updateMatrix-method ##
+        self.ClassicRBAmatrix.build_matrices(self.Mu)
+        inputMatrix = RBA_Matrix()
+        inputMatrix.loadMatrix(matrix=self.ClassicRBAmatrix)
+        self.LP.updateMatrix(matrix=inputMatrix, Ainds=A_idxs, Binds=B_idxs,
+                             CTinds=[], LBinds=LB_idxs, UBinds=UB_idxs)
+        if ModifiedProblem:
+            for i in list(self.MuDependencies[&#39;FromParameters&#39;][&#39;b&#39;].keys()):
+                newPar = self.evaluateParameter(self.MuDependencies[&#39;FromParameters&#39;][&#39;b&#39;][i])
+                self.setRighthandSideValue({i: newPar}, logging=False)
+            for i in list(self.MuDependencies[&#39;FromParameters&#39;][&#39;A&#39;].keys()):
+                newPar = self.evaluateParameter(self.MuDependencies[&#39;FromParameters&#39;][&#39;A&#39;][i])
+                self.setProblemCoefficients({i: newPar}, logging=False)
+            for i in list(self.MuDependencies[&#39;FromParameters&#39;][&#39;LB&#39;].keys()):
+                newPar = self.evaluateParameter(self.MuDependencies[&#39;FromParameters&#39;][&#39;LB&#39;][i])
+                self.setLB({i: newPar}, logging=False)
+            for i in list(self.MuDependencies[&#39;FromParameters&#39;][&#39;UB&#39;].keys()):
+                newPar = self.evaluateParameter(self.MuDependencies[&#39;FromParameters&#39;][&#39;UB&#39;][i])
+                self.setUB({i: newPar}, logging=False)
+
+    def setMu(self, Mu, ModelStructure, keepParameters=None, logging=True):
+        &#34;&#34;&#34;
+        Changes growth-rate of problem and sets all associated coefficients.
+
+        Can be provided with &#39;keepParameters&#39; argument
+        to define problem coefficients which should remain unchanged.
+
+        Parameters
+        ----------
+        Mu : float
+            Growth rate
+        ModelStructure : RBA_ModellStructure object.
+        keepParameters : dict
+            Dictionary indicating which elements of the linear problem should
+            not be affected when setting growth-rate. Possible keys of dictionary:
+                &#39;LHS&#39;: List of index-tuples (constraint-ID,variable-ID),
+                       indicating elements of the lefthandside (constraint-matrix).
+                &#39;RHS&#39;: List of constraint IDs, indicating elements of the righthandside (b-vector).
+                &#39;LB&#39;: List of variable-IDs, indicating elements of the lower-bound vector.
+                &#39;UB&#39;: List of variable-IDs, indicating elements of the upper-bound vector.
+            Default: keepParameters=None
+        logging : bool
+            Wheter to write change to log-file or not
+                &#34;&#34;&#34;
+
+        self.Mu = float(Mu)
+        NumberParDeps = len([self.MuDependencies[&#39;FromParameters&#39;][i].keys() for i in [
+                            &#39;b&#39;, &#39;A&#39;, &#39;LB&#39;, &#39;UB&#39;] if len(list(self.MuDependencies[&#39;FromParameters&#39;][i].keys())) &gt; 0])
+        if self.LP.row_names == self.ClassicRBAmatrix.row_names and self.LP.col_names == self.ClassicRBAmatrix.col_names and self.classicRBA and NumberParDeps == 0:
+            self.updateMu(Mu=float(Mu), keepParameters=keepParameters,
+                          logging=logging, ModifiedProblem=False)
+        else:
+            self.updateMu(Mu=float(Mu), keepParameters=keepParameters,
+                          logging=logging, ModifiedProblem=True)
+
+        self.resetCPLEXparams()
+
+    def resetCPLEXparams(self):
+        &#34;&#34;&#34;
+        Sets cplex.Cplex() parameters to predefined values.
+
+        Settings:
+            cplex.Cplex.parameters.feasopt.tolerance.set(1e-9)
+            cplex.Cplex.parameters.simplex.tolerances.feasibility.set(1e-9)
+            cplex.Cplex.parameters.simplex.tolerances.optimality.set(1e-9)
+            cplex.Cplex.parameters.simplex.tolerances.markowitz.set(0.1)
+            cplex.Cplex.parameters.barrier.convergetol.set(1e-9)
+            cplex.Cplex.parameters.read.scale.set(1)
+            cplex.Cplex.set_results_stream(None)
+            cplex.Cplex.set_log_stream(None)
+            cplex.Cplex.set_warning_stream(None)
+        &#34;&#34;&#34;
+        self.LP.cplexLP.parameters.feasopt.tolerance.set(1e-9)
+        self.LP.cplexLP.parameters.simplex.tolerances.feasibility.set(1e-9)
+        self.LP.cplexLP.parameters.simplex.tolerances.optimality.set(1e-9)
+        self.LP.cplexLP.parameters.simplex.tolerances.markowitz.set(0.1)
+        self.LP.cplexLP.parameters.barrier.convergetol.set(1e-9)
+        self.LP.cplexLP.parameters.read.scale.set(1)
+        self.LP.cplexLP.set_results_stream(None)
+        self.LP.cplexLP.set_log_stream(None)
+        self.LP.cplexLP.set_warning_stream(None)
+
+    def getConstraintType(self, *constraints):
+        &#34;&#34;&#34;
+        Extracts type of constraints.
+
+        Parameters
+        ----------
+        constraints : str or list of str or None
+            Constraints to retreive the type for.
+            Either constraint ID or list of constraint IDs to specify the type
+            of which constraint to look up.
+            This is an optional input; if not provided all constraint are looked up.
+        Returns
+        ----------
+        dict
+            Dictionary with constraint-IDs as keys and
+            type identification-characters as values.
+        &#34;&#34;&#34;
+        if len(list(constraints)) &gt; 0:
+            if isinstance(constraints[0], list):
+                names = constraints[0]
+            if isinstance(constraints[0], str):
+                names = [constraints[0]]
+        if len(list(constraints)) == 0:
+            names = self.LP.row_names
+        Types = [self.LP.cplexLP.linear_constraints.get_senses(
+            self.LP.rowIndicesMap[c]) for c in names]
+        return(dict(zip(names, Types)))
+
+    def setConstraintType(self, inputDict, logging=True):
+        &#34;&#34;&#34;
+        Sets type of constraints.
+
+        E: = or L: &lt;=
+
+        Parameters
+        ----------
+        inputDict : dict
+            Dictionary with constraint-IDs as keys and type identification-character as values.
+            ({&#39;col1&#39;:&#39;E&#39;,&#39;col2&#39;:&#39;L&#39;, ...}).
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+        if logging:
+            for c in list(inputDict.keys()):
+                self.LogBook.addEntry(&#39;Constraint-type {} changed:{} --&gt; {}&#39;.format(c,
+                                                                                    self.LP.row_signs[self.LP.rowIndicesMap[c]], inputDict[c]))
+
+        ##Update in cplex.Cplex LP##
+        self.LP.cplexLP.linear_constraints.set_senses(
+            list(zip(inputDict.keys(), inputDict.values())))
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.row_signs = self.LP.cplexLP.linear_constraints.get_senses()
+
+    def getObjective(self, *variables):
+        &#34;&#34;&#34;
+        Returns objective coefficient of variables in problem.
+
+        Parameters
+        ----------
+        variables : str or list of str or None
+            Variables to retreive the objective coefficients for.
+            Either variable ID or list of variable IDs to specify
+            the coefficients of which variables to look up.
+            This is an optional input; if not provided all variables are looked up.
+
+        Returns
+        ----------
+        dict
+            Dictionary with variable-IDs as keys and
+            objective coefficients as values.
+        &#34;&#34;&#34;
+
+        if len(list(variables)) &gt; 0:
+            if isinstance(variables[0], list):
+                vrs = variables[0]
+                vls = []
+            if isinstance(variables[0], str):
+                vrs = [variables[0]]
+                vls = []
+            for v in vrs:
+                vls.append(self.LP.cplexLP.objective.get_linear()[
+                           numpy.where(numpy.array(self.LP.col_names) == v)[0][0]])
+        if len(list(variables)) == 0:
+            vrs = self.LP.col_names
+            vls = self.LP.cplexLP.objective.get_linear()
+        OF = dict(zip(vrs, vls))
+        return(OF)
+
+    def setObjectiveCoefficients(self, inputDict, logging=True):
+        &#34;&#34;&#34;
+        Sets objective function coefficients.
+
+        Parameters
+        ----------
+        inputDict : dict
+            Dictionary with variable-IDs as keys and new numeric values as values.
+            ({&#39;col1&#39;:42,&#39;col2&#39;:9000, ...}).
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+        if logging:
+            for v in list(inputDict.keys()):
+                self.LogBook.addEntry(&#39;Objective coefficient {} changed:{} --&gt; {}&#39;.format(v,
+                                                                                          self.LP.f[self.LP.colIndicesMap[v]], inputDict[v]))
+
+        ##Update in cplex.Cplex LP##
+        self.LP.cplexLP.objective.set_linear(
+            zip(list(inputDict.keys()), [float(i) for i in list(inputDict.values())]))
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.f = self.LP.cplexLP.objective.get_linear()
+
+    def clearObjective(self, logging=True):
+        &#34;&#34;&#34;
+        Sets all coefficients of the objective function to zero.
+
+        Parameters
+        ----------
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+
+        if logging:
+            self.LogBook.addEntry(&#39;Objective cleared.&#39;)
+        ##Update in cplex.Cplex LP##
+        self.LP.cplexLP.objective.set_linear(
+            zip(self.LP.col_names, [float(0)]*len(self.LP.col_names)))
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.f = self.LP.cplexLP.objective.get_linear()
+
+    def invertObjective(self, logging=True):
+        &#34;&#34;&#34;
+        Changes sign (optimisation-sense) of objective function.
+
+        Parameters
+        ----------
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+
+        if logging:
+            self.LogBook.addEntry(&#39;Objective inverted.&#39;)
+        current_objective = self.getObjective()
+        negative_objective = zip(list(current_objective.keys()),
+                                 [-float(x) for x in list(current_objective.values())])
+        ##Update in cplex.Cplex LP##
+        self.LP.cplexLP.objective.set_linear(negative_objective)
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.f = self.LP.cplexLP.objective.get_linear()
+
+    def getRighthandSideValue(self, *constraints):
+        &#34;&#34;&#34;
+        Extracts coefficients of problem&#39;s righthand side (B-vector).
+
+        Parameters
+        ----------
+        constraints : str or list of str or None
+            Constraints to retreive the objective coefficients for.
+            Either constraint ID or list of constraint IDs to specify the RHS
+            of which constraint to look up.
+            This is an optional input; if not provided all constraint are looked up.
+        Returns
+        ----------
+        dict
+            Dictionary with constraint-IDs as keys and
+            RHS-values as values.
+        &#34;&#34;&#34;
+
+        if len(list(constraints)) &gt; 0:
+            if isinstance(constraints[0], list):
+                names = constraints[0]
+            if isinstance(constraints[0], str):
+                names = [constraints[0]]
+        if len(list(constraints)) == 0:
+            names = self.LP.row_names
+        Bs = [self.LP.cplexLP.linear_constraints.get_rhs(self.LP.rowIndicesMap[c]) for c in names]
+        return(dict(zip(names, Bs)))
+
+    def setRighthandSideValue(self, inputDict, logging=True):
+        &#34;&#34;&#34;
+        Set coefficients of the problems&#39; RHS (b-vector).
+        Parameters
+        ----------
+        inputDict : dict
+            Dictionary with constraint-IDs as keys and new numeric values as values.
+            ({&#39;row1&#39;:42,&#39;row2&#39;:9000, ...}).
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+        if logging:
+            for c in list(inputDict.keys()):
+                self.LogBook.addEntry(&#39;RHS coefficient {} changed:{} --&gt; {}&#39;.format(v,
+                                                                                    self.LP.b[self.LP.rowIndicesMap[c]], inputDict[c]))
+
+        ##Update in cplex.Cplex LP##
+        self.LP.cplexLP.linear_constraints.set_rhs(
+            list(zip(list(inputDict.keys()), [float(i) for i in list(inputDict.values())])))
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.b = self.LP.cplexLP.linear_constraints.get_rhs()
+
+    def calculateLefthandSideValue(self, *constraints):
+        &#34;&#34;&#34;
+        Calculates value of problem&#39;s lefthand side
+        (after multiplying with solution-vector).
+
+        Parameters
+        ----------
+        constraints : str or list of str or None
+            Constraints to retreive the LHS-value for.
+            Either constraint ID or list of constraint IDs to specify the LHS-value
+            of which constraint to look up.
+            This is an optional input; if not provided all constraint are looked up.
+        Returns
+        ----------
+        dict
+            Dictionary with constraint-IDs as keys and
+            LHS-value as values.
+        &#34;&#34;&#34;
+        if len(list(constraints)) &gt; 0:
+            if isinstance(constraints[0], list):
+                names = constraints[0]
+            if isinstance(constraints[0], str):
+                names = [constraints[0]]
+        if len(list(constraints)) == 0:
+            names = self.LP.row_names
+        Sol = numpy.array(list(self.SolutionValues.values()))
+        Amat = self.LP.A.toarray()
+        multRes = Amat.dot(Sol)
+        out = {c: multRes[self.LP.row_names.index(c)] for c in names}
+        return(out)
+
+    def getProblemCoefficients(self, *inputTuples):
+        &#34;&#34;&#34;
+        Returns coefficients of LHS of problem.
+
+        Parameters
+        ----------
+        inputTuples : tuple or list of tuples.
+            Tuples hold row and column indices.
+            [(&#39;row1&#39;,&#39;col1&#39;),(&#39;row2&#39;,&#39;col2&#39;),...] or (&#39;row1&#39;,&#39;col1&#39;).
+
+        Returns
+        ----------
+        dict
+            Dictionary with index tuples as keys and
+            matrix coefficients as values.
+        &#34;&#34;&#34;
+
+        if len(list(inputTuples)) &gt; 0:
+            if isinstance(inputTuples[0], list):
+                tuples = inputTuples[0]
+            elif isinstance(inputTuples[0], tuple):
+                tuples = [inputTuples[0]]
+            else:
+                print(&#39;Error: Please provide tuple or list of tuples as input&#39;)
+                return
+        if len(list(inputTuples)) == 0:
+            print(&#39;Error: Please provide tuple or list of tuples as input&#39;)
+            return
+        return(dict(zip(tuples, [self.LP.cplexLP.linear_constraints.get_coefficients(self.LP.rowIndicesMap[tup[0]], self.LP.colIndicesMap[tup[1]]) for tup in tuples])))
+
+    def setProblemCoefficients(self, inputDict, logging=True):
+        &#34;&#34;&#34;
+        Set coefficients of the problems&#39; LHS (constraint matrix).
+
+        Parameters
+        ----------
+        inputDict : dict
+            Dict with index-tuples (&#39;row1&#39;,&#39;col1&#39;) as keys
+            and new numeric values as values.
+            ({(&#39;row1&#39;,&#39;col1&#39;):42,(&#39;row2&#39;,&#39;col2&#39;):9000, ...}).
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+
+        variables = []
+        constraints = []
+        coefficients = []
+        Changes = []
+        for const in list(inputDict.keys()):
+            for var in list(inputDict[const].keys()):
+                if logging:
+                    self.LogBook.addEntry(&#39;LHS coefficient {} changed:{} --&gt; {}&#39;.format(
+                        (const, var), self.getProblemCoefficients((const, var))[(const, var)], inputDict[const][var]))
+                constraints.append(const)
+                variables.append(var)
+                coefficients.append(numpy.float64(inputDict[const][var]))
+        Changes = list(zip(constraints, variables, coefficients))
+        ##Update in cplex.Cplex LP##
+        self.LP.cplexLP.linear_constraints.set_coefficients(Changes)
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.A = convertCPLEXmatrix_to_Sparse(self)
+
+    def getUB(self, *variables):
+        &#34;&#34;&#34;
+        Returns upper bounds of problem variables.
+
+        Parameters
+        ----------
+        variables : str list of str or None
+            Variables to retreive the objective coefficients for.
+            Either variable ID or list of variable IDs to specify
+            the coefficients of which variables to look up.
+            This is an optional input; if not provided all variables are looked up.
+
+        Returns
+        ----------
+        dict
+            Dictionary with variable-IDs as keys and
+            upper bounds as values.
+        &#34;&#34;&#34;
+
+        if len(list(variables)) &gt; 0:
+            if isinstance(variables[0], list):
+                names = variables[0]
+            if isinstance(variables[0], str):
+                names = [variables[0]]
+        if len(list(variables)) == 0:
+            names = self.LP.col_names
+        bound = [self.LP.cplexLP.variables.get_upper_bounds(
+            self.LP.colIndicesMap[v]) for v in names]
+        return(dict(zip(names, bound)))
+
+    def getLB(self, *variables):
+        &#34;&#34;&#34;
+        Returns lower bounds of problem variables.
+
+        Parameters
+        ----------
+        variables : str list of str or None
+            Variables to retreive the objective coefficients for.
+            Either variable ID or list of variable IDs to specify
+            the coefficients of which variables to look up.
+            This is an optional input; if not provided all variables are looked up.
+
+        Returns
+        ----------
+        dict
+            Dictionary with variable-IDs as keys and
+            lower bounds as values.
+        &#34;&#34;&#34;
+
+        if len(list(variables)) &gt; 0:
+            if isinstance(variables[0], list):
+                names = variables[0]
+            if isinstance(variables[0], str):
+                names = [variables[0]]
+        if len(list(variables)) == 0:
+            names = self.LP.col_names
+        bound = [self.LP.cplexLP.variables.get_lower_bounds(
+            self.LP.colIndicesMap[v]) for v in names]
+        return(dict(zip(names, bound)))
+
+    def setLB(self, inputDict, logging=True):
+        &#34;&#34;&#34;
+        Set lower-bounds of the problem variables.
+
+        Parameters
+        ----------
+        inputDict : dict
+            Dictionary with variable-IDs as keys and new numeric values as values.
+            ({&#39;col1&#39;:42,&#39;col2&#39;:9000, ...}).
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+
+        if logging:
+            for v in list(inputDict.keys()):
+                self.LogBook.addEntry(&#39;LowerBound {} changed:{} --&gt; {}&#39;.format(v,
+                                                                               self.LP.LB[self.LP.colIndicesMap[v]], inputDict[v]))
+        ##Update in cplex.Cplex LP##
+        self.LP.cplexLP.variables.set_lower_bounds(
+            zip(list(inputDict.keys()), [float(i) for i in list(inputDict.values())]))
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.LB = self.LP.cplexLP.variables.get_lower_bounds()
+
+    def setUB(self, inputDict, logging=True):
+        &#34;&#34;&#34;
+        Set upper-bounds of the problem variables.
+
+        Parameters
+        ----------
+        inputDict : dict
+            Dictionary with variable-IDs as keys and new numeric values as values.
+            ({&#39;col1&#39;:42,&#39;col2&#39;:9000, ...}).
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+
+        if logging:
+            for v in list(inputDict.keys()):
+                self.LogBook.addEntry(&#39;UpperBound {} changed:{} --&gt; {}&#39;.format(v,
+                                                                               self.LP.UB[self.LP.colIndicesMap[v]], inputDict[v]))
+        ##Update in cplex.Cplex LP##
+        # self.LP.cplexLP.variables.set_upper_bounds(zip(list(inputDict.keys()), [self.LP.colIndicesMap[v] for v in list(inputDict.keys())]))
+        self.LP.cplexLP.variables.set_upper_bounds(
+            zip(list(inputDict.keys()), [float(i) for i in list(inputDict.values())]))
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.UB = self.LP.cplexLP.variables.get_upper_bounds()
+
+    def getEnzymeCapacities(self, *Enzyme):
+        &#34;&#34;&#34;
+        Returns of capacity coefficients oof enzymes in problem.
+
+        Parameters
+        ---------
+        Enzyme : str list of str or None
+            Enzymes to retreive the efficiency coefficients for.
+            Either enzyme ID or list of enzyme IDs to specify
+            the efficiencies of which enzymes to look up.
+            This is an optional input; if not provided all enzymes are looked up.
+
+        Returns
+        ----------
+        dict
+            Dictionary with enzyme ID as keys and dictionaries as values.
+            The &#34;inner&#34; dictionaries hold keys &#39;Forward&#39; and &#39;Backward&#39; with forward and backward efficiencies as numeric values respectively.
+            {&#39;R_abcdef_enzyme&#39;:{&#39;Froward&#39;:3000000,&#39;Backward&#39;:3000000}} (negative values).
+            If enzyme is irreversible &#39;Backward&#39; is numpy.nan.
+        &#34;&#34;&#34;
+
+        import difflib
+        if len(list(Enzyme)) &gt; 0:
+            if isinstance(Enzyme[0], list):
+                EnzymesInQuestion = Enzyme[0]
+            if isinstance(Enzyme[0], str):
+                EnzymesInQuestion = [Enzyme[0]]
+        if len(list(Enzyme)) == 0:
+            EnzymesInQuestion = self.Enzymes
+        A = scipy.sparse.lil_matrix(self.LP.A)
+        out = {}
+        for i in EnzymesInQuestion:
+            likelyFWkapps = difflib.get_close_matches(i, self.Enzyme_FWcapacities, 1)
+            if len(likelyFWkapps) &gt; 0:
+                FWkapp = likelyFWkapps[0]
+                BWkapp = FWkapp.replace(&#39;_forward_capacity&#39;, &#39;_backward_capacity&#39;)
+                FW = A[self.LP.rowIndicesMap[FWkapp], self.LP.colIndicesMap[i]]
+                if BWkapp in self.Enzyme_BWcapacities:
+                    BW = A[self.LP.rowIndicesMap[BWkapp], self.LP.colIndicesMap[i]]
+                else:
+                    BW = numpy.nan
+            else:
+                BW = numpy.nan
+                FW = numpy.nan
+            out.update({i: {&#39;Forward&#39;: FW, &#39;Backward&#39;: BW}})
+        return(out)
+
+    # def setEnzymeCapacities(self, inputDict):
+
+    def getProcessCapacities(self, *Process):
+        &#34;&#34;&#34;
+        Returns of capacity coefficients of process machineries in problem.
+
+        Parameters
+        ---------
+        Process : str list of str or None
+            Processes to retreive the efficiency coefficients for.
+            Either process ID or list of process IDs to specify
+            the efficiencies of which processes to look up.
+            This is an optional input; if not provided all processes are looked up.
+
+        Returns
+        ----------
+        dict
+            Dictionary with process ID as keys and their efficiencies as values.
+        &#34;&#34;&#34;
+
+        import difflib
+        if len(list(Process)) &gt; 0:
+            if isinstance(Process[0], list):
+                ProcessesInQuestion = Process[0]
+            if isinstance(Process[0], str):
+                ProcessesInQuestion = [Process[0]]
+        if len(list(Process)) == 0:
+            ProcessesInQuestion = self.Processes
+        IndexPairs = [(self.LP.rowIndicesMap[difflib.get_close_matches(i, self.ProcessCapacities, 1)[
+            0]], self.LP.colIndicesMap[i]) for i in ProcessesInQuestion]
+        A = scipy.sparse.lil_matrix(self.LP.A)
+        out = {i: A[IndexPairs[ProcessesInQuestion.index(i)]] for i in ProcessesInQuestion}
+        return(out)
+
+    # def setProcessCapacities(self, inputDict):
+
+    def getCompartmentCapacities(self, *Compartment):
+        &#34;&#34;&#34;
+        Returns of capacity coefficients of compartments in problem.
+
+        Parameters
+        ---------
+        Compartment : str list of str or None
+            Compartments to retreive the capacity coefficients for.
+            Either compartment ID or list of compartment IDs to specify
+            the capacities of which compartments to look up.
+            This is an optional input; if not provided all compartments are looked up.
+
+        Returns
+        ----------
+        dict
+            Dictionary with compartments ID as keys and their capacities as values.
+        &#34;&#34;&#34;
+
+        if len(list(Compartment)) &gt; 0:
+            if isinstance(Compartment[0], list):
+                CompartmentsInQuestion = Compartment[0]
+            if isinstance(Compartment[0], str):
+                CompartmentsInQuestion = [Compartment[0]]
+        if len(list(Compartment)) == 0:
+            CompartmentsInQuestion = self.CompartmentDensities
+        out = {i: self.LP.b[self.LP.rowIndicesMap[i]] for i in CompartmentsInQuestion}
+        return(out)
+
+    # def setCompartmentCapacities(self, inputDict):
+
+    def evaluateParameter(self, definition):
+
+        if type(definition) == str:
+            return(self.ClassicRBAmatrix._blocks.parameters.__getitem__(definition).value)
+        elif type(definition) == dict:
+            variables = {i: self.ClassicRBAmatrix._blocks.parameters.__getitem__(
+                i).value for i in definition[&#39;Variables&#39;]}
+            return(eval(str(definition[&#39;Equation&#39;]), variables))
+
+
+def convertCPLEXmatrix_to_Sparse(inputStructure):
+    import scipy
+    Ma = inputStructure.LP.cplexLP.linear_constraints.get_rows()
+    Anew = numpy.zeros((inputStructure.LP.cplexLP.linear_constraints.get_num(),
+                        inputStructure.LP.cplexLP.variables.get_num()))
+    rowIndex = 0
+    for m in Ma:
+        Anew[rowIndex, m.ind] = m.val
+        rowIndex += 1
+    return(scipy.sparse.coo_matrix(Anew))
+
+
+def determineCoefficient(x, changes, species):
+    multiplicativeFactors = []
+    for k in x:
+        result = 1
+        type = list(k.values())[0][&#39;FunctionType&#39;]
+        pars = list(k.values())[0][&#39;FunctionParameters&#39;]
+
+        if type == &#39;constant&#39;:
+            result = numpy.float64(pars[&#39;C&#39;])
+
+        if type == &#39;exponential&#39;:
+            L = 1
+            if &#39;Lambda&#39; in list(pars.keys()):
+                L = numpy.float64(pars[&#39;Lambda&#39;])
+            result = numpy.exp(float(changes[species])*L)
+
+        if type == &#39;indicator&#39;:
+            maxi = numpy.inf
+            mini = -numpy.inf
+            if &#39;xMax&#39; in list(pars.keys()):
+                maxi = numpy.float64(pars[&#39;xMax&#39;])
+            if &#39;xMin&#39; in list(pars.keys()):
+                mini = numpy.float64(pars[&#39;xMin&#39;])
+            result = (float(changes[species]) &gt; mini) and (float(changes[species]) &lt; maxi)
+
+        if type == &#39;linear&#39;:
+            X_maxi = numpy.inf
+            X_mini = -numpy.inf
+            Y_maxi = numpy.inf
+            Y_mini = -numpy.inf
+            A = 1
+            C = 0
+            if &#39;A&#39; in list(pars.keys()):
+                A = numpy.float64(pars[&#39;A&#39;])
+            if &#39;C&#39; in list(pars.keys()):
+                C = numpy.float64(pars[&#39;C&#39;])
+            if &#39;xMin&#39; in list(pars.keys()):
+                X_mini = numpy.float64(pars[&#39;xMin&#39;])
+            if &#39;xMax&#39; in list(pars.keys()):
+                X_maxi = numpy.float64(pars[&#39;xMax&#39;])
+            if &#39;yMin&#39; in list(pars.keys()):
+                Y_mini = numpy.float64(pars[&#39;yMin&#39;])
+            if &#39;yMax&#39; in list(pars.keys()):
+                Y_maxi = numpy.float64(pars[&#39;yMax&#39;])
+            X = float(min(max(float(changes[species]), X_mini), X_maxi))
+            Y = float(A*X + C)
+            result = float(min(max(Y, Y_mini), Y_maxi))
+
+        if type == &#39;michaelisMenten&#39;:
+            Y_mini = -numpy.inf
+            KM = 0
+            VM = 1
+            if &#39;Km&#39; in list(pars.keys()):
+                KM = numpy.float64(pars[&#39;Km&#39;])
+            if &#39;Vmax&#39; in list(pars.keys()):
+                VM = numpy.float64(pars[&#39;Vmax&#39;])
+            if &#39;yMin&#39; in list(pars.keys()):
+                Y_mini = numpy.float64(pars[&#39;yMin&#39;])
+            Y = float(VM * float(changes[species]) / (float(changes[species]) + KM))
+            result = float(max(Y, Y_mini))
+
+        if type == &#39;competitiveInhibition&#39;:
+            Y_mini = -numpy.inf
+            KM = 0
+            VM = 1
+            KI = 0
+            I = 0
+            if &#39;Ki&#39; in list(pars.keys()):
+                KI = numpy.float64(pars[&#39;Ki&#39;])
+            if &#39;I&#39; in list(pars.keys()):
+                I = numpy.float64(pars[&#39;I&#39;])
+            if &#39;Km&#39; in list(pars.keys()):
+                KM = numpy.float64(pars[&#39;Km&#39;])
+            if &#39;Vmax&#39; in list(pars.keys()):
+                VM = numpy.float64(pars[&#39;Vmax&#39;])
+            if &#39;yMin&#39; in list(pars.keys()):
+                Y_mini = numpy.float64(pars[&#39;yMin&#39;])
+            Y = VM*float(changes[species])/(float(changes[species])+KM*(1+I/KI))
+            result = max(Y, Y_mini)
+
+        if type == &#39;inverse&#39;:
+            C = 1
+            if &#39;C&#39; in list(pars.keys()):
+                C = numpy.float64(pars[&#39;C&#39;])
+            try:
+                result = C/float(changes[i])
+            except KeyError:
+                print(&#39;variable is 0, impossible to do inversion&#39;)
+
+        multiplicativeFactors.append(result)
+    value = numpy.prod(numpy.array(multiplicativeFactors))
+    return(float(value))</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="rbatools.rba_Problem.convertCPLEXmatrix_to_Sparse"><code class="name flex">
+<span>def <span class="ident">convertCPLEXmatrix_to_Sparse</span></span>(<span>inputStructure)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def convertCPLEXmatrix_to_Sparse(inputStructure):
+    import scipy
+    Ma = inputStructure.LP.cplexLP.linear_constraints.get_rows()
+    Anew = numpy.zeros((inputStructure.LP.cplexLP.linear_constraints.get_num(),
+                        inputStructure.LP.cplexLP.variables.get_num()))
+    rowIndex = 0
+    for m in Ma:
+        Anew[rowIndex, m.ind] = m.val
+        rowIndex += 1
+    return(scipy.sparse.coo_matrix(Anew))</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.determineCoefficient"><code class="name flex">
+<span>def <span class="ident">determineCoefficient</span></span>(<span>x, changes, species)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def determineCoefficient(x, changes, species):
+    multiplicativeFactors = []
+    for k in x:
+        result = 1
+        type = list(k.values())[0][&#39;FunctionType&#39;]
+        pars = list(k.values())[0][&#39;FunctionParameters&#39;]
+
+        if type == &#39;constant&#39;:
+            result = numpy.float64(pars[&#39;C&#39;])
+
+        if type == &#39;exponential&#39;:
+            L = 1
+            if &#39;Lambda&#39; in list(pars.keys()):
+                L = numpy.float64(pars[&#39;Lambda&#39;])
+            result = numpy.exp(float(changes[species])*L)
+
+        if type == &#39;indicator&#39;:
+            maxi = numpy.inf
+            mini = -numpy.inf
+            if &#39;xMax&#39; in list(pars.keys()):
+                maxi = numpy.float64(pars[&#39;xMax&#39;])
+            if &#39;xMin&#39; in list(pars.keys()):
+                mini = numpy.float64(pars[&#39;xMin&#39;])
+            result = (float(changes[species]) &gt; mini) and (float(changes[species]) &lt; maxi)
+
+        if type == &#39;linear&#39;:
+            X_maxi = numpy.inf
+            X_mini = -numpy.inf
+            Y_maxi = numpy.inf
+            Y_mini = -numpy.inf
+            A = 1
+            C = 0
+            if &#39;A&#39; in list(pars.keys()):
+                A = numpy.float64(pars[&#39;A&#39;])
+            if &#39;C&#39; in list(pars.keys()):
+                C = numpy.float64(pars[&#39;C&#39;])
+            if &#39;xMin&#39; in list(pars.keys()):
+                X_mini = numpy.float64(pars[&#39;xMin&#39;])
+            if &#39;xMax&#39; in list(pars.keys()):
+                X_maxi = numpy.float64(pars[&#39;xMax&#39;])
+            if &#39;yMin&#39; in list(pars.keys()):
+                Y_mini = numpy.float64(pars[&#39;yMin&#39;])
+            if &#39;yMax&#39; in list(pars.keys()):
+                Y_maxi = numpy.float64(pars[&#39;yMax&#39;])
+            X = float(min(max(float(changes[species]), X_mini), X_maxi))
+            Y = float(A*X + C)
+            result = float(min(max(Y, Y_mini), Y_maxi))
+
+        if type == &#39;michaelisMenten&#39;:
+            Y_mini = -numpy.inf
+            KM = 0
+            VM = 1
+            if &#39;Km&#39; in list(pars.keys()):
+                KM = numpy.float64(pars[&#39;Km&#39;])
+            if &#39;Vmax&#39; in list(pars.keys()):
+                VM = numpy.float64(pars[&#39;Vmax&#39;])
+            if &#39;yMin&#39; in list(pars.keys()):
+                Y_mini = numpy.float64(pars[&#39;yMin&#39;])
+            Y = float(VM * float(changes[species]) / (float(changes[species]) + KM))
+            result = float(max(Y, Y_mini))
+
+        if type == &#39;competitiveInhibition&#39;:
+            Y_mini = -numpy.inf
+            KM = 0
+            VM = 1
+            KI = 0
+            I = 0
+            if &#39;Ki&#39; in list(pars.keys()):
+                KI = numpy.float64(pars[&#39;Ki&#39;])
+            if &#39;I&#39; in list(pars.keys()):
+                I = numpy.float64(pars[&#39;I&#39;])
+            if &#39;Km&#39; in list(pars.keys()):
+                KM = numpy.float64(pars[&#39;Km&#39;])
+            if &#39;Vmax&#39; in list(pars.keys()):
+                VM = numpy.float64(pars[&#39;Vmax&#39;])
+            if &#39;yMin&#39; in list(pars.keys()):
+                Y_mini = numpy.float64(pars[&#39;yMin&#39;])
+            Y = VM*float(changes[species])/(float(changes[species])+KM*(1+I/KI))
+            result = max(Y, Y_mini)
+
+        if type == &#39;inverse&#39;:
+            C = 1
+            if &#39;C&#39; in list(pars.keys()):
+                C = numpy.float64(pars[&#39;C&#39;])
+            try:
+                result = C/float(changes[i])
+            except KeyError:
+                print(&#39;variable is 0, impossible to do inversion&#39;)
+
+        multiplicativeFactors.append(result)
+    value = numpy.prod(numpy.array(multiplicativeFactors))
+    return(float(value))</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="rbatools.rba_Problem.RBA_Problem"><code class="flex name class">
+<span>class <span class="ident">RBA_Problem</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class holding RBA-problem as mathematical manifestation of the RBA-model.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>classicRBA</code></strong> :&ensp;<code>boolean</code></dt>
+<dd>Indicates that the problem is a classic RBA-problem (as defined in RBApy)</dd>
+<dt><strong><code>ClassicRBAmatrix</code></strong> :&ensp;<code>rba.solver.matrix</code> <code>object</code></dt>
+<dd>&nbsp;</dd>
+<dt><strong><code>Mu</code></strong> :&ensp;<code>float</code></dt>
+<dd>Current Growth rate as numeric value</dd>
+<dt><strong><code>LP</code></strong> :&ensp;<code>rbatools.LP</code> <code>object</code></dt>
+<dd>&nbsp;</dd>
+<dt><strong><code>Enzyme_FWcapacities</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of constraint IDs, which represent forward efficiencies of enzymes
+Created by method 'extractConstraintTypes'</dd>
+<dt><strong><code>Enzyme_BWcapacities</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of constraint IDs, which represent backward efficiencies of enzymes
+Created by method 'extractConstraintTypes'</dd>
+<dt><strong><code>ProcessCapacities</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of constraint IDs, which represent net efficiencies of processes
+Created by method 'extractConstraintTypes'</dd>
+<dt><strong><code>Metabolites</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of constraint IDs, which represent mass balances of metabolites
+Created by method 'extractConstraintTypes'</dd>
+<dt><strong><code>CompartmentDensities</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of constraint IDs, which represent compartment capacities
+Created by method 'extractConstraintTypes'</dd>
+<dt><strong><code>Reactions</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of constraint IDs, which represent metabolic reactions
+Created by method 'extractVariableTypes'</dd>
+<dt><strong><code>Enzymes</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of constraint IDs, which represent enzymes, associated with metabolic reactions
+Created by method 'extractVariableTypes'</dd>
+<dt><strong><code>Processes</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of constraint IDs, which represent process machineries
+Created by method 'extractVariableTypes'</dd>
+<dt><strong><code>MuDepIndices_A</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of tuples holding rows (constraint IDs) and columns (variable IDs) of
+constraint-matrix coefficients (LHS), which depend on the growth rate.
+Created by method 'findMudependencies'</dd>
+<dt><strong><code>MuDepIndices_b</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of constraint IDs, whos RHS depend on the growth rate
+Created by method 'findMudependencies'</dd>
+<dt><strong><code>MuDepIndices_LB</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of variable IDs, whos lower-bounds depend on the growth rate
+Created by method 'findMudependencies'</dd>
+<dt><strong><code>MuDepIndices_UB</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of variable IDs, whos upper-bounds depend on the growth rate
+Created by method 'findMudependencies'</dd>
+<dt><strong><code>Solved</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Booelean indicating wheter Problem has been successfully solved,
+according to the acceptable solution statuses provided to the solveLP-method.
+Created by method 'solveLP'</dd>
+<dt><strong><code>SolutionStatus</code></strong> :&ensp;<code>int</code></dt>
+<dd>Numerical value indicating the solution-status of the problem.
+Consult CPLEX documentation for their meaning.
+Created by method 'solveLP'</dd>
+<dt><strong><code>ObjectiveValue</code></strong> :&ensp;<code>float</code></dt>
+<dd>Numeric value of the objective function after optimisation by CPLEX.
+Created by method 'solveLP'</dd>
+<dt><strong><code>SolutionValues</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Solution vector after optimisation by CPLEX.
+(Dictionary with variable IDs as keys and numeric values as values)
+Created by method 'solveLP'</dd>
+<dt><strong><code>DualValues</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Vector of dual-values after optimisation by CPLEX.
+(Dictionary with constraint IDs as keys and numeric values as values)
+Created by method 'solveLP'</dd>
+</dl>
+<h2 id="methods">Methods</h2>
+<p><strong>init</strong>(solver)
+Initiates rba_Problem from supplied rba.solver object.</p>
+<p>extractConstraintTypes()
+Extracts information on the different constraint types in the standard RBA-matrix.</p>
+<p>extractVariableTypes()
+Extracts information on the different variable types in the standard RBA-matrix.</p>
+<p>findMudependencies()
+Extracts information on the growth-rate dependent LP-coefficients.</p>
+<p>BuildClassicMatrix(Mu)
+Builds standard RBA-matrix according to growth-rate</p>
+<p>solveLP(feasibleStatuses=[1])
+Solves Linear RBA problem.</p>
+<p>setMu(Mu, keepParameters=None)
+Changes growth-rate of problem and sets all associated coefficients.</p>
+<p>resetCPLEXparams()
+Sets cplex.Cplex() parameters to predefined values.</p>
+<p>setConstraintType(inputDict)
+Sets objective function coefficients.</p>
+<p>getConstraintType(*constraints)
+Returns type of constraints.</p>
+<p>getObjective(*variables)
+Returns objective coefficient of variables in problem.</p>
+<p>setObjectiveCoefficients(inputDict)
+Sets objective function coefficients.</p>
+<p>clearObjective()
+Sets all coefficients of the objective function to zero.</p>
+<p>invertObjective()
+Changes sign (optimisation-sense) of objective function.</p>
+<p>getRighthandSideValue(*constraints)
+Extracts coefficients of problem's righthand side (B-vector).</p>
+<p>setRighthandSideValue(inputDict)
+Set coefficients of the problems' RHS (b-vector).</p>
+<p>calculateLefthandSideValue(*constraints)
+Calculates value of problem's lefthand side
+(after multiplying with solution-vector).</p>
+<p>getProblemCoefficients(*inputTuples)
+Returns coefficients of LHS of problem.</p>
+<p>setProblemCoefficients(inputDict)
+Set coefficients of the problems' LHS (constraint matrix).</p>
+<p>getUB(*variables)
+Returns upper bounds of problem variables.</p>
+<p>setUB(inputDict)
+Set upper-bounds of the problem variables.</p>
+<p>getLB(*variables)
+Returns lower bounds of problem variables.</p>
+<p>setLB(inputDict)
+Set lower-bounds of the problem variables.</p>
+<p>getEnzymeCapacities(*Enzyme)
+Returns of capacity coefficients oof enzymes in problem.</p>
+<p>getProcessCapacities(*Process)
+Returns of capacity coefficients of process machineries in problem.</p>
+<p>getCompartmentCapacities(*Compartment)
+Returns of capacity coefficients of compartments in problem.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class RBA_Problem(object):
+    &#34;&#34;&#34;
+    Class holding RBA-problem as mathematical manifestation of the RBA-model.
+
+    Attributes
+    ----------
+    classicRBA : boolean
+        Indicates that the problem is a classic RBA-problem (as defined in RBApy)
+    ClassicRBAmatrix : rba.solver.matrix object
+    Mu : float
+        Current Growth rate as numeric value
+    LP : rbatools.LP object
+    Enzyme_FWcapacities : list
+        List of constraint IDs, which represent forward efficiencies of enzymes
+        Created by method &#39;extractConstraintTypes&#39;
+    Enzyme_BWcapacities : list
+        List of constraint IDs, which represent backward efficiencies of enzymes
+        Created by method &#39;extractConstraintTypes&#39;
+    ProcessCapacities : list
+        List of constraint IDs, which represent net efficiencies of processes
+        Created by method &#39;extractConstraintTypes&#39;
+    Metabolites : list
+        List of constraint IDs, which represent mass balances of metabolites
+        Created by method &#39;extractConstraintTypes&#39;
+    CompartmentDensities : list
+        List of constraint IDs, which represent compartment capacities
+        Created by method &#39;extractConstraintTypes&#39;
+    Reactions : list
+        List of constraint IDs, which represent metabolic reactions
+        Created by method &#39;extractVariableTypes&#39;
+    Enzymes : list
+        List of constraint IDs, which represent enzymes, associated with metabolic reactions
+        Created by method &#39;extractVariableTypes&#39;
+    Processes : list
+        List of constraint IDs, which represent process machineries
+        Created by method &#39;extractVariableTypes&#39;
+    MuDepIndices_A : list
+        List of tuples holding rows (constraint IDs) and columns (variable IDs) of
+        constraint-matrix coefficients (LHS), which depend on the growth rate.
+        Created by method &#39;findMudependencies&#39;
+    MuDepIndices_b: list
+        List of constraint IDs, whos RHS depend on the growth rate
+        Created by method &#39;findMudependencies&#39;
+    MuDepIndices_LB: list
+        List of variable IDs, whos lower-bounds depend on the growth rate
+        Created by method &#39;findMudependencies&#39;
+    MuDepIndices_UB: list
+        List of variable IDs, whos upper-bounds depend on the growth rate
+        Created by method &#39;findMudependencies&#39;
+    Solved: bool
+        Booelean indicating wheter Problem has been successfully solved,
+        according to the acceptable solution statuses provided to the solveLP-method.
+        Created by method &#39;solveLP&#39;
+    SolutionStatus: int
+        Numerical value indicating the solution-status of the problem.
+        Consult CPLEX documentation for their meaning.
+        Created by method &#39;solveLP&#39;
+    ObjectiveValue: float
+        Numeric value of the objective function after optimisation by CPLEX.
+        Created by method &#39;solveLP&#39;
+    SolutionValues: dict
+        Solution vector after optimisation by CPLEX.
+        (Dictionary with variable IDs as keys and numeric values as values)
+        Created by method &#39;solveLP&#39;
+    DualValues: dict
+        Vector of dual-values after optimisation by CPLEX.
+        (Dictionary with constraint IDs as keys and numeric values as values)
+        Created by method &#39;solveLP&#39;
+
+    Methods
+    ----------
+    __init__(solver)
+        Initiates rba_Problem from supplied rba.solver object.
+
+    extractConstraintTypes()
+        Extracts information on the different constraint types in the standard RBA-matrix.
+
+    extractVariableTypes()
+        Extracts information on the different variable types in the standard RBA-matrix.
+
+    findMudependencies()
+        Extracts information on the growth-rate dependent LP-coefficients.
+
+    BuildClassicMatrix(Mu)
+        Builds standard RBA-matrix according to growth-rate
+
+    solveLP(feasibleStatuses=[1])
+        Solves Linear RBA problem.
+
+    setMu(Mu, keepParameters=None)
+        Changes growth-rate of problem and sets all associated coefficients.
+
+    resetCPLEXparams()
+        Sets cplex.Cplex() parameters to predefined values.
+
+    setConstraintType(inputDict)
+        Sets objective function coefficients.
+
+    getConstraintType(*constraints)
+        Returns type of constraints.
+
+    getObjective(*variables)
+        Returns objective coefficient of variables in problem.
+
+    setObjectiveCoefficients(inputDict)
+        Sets objective function coefficients.
+
+    clearObjective()
+        Sets all coefficients of the objective function to zero.
+
+    invertObjective()
+        Changes sign (optimisation-sense) of objective function.
+
+    getRighthandSideValue(*constraints)
+        Extracts coefficients of problem&#39;s righthand side (B-vector).
+
+    setRighthandSideValue(inputDict)
+        Set coefficients of the problems&#39; RHS (b-vector).
+
+    calculateLefthandSideValue(*constraints)
+        Calculates value of problem&#39;s lefthand side
+        (after multiplying with solution-vector).
+
+    getProblemCoefficients(*inputTuples)
+        Returns coefficients of LHS of problem.
+
+    setProblemCoefficients(inputDict)
+        Set coefficients of the problems&#39; LHS (constraint matrix).
+
+    getUB(*variables)
+        Returns upper bounds of problem variables.
+
+    setUB(inputDict)
+        Set upper-bounds of the problem variables.
+
+    getLB(*variables)
+        Returns lower bounds of problem variables.
+
+    setLB(inputDict)
+        Set lower-bounds of the problem variables.
+
+    getEnzymeCapacities(*Enzyme)
+        Returns of capacity coefficients oof enzymes in problem.
+
+    getProcessCapacities(*Process)
+        Returns of capacity coefficients of process machineries in problem.
+
+    getCompartmentCapacities(*Compartment)
+        Returns of capacity coefficients of compartments in problem.
+
+    &#34;&#34;&#34;
+
+    def __init__(self, solver):
+        &#34;&#34;&#34;
+        Initiates rba_Problem from supplied rba.solver object.
+
+        Makes sure the problem is consistent and optimisable.
+
+        Parameters
+        ----------
+        solver : rba.solver
+        &#34;&#34;&#34;
+
+        self.classicRBA = True
+        ## Import solver-object information ##
+        self.ClassicRBAmatrix = solver.matrix
+        self.Mu = 0
+        ## Set Mu of solver to 0 ##
+        self.LogBook = RBA_LogBook(&#39;Problem&#39;)
+        self.BuildClassicMatrix(Mu=self.Mu)
+        ## Initiate LP-object ##
+        self.LP = RBA_LP()
+        ## Transfer solver information to LP-object ##
+        self.LP.loadMatrix(matrix=self.ClassicRBAmatrix)
+        self.LP.buildCPLEX_LP()
+
+        ## Solve for Mu=0 to check if problem is consistent##
+        self.LogBook.addEntry(&#39;Problem initiated.&#39;)
+        self.solveLP()
+        if not self.Solved:
+            ## Problem is wrongly defined and can not be solved ##
+            print(&#39; INCONSISTENT RBA-PROBLEM; NOT SOLVABLE!\n&#39;)
+            self.LogBook.addEntry(&#39;Problem inconsistent at growth-rate 0.&#39;)
+        ## Growth-rate dependent indices ##
+        ## and constraint/variable types are extractet ##
+        self.findMudependencies()
+        self.extractConstraintTypes()
+        self.extractVariableTypes()
+
+    def extractConstraintTypes(self):
+        &#34;&#34;&#34;
+        Extracts information on the different constraint types in the standard RBA-matrix.
+
+        AddsAttributes: Enzyme_FWcapacities, Enzyme_BWcapacities, ProcessCapacities,
+                        Metabolites and CompartmentDensities
+        &#34;&#34;&#34;
+
+        self.Enzyme_FWcapacities = [i for i in self.LP.row_names if i.endswith(
+            &#39;_forward_capacity&#39;) and i.startswith(&#39;R_&#39;)]
+        self.Enzyme_BWcapacities = [i for i in self.LP.row_names if i.endswith(
+            &#39;_backward_capacity&#39;) and i.startswith(&#39;R_&#39;)]
+        self.ProcessCapacities = [i for i in self.LP.row_names if i.endswith(
+            &#39;_capacity&#39;) and i.startswith(&#39;P_&#39;)]
+        self.Metabolites = [i for i in self.LP.row_names if i.startswith(&#39;M_&#39;)]
+        self.CompartmentDensities = [i for i in self.LP.row_names if i.endswith(&#39;_density&#39;)]
+
+    def extractVariableTypes(self):
+        &#34;&#34;&#34;
+        Extracts information on the different variable types in the standard RBA-matrix.
+
+        AddsAttributes: Enzymes, Reactions and Processes
+        &#34;&#34;&#34;
+
+        self.Enzymes = [i for i in self.LP.col_names if i.endswith(&#39;_enzyme&#39;)]
+        self.Processes = [i for i in self.LP.col_names if i.startswith(
+            &#39;P_&#39;) and i.endswith(&#39;_machinery&#39;)]
+
+    def findMudependencies(self):
+        &#34;&#34;&#34;
+        Extracts information on the growth-rate dependent LP-coefficients.
+
+        AddsAttributes: MuDepIndices_A, MuDepIndices_b, MuDepIndices_LB
+                        and MuDepIndices_UB
+        &#34;&#34;&#34;
+
+        ## Construct 2 rba.solver.matrix objects for growth-rate 0 and 1.1 ##
+        MuOneMatrix = copy.deepcopy(self.ClassicRBAmatrix)
+        MuOneMatrix.build_matrices(1.0)
+        self.MuOneMatrix = RBA_LP()
+        self.MuOneMatrix.loadMatrix(MuOneMatrix)
+
+        M0 = copy.deepcopy(self.ClassicRBAmatrix)
+        M11 = copy.deepcopy(self.ClassicRBAmatrix)
+        M0.build_matrices(0)
+        M11.build_matrices(1.1)
+        ## Build arrays from matrices ##
+        A_0 = M0.A.toarray()
+        A_11 = M11.A.toarray()
+        ## Find index pairs at which the two constraint-matrices differ ##
+        MuDeps = numpy.where(A_11 != A_0)
+        ## Transform list of numeric indices in list of tuples with row- and col names ##
+        MuDepIndices_A = list(zip([self.ClassicRBAmatrix.row_names[i] for i in MuDeps[0]], [
+            self.ClassicRBAmatrix.col_names[j] for j in MuDeps[1]]))
+        ## Find rows at which the two righthandsides differ ##
+        MuDepIndices_b = [n for n in self.ClassicRBAmatrix.row_names if M0.b[self.ClassicRBAmatrix.row_names.index(
+            n)] != M11.b[self.ClassicRBAmatrix.row_names.index(n)]]
+        ## Find columns at which the variable bounds differ ##
+        MuDepIndices_LB = [n for n in self.ClassicRBAmatrix.col_names if M0.LB[self.ClassicRBAmatrix.col_names.index(
+            n)] != M11.LB[self.ClassicRBAmatrix.col_names.index(n)]]
+        MuDepIndices_UB = [n for n in self.ClassicRBAmatrix.col_names if M0.UB[self.ClassicRBAmatrix.col_names.index(
+            n)] != M11.UB[self.ClassicRBAmatrix.col_names.index(n)]]
+        self.MuDependencies = {&#39;FromMatrix&#39;: {&#39;A&#39;: MuDepIndices_A, &#39;b&#39;: MuDepIndices_b, &#39;LB&#39;: MuDepIndices_LB, &#39;UB&#39;: MuDepIndices_UB},
+                               &#39;FromParameters&#39;: {&#39;A&#39;: {}, &#39;b&#39;: {}, &#39;LB&#39;: {}, &#39;UB&#39;: {}}}
+
+    def BuildClassicMatrix(self, Mu):
+        &#34;&#34;&#34;
+        Builds standard RBA-matrix according to growth-rate
+
+        Parameters
+        ----------
+        Mu : float
+            Growth rate
+        &#34;&#34;&#34;
+
+        self.Mu = Mu
+        self.ClassicRBAmatrix.build_matrices(Mu)
+
+    def solveLP(self, feasibleStatuses=[1], try_unscaling_if_sol_status_is_five=True, logging=True):
+        &#34;&#34;&#34;
+        Solves Linear RBA problem.
+
+        Optimises RBA-LP with CPLEX.
+        When cplex-solution status is amongst the user-defined feasible statuses;
+        boolean &#39;Solved&#39; is set to True and &#39;ObjectiveValue&#39;, &#39;SolutionValues&#39; and &#39;DualValues&#39;
+        are stored as attributes.
+
+        Parameters
+        ----------
+        feasibleStatuses : list of int
+            List with identifiers of acceptable solution statuses.
+            (consult ILOG-CPLEX documentation for information on them).
+            Default: feasibleStatuses=[1]
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+
+        self.Solved = False
+        try:
+            ## Solve cplex LP ##
+            self.LP.cplexLP.solve()
+            ## Determin solution-status ##
+            self.SolutionStatus = self.LP.cplexLP.solution.get_status()
+            ## Check if solution status is amongst acceptable ones ##
+            if logging:
+                self.LogBook.addEntry(
+                    &#39;Problem solved with solution status: {}&#39;.format(self.SolutionStatus))
+            if self.SolutionStatus in feasibleStatuses:
+                ## Extract solution-data ##
+                self.Solved = True
+                self.ObjectiveValue = self.LP.cplexLP.solution.get_objective_value()
+                self.SolutionValues = dict(
+                    zip(self.LP.col_names, self.LP.cplexLP.solution.get_values()))
+                self.DualValues = dict(
+                    zip(self.LP.row_names, self.LP.cplexLP.solution.get_dual_values()))
+            else:
+                if try_unscaling_if_sol_status_is_five:
+                    if self.SolutionStatus == 5:
+                        self.LP.cplexLP.parameters.read.scale.set(-1)
+                        self.LP.cplexLP.solve()
+                        self.SolutionStatus = self.LP.cplexLP.solution.get_status()
+                        if self.SolutionStatus in feasibleStatuses:
+                            ## Extract solution-data ##
+                            self.Solved = True
+                            self.ObjectiveValue = self.LP.cplexLP.solution.get_objective_value()
+                            self.SolutionValues = dict(
+                                zip(self.LP.col_names, self.LP.cplexLP.solution.get_values()))
+                            self.DualValues = dict(
+                                zip(self.LP.row_names, self.LP.cplexLP.solution.get_dual_values()))
+
+        except:
+            self.ObjectiveValue = None
+            self.SolutionValues = None
+            self.DualValues = None
+
+    def updateMu(self, Mu, keepParameters=None, logging=True, ModifiedProblem=False):
+        &#34;&#34;&#34;
+        Changes growth-rate of problem and sets all associated coefficients.
+
+        Can be provided with &#39;keepParameters&#39; argument
+        to define problem coefficients which should remain unchanged.
+
+        Parameters
+        ----------
+        Mu : float
+            Growth rate
+        keepParameters : dict
+            Dictionary indicating which elements of the linear problem should
+            not be affected when setting growth-rate. Possible keys of dictionary:
+                &#39;LHS&#39;: List of index-tuples (constraint-ID,variable-ID),
+                       indicating elements of the lefthandside (constraint-matrix).
+                &#39;RHS&#39;: List of constraint IDs, indicating elements of the righthandside (b-vector).
+                &#39;LB&#39;: List of variable-IDs, indicating elements of the lower-bound vector.
+                &#39;UB&#39;: List of variable-IDs, indicating elements of the upper-bound vector.
+            Default: keepParameters=None
+        logging : bool
+            Wheter to write change to log-file or not
+                &#34;&#34;&#34;
+        if keepParameters is None:
+            A_idxs = self.MuDependencies[&#39;FromMatrix&#39;][&#39;A&#39;]
+            B_idxs = self.MuDependencies[&#39;FromMatrix&#39;][&#39;b&#39;]
+            LB_idxs = self.MuDependencies[&#39;FromMatrix&#39;][&#39;LB&#39;]
+            UB_idxs = self.MuDependencies[&#39;FromMatrix&#39;][&#39;UB&#39;]
+        else:
+            ## If indices are passed, which define elements to be not changed when setting Mu ##
+            ## these indices are removed from the update-from-new-to-old indices ##
+            if &#39;LHS&#39; in list(keepParameters.keys()):
+                A_idxs = set(self.MuDependencies[&#39;FromMatrix&#39;][&#39;A&#39;])-set(keepParameters[&#39;LHS&#39;])
+            if &#39;RHS&#39; in list(keepParameters.keys()):
+                B_idxs = set(self.MuDependencies[&#39;FromMatrix&#39;][&#39;b&#39;])-set(keepParameters[&#39;RHS&#39;])
+            if &#39;LB&#39; in list(keepParameters.keys()):
+                LB_idxs = set(self.MuDependencies[&#39;FromMatrix&#39;][&#39;LB&#39;])-set(keepParameters[&#39;LB&#39;])
+            if &#39;UB&#39; in list(keepParameters.keys()):
+                UB_idxs = set(self.MuDependencies[&#39;FromMatrix&#39;][&#39;UB&#39;])-set(keepParameters[&#39;UB&#39;])
+        ## Pass new matrix and indices of elements to update to LP.updateMatrix-method ##
+        self.ClassicRBAmatrix.build_matrices(self.Mu)
+        inputMatrix = RBA_Matrix()
+        inputMatrix.loadMatrix(matrix=self.ClassicRBAmatrix)
+        self.LP.updateMatrix(matrix=inputMatrix, Ainds=A_idxs, Binds=B_idxs,
+                             CTinds=[], LBinds=LB_idxs, UBinds=UB_idxs)
+        if ModifiedProblem:
+            for i in list(self.MuDependencies[&#39;FromParameters&#39;][&#39;b&#39;].keys()):
+                newPar = self.evaluateParameter(self.MuDependencies[&#39;FromParameters&#39;][&#39;b&#39;][i])
+                self.setRighthandSideValue({i: newPar}, logging=False)
+            for i in list(self.MuDependencies[&#39;FromParameters&#39;][&#39;A&#39;].keys()):
+                newPar = self.evaluateParameter(self.MuDependencies[&#39;FromParameters&#39;][&#39;A&#39;][i])
+                self.setProblemCoefficients({i: newPar}, logging=False)
+            for i in list(self.MuDependencies[&#39;FromParameters&#39;][&#39;LB&#39;].keys()):
+                newPar = self.evaluateParameter(self.MuDependencies[&#39;FromParameters&#39;][&#39;LB&#39;][i])
+                self.setLB({i: newPar}, logging=False)
+            for i in list(self.MuDependencies[&#39;FromParameters&#39;][&#39;UB&#39;].keys()):
+                newPar = self.evaluateParameter(self.MuDependencies[&#39;FromParameters&#39;][&#39;UB&#39;][i])
+                self.setUB({i: newPar}, logging=False)
+
+    def setMu(self, Mu, ModelStructure, keepParameters=None, logging=True):
+        &#34;&#34;&#34;
+        Changes growth-rate of problem and sets all associated coefficients.
+
+        Can be provided with &#39;keepParameters&#39; argument
+        to define problem coefficients which should remain unchanged.
+
+        Parameters
+        ----------
+        Mu : float
+            Growth rate
+        ModelStructure : RBA_ModellStructure object.
+        keepParameters : dict
+            Dictionary indicating which elements of the linear problem should
+            not be affected when setting growth-rate. Possible keys of dictionary:
+                &#39;LHS&#39;: List of index-tuples (constraint-ID,variable-ID),
+                       indicating elements of the lefthandside (constraint-matrix).
+                &#39;RHS&#39;: List of constraint IDs, indicating elements of the righthandside (b-vector).
+                &#39;LB&#39;: List of variable-IDs, indicating elements of the lower-bound vector.
+                &#39;UB&#39;: List of variable-IDs, indicating elements of the upper-bound vector.
+            Default: keepParameters=None
+        logging : bool
+            Wheter to write change to log-file or not
+                &#34;&#34;&#34;
+
+        self.Mu = float(Mu)
+        NumberParDeps = len([self.MuDependencies[&#39;FromParameters&#39;][i].keys() for i in [
+                            &#39;b&#39;, &#39;A&#39;, &#39;LB&#39;, &#39;UB&#39;] if len(list(self.MuDependencies[&#39;FromParameters&#39;][i].keys())) &gt; 0])
+        if self.LP.row_names == self.ClassicRBAmatrix.row_names and self.LP.col_names == self.ClassicRBAmatrix.col_names and self.classicRBA and NumberParDeps == 0:
+            self.updateMu(Mu=float(Mu), keepParameters=keepParameters,
+                          logging=logging, ModifiedProblem=False)
+        else:
+            self.updateMu(Mu=float(Mu), keepParameters=keepParameters,
+                          logging=logging, ModifiedProblem=True)
+
+        self.resetCPLEXparams()
+
+    def resetCPLEXparams(self):
+        &#34;&#34;&#34;
+        Sets cplex.Cplex() parameters to predefined values.
+
+        Settings:
+            cplex.Cplex.parameters.feasopt.tolerance.set(1e-9)
+            cplex.Cplex.parameters.simplex.tolerances.feasibility.set(1e-9)
+            cplex.Cplex.parameters.simplex.tolerances.optimality.set(1e-9)
+            cplex.Cplex.parameters.simplex.tolerances.markowitz.set(0.1)
+            cplex.Cplex.parameters.barrier.convergetol.set(1e-9)
+            cplex.Cplex.parameters.read.scale.set(1)
+            cplex.Cplex.set_results_stream(None)
+            cplex.Cplex.set_log_stream(None)
+            cplex.Cplex.set_warning_stream(None)
+        &#34;&#34;&#34;
+        self.LP.cplexLP.parameters.feasopt.tolerance.set(1e-9)
+        self.LP.cplexLP.parameters.simplex.tolerances.feasibility.set(1e-9)
+        self.LP.cplexLP.parameters.simplex.tolerances.optimality.set(1e-9)
+        self.LP.cplexLP.parameters.simplex.tolerances.markowitz.set(0.1)
+        self.LP.cplexLP.parameters.barrier.convergetol.set(1e-9)
+        self.LP.cplexLP.parameters.read.scale.set(1)
+        self.LP.cplexLP.set_results_stream(None)
+        self.LP.cplexLP.set_log_stream(None)
+        self.LP.cplexLP.set_warning_stream(None)
+
+    def getConstraintType(self, *constraints):
+        &#34;&#34;&#34;
+        Extracts type of constraints.
+
+        Parameters
+        ----------
+        constraints : str or list of str or None
+            Constraints to retreive the type for.
+            Either constraint ID or list of constraint IDs to specify the type
+            of which constraint to look up.
+            This is an optional input; if not provided all constraint are looked up.
+        Returns
+        ----------
+        dict
+            Dictionary with constraint-IDs as keys and
+            type identification-characters as values.
+        &#34;&#34;&#34;
+        if len(list(constraints)) &gt; 0:
+            if isinstance(constraints[0], list):
+                names = constraints[0]
+            if isinstance(constraints[0], str):
+                names = [constraints[0]]
+        if len(list(constraints)) == 0:
+            names = self.LP.row_names
+        Types = [self.LP.cplexLP.linear_constraints.get_senses(
+            self.LP.rowIndicesMap[c]) for c in names]
+        return(dict(zip(names, Types)))
+
+    def setConstraintType(self, inputDict, logging=True):
+        &#34;&#34;&#34;
+        Sets type of constraints.
+
+        E: = or L: &lt;=
+
+        Parameters
+        ----------
+        inputDict : dict
+            Dictionary with constraint-IDs as keys and type identification-character as values.
+            ({&#39;col1&#39;:&#39;E&#39;,&#39;col2&#39;:&#39;L&#39;, ...}).
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+        if logging:
+            for c in list(inputDict.keys()):
+                self.LogBook.addEntry(&#39;Constraint-type {} changed:{} --&gt; {}&#39;.format(c,
+                                                                                    self.LP.row_signs[self.LP.rowIndicesMap[c]], inputDict[c]))
+
+        ##Update in cplex.Cplex LP##
+        self.LP.cplexLP.linear_constraints.set_senses(
+            list(zip(inputDict.keys(), inputDict.values())))
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.row_signs = self.LP.cplexLP.linear_constraints.get_senses()
+
+    def getObjective(self, *variables):
+        &#34;&#34;&#34;
+        Returns objective coefficient of variables in problem.
+
+        Parameters
+        ----------
+        variables : str or list of str or None
+            Variables to retreive the objective coefficients for.
+            Either variable ID or list of variable IDs to specify
+            the coefficients of which variables to look up.
+            This is an optional input; if not provided all variables are looked up.
+
+        Returns
+        ----------
+        dict
+            Dictionary with variable-IDs as keys and
+            objective coefficients as values.
+        &#34;&#34;&#34;
+
+        if len(list(variables)) &gt; 0:
+            if isinstance(variables[0], list):
+                vrs = variables[0]
+                vls = []
+            if isinstance(variables[0], str):
+                vrs = [variables[0]]
+                vls = []
+            for v in vrs:
+                vls.append(self.LP.cplexLP.objective.get_linear()[
+                           numpy.where(numpy.array(self.LP.col_names) == v)[0][0]])
+        if len(list(variables)) == 0:
+            vrs = self.LP.col_names
+            vls = self.LP.cplexLP.objective.get_linear()
+        OF = dict(zip(vrs, vls))
+        return(OF)
+
+    def setObjectiveCoefficients(self, inputDict, logging=True):
+        &#34;&#34;&#34;
+        Sets objective function coefficients.
+
+        Parameters
+        ----------
+        inputDict : dict
+            Dictionary with variable-IDs as keys and new numeric values as values.
+            ({&#39;col1&#39;:42,&#39;col2&#39;:9000, ...}).
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+        if logging:
+            for v in list(inputDict.keys()):
+                self.LogBook.addEntry(&#39;Objective coefficient {} changed:{} --&gt; {}&#39;.format(v,
+                                                                                          self.LP.f[self.LP.colIndicesMap[v]], inputDict[v]))
+
+        ##Update in cplex.Cplex LP##
+        self.LP.cplexLP.objective.set_linear(
+            zip(list(inputDict.keys()), [float(i) for i in list(inputDict.values())]))
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.f = self.LP.cplexLP.objective.get_linear()
+
+    def clearObjective(self, logging=True):
+        &#34;&#34;&#34;
+        Sets all coefficients of the objective function to zero.
+
+        Parameters
+        ----------
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+
+        if logging:
+            self.LogBook.addEntry(&#39;Objective cleared.&#39;)
+        ##Update in cplex.Cplex LP##
+        self.LP.cplexLP.objective.set_linear(
+            zip(self.LP.col_names, [float(0)]*len(self.LP.col_names)))
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.f = self.LP.cplexLP.objective.get_linear()
+
+    def invertObjective(self, logging=True):
+        &#34;&#34;&#34;
+        Changes sign (optimisation-sense) of objective function.
+
+        Parameters
+        ----------
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+
+        if logging:
+            self.LogBook.addEntry(&#39;Objective inverted.&#39;)
+        current_objective = self.getObjective()
+        negative_objective = zip(list(current_objective.keys()),
+                                 [-float(x) for x in list(current_objective.values())])
+        ##Update in cplex.Cplex LP##
+        self.LP.cplexLP.objective.set_linear(negative_objective)
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.f = self.LP.cplexLP.objective.get_linear()
+
+    def getRighthandSideValue(self, *constraints):
+        &#34;&#34;&#34;
+        Extracts coefficients of problem&#39;s righthand side (B-vector).
+
+        Parameters
+        ----------
+        constraints : str or list of str or None
+            Constraints to retreive the objective coefficients for.
+            Either constraint ID or list of constraint IDs to specify the RHS
+            of which constraint to look up.
+            This is an optional input; if not provided all constraint are looked up.
+        Returns
+        ----------
+        dict
+            Dictionary with constraint-IDs as keys and
+            RHS-values as values.
+        &#34;&#34;&#34;
+
+        if len(list(constraints)) &gt; 0:
+            if isinstance(constraints[0], list):
+                names = constraints[0]
+            if isinstance(constraints[0], str):
+                names = [constraints[0]]
+        if len(list(constraints)) == 0:
+            names = self.LP.row_names
+        Bs = [self.LP.cplexLP.linear_constraints.get_rhs(self.LP.rowIndicesMap[c]) for c in names]
+        return(dict(zip(names, Bs)))
+
+    def setRighthandSideValue(self, inputDict, logging=True):
+        &#34;&#34;&#34;
+        Set coefficients of the problems&#39; RHS (b-vector).
+        Parameters
+        ----------
+        inputDict : dict
+            Dictionary with constraint-IDs as keys and new numeric values as values.
+            ({&#39;row1&#39;:42,&#39;row2&#39;:9000, ...}).
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+        if logging:
+            for c in list(inputDict.keys()):
+                self.LogBook.addEntry(&#39;RHS coefficient {} changed:{} --&gt; {}&#39;.format(v,
+                                                                                    self.LP.b[self.LP.rowIndicesMap[c]], inputDict[c]))
+
+        ##Update in cplex.Cplex LP##
+        self.LP.cplexLP.linear_constraints.set_rhs(
+            list(zip(list(inputDict.keys()), [float(i) for i in list(inputDict.values())])))
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.b = self.LP.cplexLP.linear_constraints.get_rhs()
+
+    def calculateLefthandSideValue(self, *constraints):
+        &#34;&#34;&#34;
+        Calculates value of problem&#39;s lefthand side
+        (after multiplying with solution-vector).
+
+        Parameters
+        ----------
+        constraints : str or list of str or None
+            Constraints to retreive the LHS-value for.
+            Either constraint ID or list of constraint IDs to specify the LHS-value
+            of which constraint to look up.
+            This is an optional input; if not provided all constraint are looked up.
+        Returns
+        ----------
+        dict
+            Dictionary with constraint-IDs as keys and
+            LHS-value as values.
+        &#34;&#34;&#34;
+        if len(list(constraints)) &gt; 0:
+            if isinstance(constraints[0], list):
+                names = constraints[0]
+            if isinstance(constraints[0], str):
+                names = [constraints[0]]
+        if len(list(constraints)) == 0:
+            names = self.LP.row_names
+        Sol = numpy.array(list(self.SolutionValues.values()))
+        Amat = self.LP.A.toarray()
+        multRes = Amat.dot(Sol)
+        out = {c: multRes[self.LP.row_names.index(c)] for c in names}
+        return(out)
+
+    def getProblemCoefficients(self, *inputTuples):
+        &#34;&#34;&#34;
+        Returns coefficients of LHS of problem.
+
+        Parameters
+        ----------
+        inputTuples : tuple or list of tuples.
+            Tuples hold row and column indices.
+            [(&#39;row1&#39;,&#39;col1&#39;),(&#39;row2&#39;,&#39;col2&#39;),...] or (&#39;row1&#39;,&#39;col1&#39;).
+
+        Returns
+        ----------
+        dict
+            Dictionary with index tuples as keys and
+            matrix coefficients as values.
+        &#34;&#34;&#34;
+
+        if len(list(inputTuples)) &gt; 0:
+            if isinstance(inputTuples[0], list):
+                tuples = inputTuples[0]
+            elif isinstance(inputTuples[0], tuple):
+                tuples = [inputTuples[0]]
+            else:
+                print(&#39;Error: Please provide tuple or list of tuples as input&#39;)
+                return
+        if len(list(inputTuples)) == 0:
+            print(&#39;Error: Please provide tuple or list of tuples as input&#39;)
+            return
+        return(dict(zip(tuples, [self.LP.cplexLP.linear_constraints.get_coefficients(self.LP.rowIndicesMap[tup[0]], self.LP.colIndicesMap[tup[1]]) for tup in tuples])))
+
+    def setProblemCoefficients(self, inputDict, logging=True):
+        &#34;&#34;&#34;
+        Set coefficients of the problems&#39; LHS (constraint matrix).
+
+        Parameters
+        ----------
+        inputDict : dict
+            Dict with index-tuples (&#39;row1&#39;,&#39;col1&#39;) as keys
+            and new numeric values as values.
+            ({(&#39;row1&#39;,&#39;col1&#39;):42,(&#39;row2&#39;,&#39;col2&#39;):9000, ...}).
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+
+        variables = []
+        constraints = []
+        coefficients = []
+        Changes = []
+        for const in list(inputDict.keys()):
+            for var in list(inputDict[const].keys()):
+                if logging:
+                    self.LogBook.addEntry(&#39;LHS coefficient {} changed:{} --&gt; {}&#39;.format(
+                        (const, var), self.getProblemCoefficients((const, var))[(const, var)], inputDict[const][var]))
+                constraints.append(const)
+                variables.append(var)
+                coefficients.append(numpy.float64(inputDict[const][var]))
+        Changes = list(zip(constraints, variables, coefficients))
+        ##Update in cplex.Cplex LP##
+        self.LP.cplexLP.linear_constraints.set_coefficients(Changes)
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.A = convertCPLEXmatrix_to_Sparse(self)
+
+    def getUB(self, *variables):
+        &#34;&#34;&#34;
+        Returns upper bounds of problem variables.
+
+        Parameters
+        ----------
+        variables : str list of str or None
+            Variables to retreive the objective coefficients for.
+            Either variable ID or list of variable IDs to specify
+            the coefficients of which variables to look up.
+            This is an optional input; if not provided all variables are looked up.
+
+        Returns
+        ----------
+        dict
+            Dictionary with variable-IDs as keys and
+            upper bounds as values.
+        &#34;&#34;&#34;
+
+        if len(list(variables)) &gt; 0:
+            if isinstance(variables[0], list):
+                names = variables[0]
+            if isinstance(variables[0], str):
+                names = [variables[0]]
+        if len(list(variables)) == 0:
+            names = self.LP.col_names
+        bound = [self.LP.cplexLP.variables.get_upper_bounds(
+            self.LP.colIndicesMap[v]) for v in names]
+        return(dict(zip(names, bound)))
+
+    def getLB(self, *variables):
+        &#34;&#34;&#34;
+        Returns lower bounds of problem variables.
+
+        Parameters
+        ----------
+        variables : str list of str or None
+            Variables to retreive the objective coefficients for.
+            Either variable ID or list of variable IDs to specify
+            the coefficients of which variables to look up.
+            This is an optional input; if not provided all variables are looked up.
+
+        Returns
+        ----------
+        dict
+            Dictionary with variable-IDs as keys and
+            lower bounds as values.
+        &#34;&#34;&#34;
+
+        if len(list(variables)) &gt; 0:
+            if isinstance(variables[0], list):
+                names = variables[0]
+            if isinstance(variables[0], str):
+                names = [variables[0]]
+        if len(list(variables)) == 0:
+            names = self.LP.col_names
+        bound = [self.LP.cplexLP.variables.get_lower_bounds(
+            self.LP.colIndicesMap[v]) for v in names]
+        return(dict(zip(names, bound)))
+
+    def setLB(self, inputDict, logging=True):
+        &#34;&#34;&#34;
+        Set lower-bounds of the problem variables.
+
+        Parameters
+        ----------
+        inputDict : dict
+            Dictionary with variable-IDs as keys and new numeric values as values.
+            ({&#39;col1&#39;:42,&#39;col2&#39;:9000, ...}).
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+
+        if logging:
+            for v in list(inputDict.keys()):
+                self.LogBook.addEntry(&#39;LowerBound {} changed:{} --&gt; {}&#39;.format(v,
+                                                                               self.LP.LB[self.LP.colIndicesMap[v]], inputDict[v]))
+        ##Update in cplex.Cplex LP##
+        self.LP.cplexLP.variables.set_lower_bounds(
+            zip(list(inputDict.keys()), [float(i) for i in list(inputDict.values())]))
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.LB = self.LP.cplexLP.variables.get_lower_bounds()
+
+    def setUB(self, inputDict, logging=True):
+        &#34;&#34;&#34;
+        Set upper-bounds of the problem variables.
+
+        Parameters
+        ----------
+        inputDict : dict
+            Dictionary with variable-IDs as keys and new numeric values as values.
+            ({&#39;col1&#39;:42,&#39;col2&#39;:9000, ...}).
+        logging : bool
+            Wheter to write change to log-file or not
+        &#34;&#34;&#34;
+
+        if logging:
+            for v in list(inputDict.keys()):
+                self.LogBook.addEntry(&#39;UpperBound {} changed:{} --&gt; {}&#39;.format(v,
+                                                                               self.LP.UB[self.LP.colIndicesMap[v]], inputDict[v]))
+        ##Update in cplex.Cplex LP##
+        # self.LP.cplexLP.variables.set_upper_bounds(zip(list(inputDict.keys()), [self.LP.colIndicesMap[v] for v in list(inputDict.keys())]))
+        self.LP.cplexLP.variables.set_upper_bounds(
+            zip(list(inputDict.keys()), [float(i) for i in list(inputDict.values())]))
+        ##Transfer changes to rbatools.RBA_LP object##
+        self.LP.UB = self.LP.cplexLP.variables.get_upper_bounds()
+
+    def getEnzymeCapacities(self, *Enzyme):
+        &#34;&#34;&#34;
+        Returns of capacity coefficients oof enzymes in problem.
+
+        Parameters
+        ---------
+        Enzyme : str list of str or None
+            Enzymes to retreive the efficiency coefficients for.
+            Either enzyme ID or list of enzyme IDs to specify
+            the efficiencies of which enzymes to look up.
+            This is an optional input; if not provided all enzymes are looked up.
+
+        Returns
+        ----------
+        dict
+            Dictionary with enzyme ID as keys and dictionaries as values.
+            The &#34;inner&#34; dictionaries hold keys &#39;Forward&#39; and &#39;Backward&#39; with forward and backward efficiencies as numeric values respectively.
+            {&#39;R_abcdef_enzyme&#39;:{&#39;Froward&#39;:3000000,&#39;Backward&#39;:3000000}} (negative values).
+            If enzyme is irreversible &#39;Backward&#39; is numpy.nan.
+        &#34;&#34;&#34;
+
+        import difflib
+        if len(list(Enzyme)) &gt; 0:
+            if isinstance(Enzyme[0], list):
+                EnzymesInQuestion = Enzyme[0]
+            if isinstance(Enzyme[0], str):
+                EnzymesInQuestion = [Enzyme[0]]
+        if len(list(Enzyme)) == 0:
+            EnzymesInQuestion = self.Enzymes
+        A = scipy.sparse.lil_matrix(self.LP.A)
+        out = {}
+        for i in EnzymesInQuestion:
+            likelyFWkapps = difflib.get_close_matches(i, self.Enzyme_FWcapacities, 1)
+            if len(likelyFWkapps) &gt; 0:
+                FWkapp = likelyFWkapps[0]
+                BWkapp = FWkapp.replace(&#39;_forward_capacity&#39;, &#39;_backward_capacity&#39;)
+                FW = A[self.LP.rowIndicesMap[FWkapp], self.LP.colIndicesMap[i]]
+                if BWkapp in self.Enzyme_BWcapacities:
+                    BW = A[self.LP.rowIndicesMap[BWkapp], self.LP.colIndicesMap[i]]
+                else:
+                    BW = numpy.nan
+            else:
+                BW = numpy.nan
+                FW = numpy.nan
+            out.update({i: {&#39;Forward&#39;: FW, &#39;Backward&#39;: BW}})
+        return(out)
+
+    # def setEnzymeCapacities(self, inputDict):
+
+    def getProcessCapacities(self, *Process):
+        &#34;&#34;&#34;
+        Returns of capacity coefficients of process machineries in problem.
+
+        Parameters
+        ---------
+        Process : str list of str or None
+            Processes to retreive the efficiency coefficients for.
+            Either process ID or list of process IDs to specify
+            the efficiencies of which processes to look up.
+            This is an optional input; if not provided all processes are looked up.
+
+        Returns
+        ----------
+        dict
+            Dictionary with process ID as keys and their efficiencies as values.
+        &#34;&#34;&#34;
+
+        import difflib
+        if len(list(Process)) &gt; 0:
+            if isinstance(Process[0], list):
+                ProcessesInQuestion = Process[0]
+            if isinstance(Process[0], str):
+                ProcessesInQuestion = [Process[0]]
+        if len(list(Process)) == 0:
+            ProcessesInQuestion = self.Processes
+        IndexPairs = [(self.LP.rowIndicesMap[difflib.get_close_matches(i, self.ProcessCapacities, 1)[
+            0]], self.LP.colIndicesMap[i]) for i in ProcessesInQuestion]
+        A = scipy.sparse.lil_matrix(self.LP.A)
+        out = {i: A[IndexPairs[ProcessesInQuestion.index(i)]] for i in ProcessesInQuestion}
+        return(out)
+
+    # def setProcessCapacities(self, inputDict):
+
+    def getCompartmentCapacities(self, *Compartment):
+        &#34;&#34;&#34;
+        Returns of capacity coefficients of compartments in problem.
+
+        Parameters
+        ---------
+        Compartment : str list of str or None
+            Compartments to retreive the capacity coefficients for.
+            Either compartment ID or list of compartment IDs to specify
+            the capacities of which compartments to look up.
+            This is an optional input; if not provided all compartments are looked up.
+
+        Returns
+        ----------
+        dict
+            Dictionary with compartments ID as keys and their capacities as values.
+        &#34;&#34;&#34;
+
+        if len(list(Compartment)) &gt; 0:
+            if isinstance(Compartment[0], list):
+                CompartmentsInQuestion = Compartment[0]
+            if isinstance(Compartment[0], str):
+                CompartmentsInQuestion = [Compartment[0]]
+        if len(list(Compartment)) == 0:
+            CompartmentsInQuestion = self.CompartmentDensities
+        out = {i: self.LP.b[self.LP.rowIndicesMap[i]] for i in CompartmentsInQuestion}
+        return(out)
+
+    # def setCompartmentCapacities(self, inputDict):
+
+    def evaluateParameter(self, definition):
+
+        if type(definition) == str:
+            return(self.ClassicRBAmatrix._blocks.parameters.__getitem__(definition).value)
+        elif type(definition) == dict:
+            variables = {i: self.ClassicRBAmatrix._blocks.parameters.__getitem__(
+                i).value for i in definition[&#39;Variables&#39;]}
+            return(eval(str(definition[&#39;Equation&#39;]), variables))</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="rbatools.rba_Problem.RBA_Problem.BuildClassicMatrix"><code class="name flex">
+<span>def <span class="ident">BuildClassicMatrix</span></span>(<span>self, Mu)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Builds standard RBA-matrix according to growth-rate</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>Mu</code></strong> :&ensp;<code>float</code></dt>
+<dd>Growth rate</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def BuildClassicMatrix(self, Mu):
+    &#34;&#34;&#34;
+    Builds standard RBA-matrix according to growth-rate
+
+    Parameters
+    ----------
+    Mu : float
+        Growth rate
+    &#34;&#34;&#34;
+
+    self.Mu = Mu
+    self.ClassicRBAmatrix.build_matrices(Mu)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.__init__"><code class="name flex">
+<span>def <span class="ident">__init__</span></span>(<span>self, solver)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Initiates rba_Problem from supplied rba.solver object.</p>
+<p>Makes sure the problem is consistent and optimisable.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>solver</code></strong> :&ensp;<code>rba.solver</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def __init__(self, solver):
+    &#34;&#34;&#34;
+    Initiates rba_Problem from supplied rba.solver object.
+
+    Makes sure the problem is consistent and optimisable.
+
+    Parameters
+    ----------
+    solver : rba.solver
+    &#34;&#34;&#34;
+
+    self.classicRBA = True
+    ## Import solver-object information ##
+    self.ClassicRBAmatrix = solver.matrix
+    self.Mu = 0
+    ## Set Mu of solver to 0 ##
+    self.LogBook = RBA_LogBook(&#39;Problem&#39;)
+    self.BuildClassicMatrix(Mu=self.Mu)
+    ## Initiate LP-object ##
+    self.LP = RBA_LP()
+    ## Transfer solver information to LP-object ##
+    self.LP.loadMatrix(matrix=self.ClassicRBAmatrix)
+    self.LP.buildCPLEX_LP()
+
+    ## Solve for Mu=0 to check if problem is consistent##
+    self.LogBook.addEntry(&#39;Problem initiated.&#39;)
+    self.solveLP()
+    if not self.Solved:
+        ## Problem is wrongly defined and can not be solved ##
+        print(&#39; INCONSISTENT RBA-PROBLEM; NOT SOLVABLE!\n&#39;)
+        self.LogBook.addEntry(&#39;Problem inconsistent at growth-rate 0.&#39;)
+    ## Growth-rate dependent indices ##
+    ## and constraint/variable types are extractet ##
+    self.findMudependencies()
+    self.extractConstraintTypes()
+    self.extractVariableTypes()</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.calculateLefthandSideValue"><code class="name flex">
+<span>def <span class="ident">calculateLefthandSideValue</span></span>(<span>self, *constraints)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Calculates value of problem's lefthand side
+(after multiplying with solution-vector).</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>constraints</code></strong> :&ensp;<code>str</code> or <code>list</code> of <code>str</code> or <code>None</code></dt>
+<dd>Constraints to retreive the LHS-value for.
+Either constraint ID or list of constraint IDs to specify the LHS-value
+of which constraint to look up.
+This is an optional input; if not provided all constraint are looked up.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>dict</code></strong></dt>
+<dd>Dictionary with constraint-IDs as keys and
+LHS-value as values.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def calculateLefthandSideValue(self, *constraints):
+    &#34;&#34;&#34;
+    Calculates value of problem&#39;s lefthand side
+    (after multiplying with solution-vector).
+
+    Parameters
+    ----------
+    constraints : str or list of str or None
+        Constraints to retreive the LHS-value for.
+        Either constraint ID or list of constraint IDs to specify the LHS-value
+        of which constraint to look up.
+        This is an optional input; if not provided all constraint are looked up.
+    Returns
+    ----------
+    dict
+        Dictionary with constraint-IDs as keys and
+        LHS-value as values.
+    &#34;&#34;&#34;
+    if len(list(constraints)) &gt; 0:
+        if isinstance(constraints[0], list):
+            names = constraints[0]
+        if isinstance(constraints[0], str):
+            names = [constraints[0]]
+    if len(list(constraints)) == 0:
+        names = self.LP.row_names
+    Sol = numpy.array(list(self.SolutionValues.values()))
+    Amat = self.LP.A.toarray()
+    multRes = Amat.dot(Sol)
+    out = {c: multRes[self.LP.row_names.index(c)] for c in names}
+    return(out)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.clearObjective"><code class="name flex">
+<span>def <span class="ident">clearObjective</span></span>(<span>self, logging=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets all coefficients of the objective function to zero.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>logging</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Wheter to write change to log-file or not</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def clearObjective(self, logging=True):
+    &#34;&#34;&#34;
+    Sets all coefficients of the objective function to zero.
+
+    Parameters
+    ----------
+    logging : bool
+        Wheter to write change to log-file or not
+    &#34;&#34;&#34;
+
+    if logging:
+        self.LogBook.addEntry(&#39;Objective cleared.&#39;)
+    ##Update in cplex.Cplex LP##
+    self.LP.cplexLP.objective.set_linear(
+        zip(self.LP.col_names, [float(0)]*len(self.LP.col_names)))
+    ##Transfer changes to rbatools.RBA_LP object##
+    self.LP.f = self.LP.cplexLP.objective.get_linear()</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.evaluateParameter"><code class="name flex">
+<span>def <span class="ident">evaluateParameter</span></span>(<span>self, definition)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def evaluateParameter(self, definition):
+
+    if type(definition) == str:
+        return(self.ClassicRBAmatrix._blocks.parameters.__getitem__(definition).value)
+    elif type(definition) == dict:
+        variables = {i: self.ClassicRBAmatrix._blocks.parameters.__getitem__(
+            i).value for i in definition[&#39;Variables&#39;]}
+        return(eval(str(definition[&#39;Equation&#39;]), variables))</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.extractConstraintTypes"><code class="name flex">
+<span>def <span class="ident">extractConstraintTypes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Extracts information on the different constraint types in the standard RBA-matrix.</p>
+<dl>
+<dt><strong><code>AddsAttributes</code></strong> :&ensp;<code>Enzyme_FWcapacities</code>, <code>Enzyme_BWcapacities</code>, <code>ProcessCapacities</code>,</dt>
+<dd>Metabolites and CompartmentDensities</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def extractConstraintTypes(self):
+    &#34;&#34;&#34;
+    Extracts information on the different constraint types in the standard RBA-matrix.
+
+    AddsAttributes: Enzyme_FWcapacities, Enzyme_BWcapacities, ProcessCapacities,
+                    Metabolites and CompartmentDensities
+    &#34;&#34;&#34;
+
+    self.Enzyme_FWcapacities = [i for i in self.LP.row_names if i.endswith(
+        &#39;_forward_capacity&#39;) and i.startswith(&#39;R_&#39;)]
+    self.Enzyme_BWcapacities = [i for i in self.LP.row_names if i.endswith(
+        &#39;_backward_capacity&#39;) and i.startswith(&#39;R_&#39;)]
+    self.ProcessCapacities = [i for i in self.LP.row_names if i.endswith(
+        &#39;_capacity&#39;) and i.startswith(&#39;P_&#39;)]
+    self.Metabolites = [i for i in self.LP.row_names if i.startswith(&#39;M_&#39;)]
+    self.CompartmentDensities = [i for i in self.LP.row_names if i.endswith(&#39;_density&#39;)]</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.extractVariableTypes"><code class="name flex">
+<span>def <span class="ident">extractVariableTypes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Extracts information on the different variable types in the standard RBA-matrix.</p>
+<dl>
+<dt><strong><code>AddsAttributes</code></strong> :&ensp;<code>Enzymes</code>, <code>Reactions</code> <code>and</code> <code>Processes</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def extractVariableTypes(self):
+    &#34;&#34;&#34;
+    Extracts information on the different variable types in the standard RBA-matrix.
+
+    AddsAttributes: Enzymes, Reactions and Processes
+    &#34;&#34;&#34;
+
+    self.Enzymes = [i for i in self.LP.col_names if i.endswith(&#39;_enzyme&#39;)]
+    self.Processes = [i for i in self.LP.col_names if i.startswith(
+        &#39;P_&#39;) and i.endswith(&#39;_machinery&#39;)]</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.findMudependencies"><code class="name flex">
+<span>def <span class="ident">findMudependencies</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Extracts information on the growth-rate dependent LP-coefficients.</p>
+<dl>
+<dt><strong><code>AddsAttributes</code></strong> :&ensp;<code>MuDepIndices_A</code>, <code>MuDepIndices_b</code>, <code>MuDepIndices_LB</code></dt>
+<dd>and MuDepIndices_UB</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def findMudependencies(self):
+    &#34;&#34;&#34;
+    Extracts information on the growth-rate dependent LP-coefficients.
+
+    AddsAttributes: MuDepIndices_A, MuDepIndices_b, MuDepIndices_LB
+                    and MuDepIndices_UB
+    &#34;&#34;&#34;
+
+    ## Construct 2 rba.solver.matrix objects for growth-rate 0 and 1.1 ##
+    MuOneMatrix = copy.deepcopy(self.ClassicRBAmatrix)
+    MuOneMatrix.build_matrices(1.0)
+    self.MuOneMatrix = RBA_LP()
+    self.MuOneMatrix.loadMatrix(MuOneMatrix)
+
+    M0 = copy.deepcopy(self.ClassicRBAmatrix)
+    M11 = copy.deepcopy(self.ClassicRBAmatrix)
+    M0.build_matrices(0)
+    M11.build_matrices(1.1)
+    ## Build arrays from matrices ##
+    A_0 = M0.A.toarray()
+    A_11 = M11.A.toarray()
+    ## Find index pairs at which the two constraint-matrices differ ##
+    MuDeps = numpy.where(A_11 != A_0)
+    ## Transform list of numeric indices in list of tuples with row- and col names ##
+    MuDepIndices_A = list(zip([self.ClassicRBAmatrix.row_names[i] for i in MuDeps[0]], [
+        self.ClassicRBAmatrix.col_names[j] for j in MuDeps[1]]))
+    ## Find rows at which the two righthandsides differ ##
+    MuDepIndices_b = [n for n in self.ClassicRBAmatrix.row_names if M0.b[self.ClassicRBAmatrix.row_names.index(
+        n)] != M11.b[self.ClassicRBAmatrix.row_names.index(n)]]
+    ## Find columns at which the variable bounds differ ##
+    MuDepIndices_LB = [n for n in self.ClassicRBAmatrix.col_names if M0.LB[self.ClassicRBAmatrix.col_names.index(
+        n)] != M11.LB[self.ClassicRBAmatrix.col_names.index(n)]]
+    MuDepIndices_UB = [n for n in self.ClassicRBAmatrix.col_names if M0.UB[self.ClassicRBAmatrix.col_names.index(
+        n)] != M11.UB[self.ClassicRBAmatrix.col_names.index(n)]]
+    self.MuDependencies = {&#39;FromMatrix&#39;: {&#39;A&#39;: MuDepIndices_A, &#39;b&#39;: MuDepIndices_b, &#39;LB&#39;: MuDepIndices_LB, &#39;UB&#39;: MuDepIndices_UB},
+                           &#39;FromParameters&#39;: {&#39;A&#39;: {}, &#39;b&#39;: {}, &#39;LB&#39;: {}, &#39;UB&#39;: {}}}</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.getCompartmentCapacities"><code class="name flex">
+<span>def <span class="ident">getCompartmentCapacities</span></span>(<span>self, *Compartment)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns of capacity coefficients of compartments in problem.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>Compartment</code></strong> :&ensp;<code>str</code> <code>list</code> of <code>str</code> or <code>None</code></dt>
+<dd>Compartments to retreive the capacity coefficients for.
+Either compartment ID or list of compartment IDs to specify
+the capacities of which compartments to look up.
+This is an optional input; if not provided all compartments are looked up.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>dict</code></strong></dt>
+<dd>Dictionary with compartments ID as keys and their capacities as values.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getCompartmentCapacities(self, *Compartment):
+    &#34;&#34;&#34;
+    Returns of capacity coefficients of compartments in problem.
+
+    Parameters
+    ---------
+    Compartment : str list of str or None
+        Compartments to retreive the capacity coefficients for.
+        Either compartment ID or list of compartment IDs to specify
+        the capacities of which compartments to look up.
+        This is an optional input; if not provided all compartments are looked up.
+
+    Returns
+    ----------
+    dict
+        Dictionary with compartments ID as keys and their capacities as values.
+    &#34;&#34;&#34;
+
+    if len(list(Compartment)) &gt; 0:
+        if isinstance(Compartment[0], list):
+            CompartmentsInQuestion = Compartment[0]
+        if isinstance(Compartment[0], str):
+            CompartmentsInQuestion = [Compartment[0]]
+    if len(list(Compartment)) == 0:
+        CompartmentsInQuestion = self.CompartmentDensities
+    out = {i: self.LP.b[self.LP.rowIndicesMap[i]] for i in CompartmentsInQuestion}
+    return(out)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.getConstraintType"><code class="name flex">
+<span>def <span class="ident">getConstraintType</span></span>(<span>self, *constraints)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Extracts type of constraints.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>constraints</code></strong> :&ensp;<code>str</code> or <code>list</code> of <code>str</code> or <code>None</code></dt>
+<dd>Constraints to retreive the type for.
+Either constraint ID or list of constraint IDs to specify the type
+of which constraint to look up.
+This is an optional input; if not provided all constraint are looked up.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>dict</code></strong></dt>
+<dd>Dictionary with constraint-IDs as keys and
+type identification-characters as values.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getConstraintType(self, *constraints):
+    &#34;&#34;&#34;
+    Extracts type of constraints.
+
+    Parameters
+    ----------
+    constraints : str or list of str or None
+        Constraints to retreive the type for.
+        Either constraint ID or list of constraint IDs to specify the type
+        of which constraint to look up.
+        This is an optional input; if not provided all constraint are looked up.
+    Returns
+    ----------
+    dict
+        Dictionary with constraint-IDs as keys and
+        type identification-characters as values.
+    &#34;&#34;&#34;
+    if len(list(constraints)) &gt; 0:
+        if isinstance(constraints[0], list):
+            names = constraints[0]
+        if isinstance(constraints[0], str):
+            names = [constraints[0]]
+    if len(list(constraints)) == 0:
+        names = self.LP.row_names
+    Types = [self.LP.cplexLP.linear_constraints.get_senses(
+        self.LP.rowIndicesMap[c]) for c in names]
+    return(dict(zip(names, Types)))</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.getEnzymeCapacities"><code class="name flex">
+<span>def <span class="ident">getEnzymeCapacities</span></span>(<span>self, *Enzyme)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns of capacity coefficients oof enzymes in problem.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>Enzyme</code></strong> :&ensp;<code>str</code> <code>list</code> of <code>str</code> or <code>None</code></dt>
+<dd>Enzymes to retreive the efficiency coefficients for.
+Either enzyme ID or list of enzyme IDs to specify
+the efficiencies of which enzymes to look up.
+This is an optional input; if not provided all enzymes are looked up.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>dict</code></strong></dt>
+<dd>Dictionary with enzyme ID as keys and dictionaries as values.
+The "inner" dictionaries hold keys 'Forward' and 'Backward' with forward and backward efficiencies as numeric values respectively.
+{'R_abcdef_enzyme':{'Froward':3000000,'Backward':3000000}} (negative values).
+If enzyme is irreversible 'Backward' is numpy.nan.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getEnzymeCapacities(self, *Enzyme):
+    &#34;&#34;&#34;
+    Returns of capacity coefficients oof enzymes in problem.
+
+    Parameters
+    ---------
+    Enzyme : str list of str or None
+        Enzymes to retreive the efficiency coefficients for.
+        Either enzyme ID or list of enzyme IDs to specify
+        the efficiencies of which enzymes to look up.
+        This is an optional input; if not provided all enzymes are looked up.
+
+    Returns
+    ----------
+    dict
+        Dictionary with enzyme ID as keys and dictionaries as values.
+        The &#34;inner&#34; dictionaries hold keys &#39;Forward&#39; and &#39;Backward&#39; with forward and backward efficiencies as numeric values respectively.
+        {&#39;R_abcdef_enzyme&#39;:{&#39;Froward&#39;:3000000,&#39;Backward&#39;:3000000}} (negative values).
+        If enzyme is irreversible &#39;Backward&#39; is numpy.nan.
+    &#34;&#34;&#34;
+
+    import difflib
+    if len(list(Enzyme)) &gt; 0:
+        if isinstance(Enzyme[0], list):
+            EnzymesInQuestion = Enzyme[0]
+        if isinstance(Enzyme[0], str):
+            EnzymesInQuestion = [Enzyme[0]]
+    if len(list(Enzyme)) == 0:
+        EnzymesInQuestion = self.Enzymes
+    A = scipy.sparse.lil_matrix(self.LP.A)
+    out = {}
+    for i in EnzymesInQuestion:
+        likelyFWkapps = difflib.get_close_matches(i, self.Enzyme_FWcapacities, 1)
+        if len(likelyFWkapps) &gt; 0:
+            FWkapp = likelyFWkapps[0]
+            BWkapp = FWkapp.replace(&#39;_forward_capacity&#39;, &#39;_backward_capacity&#39;)
+            FW = A[self.LP.rowIndicesMap[FWkapp], self.LP.colIndicesMap[i]]
+            if BWkapp in self.Enzyme_BWcapacities:
+                BW = A[self.LP.rowIndicesMap[BWkapp], self.LP.colIndicesMap[i]]
+            else:
+                BW = numpy.nan
+        else:
+            BW = numpy.nan
+            FW = numpy.nan
+        out.update({i: {&#39;Forward&#39;: FW, &#39;Backward&#39;: BW}})
+    return(out)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.getLB"><code class="name flex">
+<span>def <span class="ident">getLB</span></span>(<span>self, *variables)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns lower bounds of problem variables.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>variables</code></strong> :&ensp;<code>str</code> <code>list</code> of <code>str</code> or <code>None</code></dt>
+<dd>Variables to retreive the objective coefficients for.
+Either variable ID or list of variable IDs to specify
+the coefficients of which variables to look up.
+This is an optional input; if not provided all variables are looked up.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>dict</code></strong></dt>
+<dd>Dictionary with variable-IDs as keys and
+lower bounds as values.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getLB(self, *variables):
+    &#34;&#34;&#34;
+    Returns lower bounds of problem variables.
+
+    Parameters
+    ----------
+    variables : str list of str or None
+        Variables to retreive the objective coefficients for.
+        Either variable ID or list of variable IDs to specify
+        the coefficients of which variables to look up.
+        This is an optional input; if not provided all variables are looked up.
+
+    Returns
+    ----------
+    dict
+        Dictionary with variable-IDs as keys and
+        lower bounds as values.
+    &#34;&#34;&#34;
+
+    if len(list(variables)) &gt; 0:
+        if isinstance(variables[0], list):
+            names = variables[0]
+        if isinstance(variables[0], str):
+            names = [variables[0]]
+    if len(list(variables)) == 0:
+        names = self.LP.col_names
+    bound = [self.LP.cplexLP.variables.get_lower_bounds(
+        self.LP.colIndicesMap[v]) for v in names]
+    return(dict(zip(names, bound)))</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.getObjective"><code class="name flex">
+<span>def <span class="ident">getObjective</span></span>(<span>self, *variables)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns objective coefficient of variables in problem.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>variables</code></strong> :&ensp;<code>str</code> or <code>list</code> of <code>str</code> or <code>None</code></dt>
+<dd>Variables to retreive the objective coefficients for.
+Either variable ID or list of variable IDs to specify
+the coefficients of which variables to look up.
+This is an optional input; if not provided all variables are looked up.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>dict</code></strong></dt>
+<dd>Dictionary with variable-IDs as keys and
+objective coefficients as values.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getObjective(self, *variables):
+    &#34;&#34;&#34;
+    Returns objective coefficient of variables in problem.
+
+    Parameters
+    ----------
+    variables : str or list of str or None
+        Variables to retreive the objective coefficients for.
+        Either variable ID or list of variable IDs to specify
+        the coefficients of which variables to look up.
+        This is an optional input; if not provided all variables are looked up.
+
+    Returns
+    ----------
+    dict
+        Dictionary with variable-IDs as keys and
+        objective coefficients as values.
+    &#34;&#34;&#34;
+
+    if len(list(variables)) &gt; 0:
+        if isinstance(variables[0], list):
+            vrs = variables[0]
+            vls = []
+        if isinstance(variables[0], str):
+            vrs = [variables[0]]
+            vls = []
+        for v in vrs:
+            vls.append(self.LP.cplexLP.objective.get_linear()[
+                       numpy.where(numpy.array(self.LP.col_names) == v)[0][0]])
+    if len(list(variables)) == 0:
+        vrs = self.LP.col_names
+        vls = self.LP.cplexLP.objective.get_linear()
+    OF = dict(zip(vrs, vls))
+    return(OF)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.getProblemCoefficients"><code class="name flex">
+<span>def <span class="ident">getProblemCoefficients</span></span>(<span>self, *inputTuples)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns coefficients of LHS of problem.</p>
+<h2 id="parameters">Parameters</h2>
+<p>inputTuples : tuple or list of tuples.
+Tuples hold row and column indices.
+[('row1','col1'),('row2','col2'),&hellip;] or ('row1','col1').</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>dict</code></strong></dt>
+<dd>Dictionary with index tuples as keys and
+matrix coefficients as values.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getProblemCoefficients(self, *inputTuples):
+    &#34;&#34;&#34;
+    Returns coefficients of LHS of problem.
+
+    Parameters
+    ----------
+    inputTuples : tuple or list of tuples.
+        Tuples hold row and column indices.
+        [(&#39;row1&#39;,&#39;col1&#39;),(&#39;row2&#39;,&#39;col2&#39;),...] or (&#39;row1&#39;,&#39;col1&#39;).
+
+    Returns
+    ----------
+    dict
+        Dictionary with index tuples as keys and
+        matrix coefficients as values.
+    &#34;&#34;&#34;
+
+    if len(list(inputTuples)) &gt; 0:
+        if isinstance(inputTuples[0], list):
+            tuples = inputTuples[0]
+        elif isinstance(inputTuples[0], tuple):
+            tuples = [inputTuples[0]]
+        else:
+            print(&#39;Error: Please provide tuple or list of tuples as input&#39;)
+            return
+    if len(list(inputTuples)) == 0:
+        print(&#39;Error: Please provide tuple or list of tuples as input&#39;)
+        return
+    return(dict(zip(tuples, [self.LP.cplexLP.linear_constraints.get_coefficients(self.LP.rowIndicesMap[tup[0]], self.LP.colIndicesMap[tup[1]]) for tup in tuples])))</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.getProcessCapacities"><code class="name flex">
+<span>def <span class="ident">getProcessCapacities</span></span>(<span>self, *Process)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns of capacity coefficients of process machineries in problem.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>Process</code></strong> :&ensp;<code>str</code> <code>list</code> of <code>str</code> or <code>None</code></dt>
+<dd>Processes to retreive the efficiency coefficients for.
+Either process ID or list of process IDs to specify
+the efficiencies of which processes to look up.
+This is an optional input; if not provided all processes are looked up.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>dict</code></strong></dt>
+<dd>Dictionary with process ID as keys and their efficiencies as values.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getProcessCapacities(self, *Process):
+    &#34;&#34;&#34;
+    Returns of capacity coefficients of process machineries in problem.
+
+    Parameters
+    ---------
+    Process : str list of str or None
+        Processes to retreive the efficiency coefficients for.
+        Either process ID or list of process IDs to specify
+        the efficiencies of which processes to look up.
+        This is an optional input; if not provided all processes are looked up.
+
+    Returns
+    ----------
+    dict
+        Dictionary with process ID as keys and their efficiencies as values.
+    &#34;&#34;&#34;
+
+    import difflib
+    if len(list(Process)) &gt; 0:
+        if isinstance(Process[0], list):
+            ProcessesInQuestion = Process[0]
+        if isinstance(Process[0], str):
+            ProcessesInQuestion = [Process[0]]
+    if len(list(Process)) == 0:
+        ProcessesInQuestion = self.Processes
+    IndexPairs = [(self.LP.rowIndicesMap[difflib.get_close_matches(i, self.ProcessCapacities, 1)[
+        0]], self.LP.colIndicesMap[i]) for i in ProcessesInQuestion]
+    A = scipy.sparse.lil_matrix(self.LP.A)
+    out = {i: A[IndexPairs[ProcessesInQuestion.index(i)]] for i in ProcessesInQuestion}
+    return(out)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.getRighthandSideValue"><code class="name flex">
+<span>def <span class="ident">getRighthandSideValue</span></span>(<span>self, *constraints)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Extracts coefficients of problem's righthand side (B-vector).</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>constraints</code></strong> :&ensp;<code>str</code> or <code>list</code> of <code>str</code> or <code>None</code></dt>
+<dd>Constraints to retreive the objective coefficients for.
+Either constraint ID or list of constraint IDs to specify the RHS
+of which constraint to look up.
+This is an optional input; if not provided all constraint are looked up.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>dict</code></strong></dt>
+<dd>Dictionary with constraint-IDs as keys and
+RHS-values as values.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getRighthandSideValue(self, *constraints):
+    &#34;&#34;&#34;
+    Extracts coefficients of problem&#39;s righthand side (B-vector).
+
+    Parameters
+    ----------
+    constraints : str or list of str or None
+        Constraints to retreive the objective coefficients for.
+        Either constraint ID or list of constraint IDs to specify the RHS
+        of which constraint to look up.
+        This is an optional input; if not provided all constraint are looked up.
+    Returns
+    ----------
+    dict
+        Dictionary with constraint-IDs as keys and
+        RHS-values as values.
+    &#34;&#34;&#34;
+
+    if len(list(constraints)) &gt; 0:
+        if isinstance(constraints[0], list):
+            names = constraints[0]
+        if isinstance(constraints[0], str):
+            names = [constraints[0]]
+    if len(list(constraints)) == 0:
+        names = self.LP.row_names
+    Bs = [self.LP.cplexLP.linear_constraints.get_rhs(self.LP.rowIndicesMap[c]) for c in names]
+    return(dict(zip(names, Bs)))</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.getUB"><code class="name flex">
+<span>def <span class="ident">getUB</span></span>(<span>self, *variables)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns upper bounds of problem variables.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>variables</code></strong> :&ensp;<code>str</code> <code>list</code> of <code>str</code> or <code>None</code></dt>
+<dd>Variables to retreive the objective coefficients for.
+Either variable ID or list of variable IDs to specify
+the coefficients of which variables to look up.
+This is an optional input; if not provided all variables are looked up.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>dict</code></strong></dt>
+<dd>Dictionary with variable-IDs as keys and
+upper bounds as values.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getUB(self, *variables):
+    &#34;&#34;&#34;
+    Returns upper bounds of problem variables.
+
+    Parameters
+    ----------
+    variables : str list of str or None
+        Variables to retreive the objective coefficients for.
+        Either variable ID or list of variable IDs to specify
+        the coefficients of which variables to look up.
+        This is an optional input; if not provided all variables are looked up.
+
+    Returns
+    ----------
+    dict
+        Dictionary with variable-IDs as keys and
+        upper bounds as values.
+    &#34;&#34;&#34;
+
+    if len(list(variables)) &gt; 0:
+        if isinstance(variables[0], list):
+            names = variables[0]
+        if isinstance(variables[0], str):
+            names = [variables[0]]
+    if len(list(variables)) == 0:
+        names = self.LP.col_names
+    bound = [self.LP.cplexLP.variables.get_upper_bounds(
+        self.LP.colIndicesMap[v]) for v in names]
+    return(dict(zip(names, bound)))</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.invertObjective"><code class="name flex">
+<span>def <span class="ident">invertObjective</span></span>(<span>self, logging=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Changes sign (optimisation-sense) of objective function.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>logging</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Wheter to write change to log-file or not</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def invertObjective(self, logging=True):
+    &#34;&#34;&#34;
+    Changes sign (optimisation-sense) of objective function.
+
+    Parameters
+    ----------
+    logging : bool
+        Wheter to write change to log-file or not
+    &#34;&#34;&#34;
+
+    if logging:
+        self.LogBook.addEntry(&#39;Objective inverted.&#39;)
+    current_objective = self.getObjective()
+    negative_objective = zip(list(current_objective.keys()),
+                             [-float(x) for x in list(current_objective.values())])
+    ##Update in cplex.Cplex LP##
+    self.LP.cplexLP.objective.set_linear(negative_objective)
+    ##Transfer changes to rbatools.RBA_LP object##
+    self.LP.f = self.LP.cplexLP.objective.get_linear()</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.resetCPLEXparams"><code class="name flex">
+<span>def <span class="ident">resetCPLEXparams</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets cplex.Cplex() parameters to predefined values.</p>
+<h2 id="settings">Settings</h2>
+<p>cplex.Cplex.parameters.feasopt.tolerance.set(1e-9)
+cplex.Cplex.parameters.simplex.tolerances.feasibility.set(1e-9)
+cplex.Cplex.parameters.simplex.tolerances.optimality.set(1e-9)
+cplex.Cplex.parameters.simplex.tolerances.markowitz.set(0.1)
+cplex.Cplex.parameters.barrier.convergetol.set(1e-9)
+cplex.Cplex.parameters.read.scale.set(1)
+cplex.Cplex.set_results_stream(None)
+cplex.Cplex.set_log_stream(None)
+cplex.Cplex.set_warning_stream(None)</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def resetCPLEXparams(self):
+    &#34;&#34;&#34;
+    Sets cplex.Cplex() parameters to predefined values.
+
+    Settings:
+        cplex.Cplex.parameters.feasopt.tolerance.set(1e-9)
+        cplex.Cplex.parameters.simplex.tolerances.feasibility.set(1e-9)
+        cplex.Cplex.parameters.simplex.tolerances.optimality.set(1e-9)
+        cplex.Cplex.parameters.simplex.tolerances.markowitz.set(0.1)
+        cplex.Cplex.parameters.barrier.convergetol.set(1e-9)
+        cplex.Cplex.parameters.read.scale.set(1)
+        cplex.Cplex.set_results_stream(None)
+        cplex.Cplex.set_log_stream(None)
+        cplex.Cplex.set_warning_stream(None)
+    &#34;&#34;&#34;
+    self.LP.cplexLP.parameters.feasopt.tolerance.set(1e-9)
+    self.LP.cplexLP.parameters.simplex.tolerances.feasibility.set(1e-9)
+    self.LP.cplexLP.parameters.simplex.tolerances.optimality.set(1e-9)
+    self.LP.cplexLP.parameters.simplex.tolerances.markowitz.set(0.1)
+    self.LP.cplexLP.parameters.barrier.convergetol.set(1e-9)
+    self.LP.cplexLP.parameters.read.scale.set(1)
+    self.LP.cplexLP.set_results_stream(None)
+    self.LP.cplexLP.set_log_stream(None)
+    self.LP.cplexLP.set_warning_stream(None)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.setConstraintType"><code class="name flex">
+<span>def <span class="ident">setConstraintType</span></span>(<span>self, inputDict, logging=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets type of constraints.</p>
+<dl>
+<dt><strong><code>E</code></strong> :&ensp;= or <code>L</code>: &lt;=</dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>inputDict</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dictionary with constraint-IDs as keys and type identification-character as values.
+({'col1':'E','col2':'L', &hellip;}).</dd>
+<dt><strong><code>logging</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Wheter to write change to log-file or not</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setConstraintType(self, inputDict, logging=True):
+    &#34;&#34;&#34;
+    Sets type of constraints.
+
+    E: = or L: &lt;=
+
+    Parameters
+    ----------
+    inputDict : dict
+        Dictionary with constraint-IDs as keys and type identification-character as values.
+        ({&#39;col1&#39;:&#39;E&#39;,&#39;col2&#39;:&#39;L&#39;, ...}).
+    logging : bool
+        Wheter to write change to log-file or not
+    &#34;&#34;&#34;
+    if logging:
+        for c in list(inputDict.keys()):
+            self.LogBook.addEntry(&#39;Constraint-type {} changed:{} --&gt; {}&#39;.format(c,
+                                                                                self.LP.row_signs[self.LP.rowIndicesMap[c]], inputDict[c]))
+
+    ##Update in cplex.Cplex LP##
+    self.LP.cplexLP.linear_constraints.set_senses(
+        list(zip(inputDict.keys(), inputDict.values())))
+    ##Transfer changes to rbatools.RBA_LP object##
+    self.LP.row_signs = self.LP.cplexLP.linear_constraints.get_senses()</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.setLB"><code class="name flex">
+<span>def <span class="ident">setLB</span></span>(<span>self, inputDict, logging=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set lower-bounds of the problem variables.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>inputDict</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dictionary with variable-IDs as keys and new numeric values as values.
+({'col1':42,'col2':9000, &hellip;}).</dd>
+<dt><strong><code>logging</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Wheter to write change to log-file or not</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setLB(self, inputDict, logging=True):
+    &#34;&#34;&#34;
+    Set lower-bounds of the problem variables.
+
+    Parameters
+    ----------
+    inputDict : dict
+        Dictionary with variable-IDs as keys and new numeric values as values.
+        ({&#39;col1&#39;:42,&#39;col2&#39;:9000, ...}).
+    logging : bool
+        Wheter to write change to log-file or not
+    &#34;&#34;&#34;
+
+    if logging:
+        for v in list(inputDict.keys()):
+            self.LogBook.addEntry(&#39;LowerBound {} changed:{} --&gt; {}&#39;.format(v,
+                                                                           self.LP.LB[self.LP.colIndicesMap[v]], inputDict[v]))
+    ##Update in cplex.Cplex LP##
+    self.LP.cplexLP.variables.set_lower_bounds(
+        zip(list(inputDict.keys()), [float(i) for i in list(inputDict.values())]))
+    ##Transfer changes to rbatools.RBA_LP object##
+    self.LP.LB = self.LP.cplexLP.variables.get_lower_bounds()</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.setMu"><code class="name flex">
+<span>def <span class="ident">setMu</span></span>(<span>self, Mu, ModelStructure, keepParameters=None, logging=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Changes growth-rate of problem and sets all associated coefficients.</p>
+<p>Can be provided with 'keepParameters' argument
+to define problem coefficients which should remain unchanged.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>Mu</code></strong> :&ensp;<code>float</code></dt>
+<dd>Growth rate</dd>
+<dt>ModelStructure : RBA_ModellStructure object.</dt>
+<dt><strong><code>keepParameters</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dictionary indicating which elements of the linear problem should
+not be affected when setting growth-rate. Possible keys of dictionary:
+'LHS': List of index-tuples (constraint-ID,variable-ID),
+indicating elements of the lefthandside (constraint-matrix).
+'RHS': List of constraint IDs, indicating elements of the righthandside (b-vector).
+'LB': List of variable-IDs, indicating elements of the lower-bound vector.
+'UB': List of variable-IDs, indicating elements of the upper-bound vector.
+Default: keepParameters=None</dd>
+<dt><strong><code>logging</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Wheter to write change to log-file or not</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setMu(self, Mu, ModelStructure, keepParameters=None, logging=True):
+    &#34;&#34;&#34;
+    Changes growth-rate of problem and sets all associated coefficients.
+
+    Can be provided with &#39;keepParameters&#39; argument
+    to define problem coefficients which should remain unchanged.
+
+    Parameters
+    ----------
+    Mu : float
+        Growth rate
+    ModelStructure : RBA_ModellStructure object.
+    keepParameters : dict
+        Dictionary indicating which elements of the linear problem should
+        not be affected when setting growth-rate. Possible keys of dictionary:
+            &#39;LHS&#39;: List of index-tuples (constraint-ID,variable-ID),
+                   indicating elements of the lefthandside (constraint-matrix).
+            &#39;RHS&#39;: List of constraint IDs, indicating elements of the righthandside (b-vector).
+            &#39;LB&#39;: List of variable-IDs, indicating elements of the lower-bound vector.
+            &#39;UB&#39;: List of variable-IDs, indicating elements of the upper-bound vector.
+        Default: keepParameters=None
+    logging : bool
+        Wheter to write change to log-file or not
+            &#34;&#34;&#34;
+
+    self.Mu = float(Mu)
+    NumberParDeps = len([self.MuDependencies[&#39;FromParameters&#39;][i].keys() for i in [
+                        &#39;b&#39;, &#39;A&#39;, &#39;LB&#39;, &#39;UB&#39;] if len(list(self.MuDependencies[&#39;FromParameters&#39;][i].keys())) &gt; 0])
+    if self.LP.row_names == self.ClassicRBAmatrix.row_names and self.LP.col_names == self.ClassicRBAmatrix.col_names and self.classicRBA and NumberParDeps == 0:
+        self.updateMu(Mu=float(Mu), keepParameters=keepParameters,
+                      logging=logging, ModifiedProblem=False)
+    else:
+        self.updateMu(Mu=float(Mu), keepParameters=keepParameters,
+                      logging=logging, ModifiedProblem=True)
+
+    self.resetCPLEXparams()</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.setObjectiveCoefficients"><code class="name flex">
+<span>def <span class="ident">setObjectiveCoefficients</span></span>(<span>self, inputDict, logging=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets objective function coefficients.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>inputDict</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dictionary with variable-IDs as keys and new numeric values as values.
+({'col1':42,'col2':9000, &hellip;}).</dd>
+<dt><strong><code>logging</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Wheter to write change to log-file or not</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setObjectiveCoefficients(self, inputDict, logging=True):
+    &#34;&#34;&#34;
+    Sets objective function coefficients.
+
+    Parameters
+    ----------
+    inputDict : dict
+        Dictionary with variable-IDs as keys and new numeric values as values.
+        ({&#39;col1&#39;:42,&#39;col2&#39;:9000, ...}).
+    logging : bool
+        Wheter to write change to log-file or not
+    &#34;&#34;&#34;
+    if logging:
+        for v in list(inputDict.keys()):
+            self.LogBook.addEntry(&#39;Objective coefficient {} changed:{} --&gt; {}&#39;.format(v,
+                                                                                      self.LP.f[self.LP.colIndicesMap[v]], inputDict[v]))
+
+    ##Update in cplex.Cplex LP##
+    self.LP.cplexLP.objective.set_linear(
+        zip(list(inputDict.keys()), [float(i) for i in list(inputDict.values())]))
+    ##Transfer changes to rbatools.RBA_LP object##
+    self.LP.f = self.LP.cplexLP.objective.get_linear()</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.setProblemCoefficients"><code class="name flex">
+<span>def <span class="ident">setProblemCoefficients</span></span>(<span>self, inputDict, logging=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set coefficients of the problems' LHS (constraint matrix).</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>inputDict</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dict with index-tuples ('row1','col1') as keys
+and new numeric values as values.
+({('row1','col1'):42,('row2','col2'):9000, &hellip;}).</dd>
+<dt><strong><code>logging</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Wheter to write change to log-file or not</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setProblemCoefficients(self, inputDict, logging=True):
+    &#34;&#34;&#34;
+    Set coefficients of the problems&#39; LHS (constraint matrix).
+
+    Parameters
+    ----------
+    inputDict : dict
+        Dict with index-tuples (&#39;row1&#39;,&#39;col1&#39;) as keys
+        and new numeric values as values.
+        ({(&#39;row1&#39;,&#39;col1&#39;):42,(&#39;row2&#39;,&#39;col2&#39;):9000, ...}).
+    logging : bool
+        Wheter to write change to log-file or not
+    &#34;&#34;&#34;
+
+    variables = []
+    constraints = []
+    coefficients = []
+    Changes = []
+    for const in list(inputDict.keys()):
+        for var in list(inputDict[const].keys()):
+            if logging:
+                self.LogBook.addEntry(&#39;LHS coefficient {} changed:{} --&gt; {}&#39;.format(
+                    (const, var), self.getProblemCoefficients((const, var))[(const, var)], inputDict[const][var]))
+            constraints.append(const)
+            variables.append(var)
+            coefficients.append(numpy.float64(inputDict[const][var]))
+    Changes = list(zip(constraints, variables, coefficients))
+    ##Update in cplex.Cplex LP##
+    self.LP.cplexLP.linear_constraints.set_coefficients(Changes)
+    ##Transfer changes to rbatools.RBA_LP object##
+    self.LP.A = convertCPLEXmatrix_to_Sparse(self)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.setRighthandSideValue"><code class="name flex">
+<span>def <span class="ident">setRighthandSideValue</span></span>(<span>self, inputDict, logging=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set coefficients of the problems' RHS (b-vector).
+Parameters</p>
+<hr>
+<dl>
+<dt><strong><code>inputDict</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dictionary with constraint-IDs as keys and new numeric values as values.
+({'row1':42,'row2':9000, &hellip;}).</dd>
+<dt><strong><code>logging</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Wheter to write change to log-file or not</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setRighthandSideValue(self, inputDict, logging=True):
+    &#34;&#34;&#34;
+    Set coefficients of the problems&#39; RHS (b-vector).
+    Parameters
+    ----------
+    inputDict : dict
+        Dictionary with constraint-IDs as keys and new numeric values as values.
+        ({&#39;row1&#39;:42,&#39;row2&#39;:9000, ...}).
+    logging : bool
+        Wheter to write change to log-file or not
+    &#34;&#34;&#34;
+    if logging:
+        for c in list(inputDict.keys()):
+            self.LogBook.addEntry(&#39;RHS coefficient {} changed:{} --&gt; {}&#39;.format(v,
+                                                                                self.LP.b[self.LP.rowIndicesMap[c]], inputDict[c]))
+
+    ##Update in cplex.Cplex LP##
+    self.LP.cplexLP.linear_constraints.set_rhs(
+        list(zip(list(inputDict.keys()), [float(i) for i in list(inputDict.values())])))
+    ##Transfer changes to rbatools.RBA_LP object##
+    self.LP.b = self.LP.cplexLP.linear_constraints.get_rhs()</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.setUB"><code class="name flex">
+<span>def <span class="ident">setUB</span></span>(<span>self, inputDict, logging=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set upper-bounds of the problem variables.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>inputDict</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dictionary with variable-IDs as keys and new numeric values as values.
+({'col1':42,'col2':9000, &hellip;}).</dd>
+<dt><strong><code>logging</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Wheter to write change to log-file or not</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setUB(self, inputDict, logging=True):
+    &#34;&#34;&#34;
+    Set upper-bounds of the problem variables.
+
+    Parameters
+    ----------
+    inputDict : dict
+        Dictionary with variable-IDs as keys and new numeric values as values.
+        ({&#39;col1&#39;:42,&#39;col2&#39;:9000, ...}).
+    logging : bool
+        Wheter to write change to log-file or not
+    &#34;&#34;&#34;
+
+    if logging:
+        for v in list(inputDict.keys()):
+            self.LogBook.addEntry(&#39;UpperBound {} changed:{} --&gt; {}&#39;.format(v,
+                                                                           self.LP.UB[self.LP.colIndicesMap[v]], inputDict[v]))
+    ##Update in cplex.Cplex LP##
+    # self.LP.cplexLP.variables.set_upper_bounds(zip(list(inputDict.keys()), [self.LP.colIndicesMap[v] for v in list(inputDict.keys())]))
+    self.LP.cplexLP.variables.set_upper_bounds(
+        zip(list(inputDict.keys()), [float(i) for i in list(inputDict.values())]))
+    ##Transfer changes to rbatools.RBA_LP object##
+    self.LP.UB = self.LP.cplexLP.variables.get_upper_bounds()</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.solveLP"><code class="name flex">
+<span>def <span class="ident">solveLP</span></span>(<span>self, feasibleStatuses=[1], try_unscaling_if_sol_status_is_five=True, logging=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Solves Linear RBA problem.</p>
+<p>Optimises RBA-LP with CPLEX.
+When cplex-solution status is amongst the user-defined feasible statuses;
+boolean 'Solved' is set to True and 'ObjectiveValue', 'SolutionValues' and 'DualValues'
+are stored as attributes.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>feasibleStatuses</code></strong> :&ensp;<code>list</code> of <code>int</code></dt>
+<dd>List with identifiers of acceptable solution statuses.
+(consult ILOG-CPLEX documentation for information on them).
+Default: feasibleStatuses=[1]</dd>
+<dt><strong><code>logging</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Wheter to write change to log-file or not</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def solveLP(self, feasibleStatuses=[1], try_unscaling_if_sol_status_is_five=True, logging=True):
+    &#34;&#34;&#34;
+    Solves Linear RBA problem.
+
+    Optimises RBA-LP with CPLEX.
+    When cplex-solution status is amongst the user-defined feasible statuses;
+    boolean &#39;Solved&#39; is set to True and &#39;ObjectiveValue&#39;, &#39;SolutionValues&#39; and &#39;DualValues&#39;
+    are stored as attributes.
+
+    Parameters
+    ----------
+    feasibleStatuses : list of int
+        List with identifiers of acceptable solution statuses.
+        (consult ILOG-CPLEX documentation for information on them).
+        Default: feasibleStatuses=[1]
+    logging : bool
+        Wheter to write change to log-file or not
+    &#34;&#34;&#34;
+
+    self.Solved = False
+    try:
+        ## Solve cplex LP ##
+        self.LP.cplexLP.solve()
+        ## Determin solution-status ##
+        self.SolutionStatus = self.LP.cplexLP.solution.get_status()
+        ## Check if solution status is amongst acceptable ones ##
+        if logging:
+            self.LogBook.addEntry(
+                &#39;Problem solved with solution status: {}&#39;.format(self.SolutionStatus))
+        if self.SolutionStatus in feasibleStatuses:
+            ## Extract solution-data ##
+            self.Solved = True
+            self.ObjectiveValue = self.LP.cplexLP.solution.get_objective_value()
+            self.SolutionValues = dict(
+                zip(self.LP.col_names, self.LP.cplexLP.solution.get_values()))
+            self.DualValues = dict(
+                zip(self.LP.row_names, self.LP.cplexLP.solution.get_dual_values()))
+        else:
+            if try_unscaling_if_sol_status_is_five:
+                if self.SolutionStatus == 5:
+                    self.LP.cplexLP.parameters.read.scale.set(-1)
+                    self.LP.cplexLP.solve()
+                    self.SolutionStatus = self.LP.cplexLP.solution.get_status()
+                    if self.SolutionStatus in feasibleStatuses:
+                        ## Extract solution-data ##
+                        self.Solved = True
+                        self.ObjectiveValue = self.LP.cplexLP.solution.get_objective_value()
+                        self.SolutionValues = dict(
+                            zip(self.LP.col_names, self.LP.cplexLP.solution.get_values()))
+                        self.DualValues = dict(
+                            zip(self.LP.row_names, self.LP.cplexLP.solution.get_dual_values()))
+
+    except:
+        self.ObjectiveValue = None
+        self.SolutionValues = None
+        self.DualValues = None</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Problem.RBA_Problem.updateMu"><code class="name flex">
+<span>def <span class="ident">updateMu</span></span>(<span>self, Mu, keepParameters=None, logging=True, ModifiedProblem=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Changes growth-rate of problem and sets all associated coefficients.</p>
+<p>Can be provided with 'keepParameters' argument
+to define problem coefficients which should remain unchanged.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>Mu</code></strong> :&ensp;<code>float</code></dt>
+<dd>Growth rate</dd>
+<dt><strong><code>keepParameters</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dictionary indicating which elements of the linear problem should
+not be affected when setting growth-rate. Possible keys of dictionary:
+'LHS': List of index-tuples (constraint-ID,variable-ID),
+indicating elements of the lefthandside (constraint-matrix).
+'RHS': List of constraint IDs, indicating elements of the righthandside (b-vector).
+'LB': List of variable-IDs, indicating elements of the lower-bound vector.
+'UB': List of variable-IDs, indicating elements of the upper-bound vector.
+Default: keepParameters=None</dd>
+<dt><strong><code>logging</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Wheter to write change to log-file or not</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def updateMu(self, Mu, keepParameters=None, logging=True, ModifiedProblem=False):
+    &#34;&#34;&#34;
+    Changes growth-rate of problem and sets all associated coefficients.
+
+    Can be provided with &#39;keepParameters&#39; argument
+    to define problem coefficients which should remain unchanged.
+
+    Parameters
+    ----------
+    Mu : float
+        Growth rate
+    keepParameters : dict
+        Dictionary indicating which elements of the linear problem should
+        not be affected when setting growth-rate. Possible keys of dictionary:
+            &#39;LHS&#39;: List of index-tuples (constraint-ID,variable-ID),
+                   indicating elements of the lefthandside (constraint-matrix).
+            &#39;RHS&#39;: List of constraint IDs, indicating elements of the righthandside (b-vector).
+            &#39;LB&#39;: List of variable-IDs, indicating elements of the lower-bound vector.
+            &#39;UB&#39;: List of variable-IDs, indicating elements of the upper-bound vector.
+        Default: keepParameters=None
+    logging : bool
+        Wheter to write change to log-file or not
+            &#34;&#34;&#34;
+    if keepParameters is None:
+        A_idxs = self.MuDependencies[&#39;FromMatrix&#39;][&#39;A&#39;]
+        B_idxs = self.MuDependencies[&#39;FromMatrix&#39;][&#39;b&#39;]
+        LB_idxs = self.MuDependencies[&#39;FromMatrix&#39;][&#39;LB&#39;]
+        UB_idxs = self.MuDependencies[&#39;FromMatrix&#39;][&#39;UB&#39;]
+    else:
+        ## If indices are passed, which define elements to be not changed when setting Mu ##
+        ## these indices are removed from the update-from-new-to-old indices ##
+        if &#39;LHS&#39; in list(keepParameters.keys()):
+            A_idxs = set(self.MuDependencies[&#39;FromMatrix&#39;][&#39;A&#39;])-set(keepParameters[&#39;LHS&#39;])
+        if &#39;RHS&#39; in list(keepParameters.keys()):
+            B_idxs = set(self.MuDependencies[&#39;FromMatrix&#39;][&#39;b&#39;])-set(keepParameters[&#39;RHS&#39;])
+        if &#39;LB&#39; in list(keepParameters.keys()):
+            LB_idxs = set(self.MuDependencies[&#39;FromMatrix&#39;][&#39;LB&#39;])-set(keepParameters[&#39;LB&#39;])
+        if &#39;UB&#39; in list(keepParameters.keys()):
+            UB_idxs = set(self.MuDependencies[&#39;FromMatrix&#39;][&#39;UB&#39;])-set(keepParameters[&#39;UB&#39;])
+    ## Pass new matrix and indices of elements to update to LP.updateMatrix-method ##
+    self.ClassicRBAmatrix.build_matrices(self.Mu)
+    inputMatrix = RBA_Matrix()
+    inputMatrix.loadMatrix(matrix=self.ClassicRBAmatrix)
+    self.LP.updateMatrix(matrix=inputMatrix, Ainds=A_idxs, Binds=B_idxs,
+                         CTinds=[], LBinds=LB_idxs, UBinds=UB_idxs)
+    if ModifiedProblem:
+        for i in list(self.MuDependencies[&#39;FromParameters&#39;][&#39;b&#39;].keys()):
+            newPar = self.evaluateParameter(self.MuDependencies[&#39;FromParameters&#39;][&#39;b&#39;][i])
+            self.setRighthandSideValue({i: newPar}, logging=False)
+        for i in list(self.MuDependencies[&#39;FromParameters&#39;][&#39;A&#39;].keys()):
+            newPar = self.evaluateParameter(self.MuDependencies[&#39;FromParameters&#39;][&#39;A&#39;][i])
+            self.setProblemCoefficients({i: newPar}, logging=False)
+        for i in list(self.MuDependencies[&#39;FromParameters&#39;][&#39;LB&#39;].keys()):
+            newPar = self.evaluateParameter(self.MuDependencies[&#39;FromParameters&#39;][&#39;LB&#39;][i])
+            self.setLB({i: newPar}, logging=False)
+        for i in list(self.MuDependencies[&#39;FromParameters&#39;][&#39;UB&#39;].keys()):
+            newPar = self.evaluateParameter(self.MuDependencies[&#39;FromParameters&#39;][&#39;UB&#39;][i])
+            self.setUB({i: newPar}, logging=False)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="rbatools" href="index.html">rbatools</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="rbatools.rba_Problem.convertCPLEXmatrix_to_Sparse" href="#rbatools.rba_Problem.convertCPLEXmatrix_to_Sparse">convertCPLEXmatrix_to_Sparse</a></code></li>
+<li><code><a title="rbatools.rba_Problem.determineCoefficient" href="#rbatools.rba_Problem.determineCoefficient">determineCoefficient</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="rbatools.rba_Problem.RBA_Problem" href="#rbatools.rba_Problem.RBA_Problem">RBA_Problem</a></code></h4>
+<ul class="">
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.__init__" href="#rbatools.rba_Problem.RBA_Problem.__init__">__init__</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.BuildClassicMatrix" href="#rbatools.rba_Problem.RBA_Problem.BuildClassicMatrix">BuildClassicMatrix</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.calculateLefthandSideValue" href="#rbatools.rba_Problem.RBA_Problem.calculateLefthandSideValue">calculateLefthandSideValue</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.clearObjective" href="#rbatools.rba_Problem.RBA_Problem.clearObjective">clearObjective</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.evaluateParameter" href="#rbatools.rba_Problem.RBA_Problem.evaluateParameter">evaluateParameter</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.extractConstraintTypes" href="#rbatools.rba_Problem.RBA_Problem.extractConstraintTypes">extractConstraintTypes</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.extractVariableTypes" href="#rbatools.rba_Problem.RBA_Problem.extractVariableTypes">extractVariableTypes</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.findMudependencies" href="#rbatools.rba_Problem.RBA_Problem.findMudependencies">findMudependencies</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.getCompartmentCapacities" href="#rbatools.rba_Problem.RBA_Problem.getCompartmentCapacities">getCompartmentCapacities</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.getConstraintType" href="#rbatools.rba_Problem.RBA_Problem.getConstraintType">getConstraintType</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.getEnzymeCapacities" href="#rbatools.rba_Problem.RBA_Problem.getEnzymeCapacities">getEnzymeCapacities</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.getLB" href="#rbatools.rba_Problem.RBA_Problem.getLB">getLB</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.getObjective" href="#rbatools.rba_Problem.RBA_Problem.getObjective">getObjective</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.getProblemCoefficients" href="#rbatools.rba_Problem.RBA_Problem.getProblemCoefficients">getProblemCoefficients</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.getProcessCapacities" href="#rbatools.rba_Problem.RBA_Problem.getProcessCapacities">getProcessCapacities</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.getRighthandSideValue" href="#rbatools.rba_Problem.RBA_Problem.getRighthandSideValue">getRighthandSideValue</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.getUB" href="#rbatools.rba_Problem.RBA_Problem.getUB">getUB</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.invertObjective" href="#rbatools.rba_Problem.RBA_Problem.invertObjective">invertObjective</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.resetCPLEXparams" href="#rbatools.rba_Problem.RBA_Problem.resetCPLEXparams">resetCPLEXparams</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.setConstraintType" href="#rbatools.rba_Problem.RBA_Problem.setConstraintType">setConstraintType</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.setLB" href="#rbatools.rba_Problem.RBA_Problem.setLB">setLB</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.setMu" href="#rbatools.rba_Problem.RBA_Problem.setMu">setMu</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.setObjectiveCoefficients" href="#rbatools.rba_Problem.RBA_Problem.setObjectiveCoefficients">setObjectiveCoefficients</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.setProblemCoefficients" href="#rbatools.rba_Problem.RBA_Problem.setProblemCoefficients">setProblemCoefficients</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.setRighthandSideValue" href="#rbatools.rba_Problem.RBA_Problem.setRighthandSideValue">setRighthandSideValue</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.setUB" href="#rbatools.rba_Problem.RBA_Problem.setUB">setUB</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.solveLP" href="#rbatools.rba_Problem.RBA_Problem.solveLP">solveLP</a></code></li>
+<li><code><a title="rbatools.rba_Problem.RBA_Problem.updateMu" href="#rbatools.rba_Problem.RBA_Problem.updateMu">updateMu</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.5.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

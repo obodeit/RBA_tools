@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.5.3" />
+<title>rbatools.rba_Matrix API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.name small{font-weight:normal}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title"><code>rbatools.rba_Matrix</code> module</h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from __future__ import division, print_function
+import numpy
+import scipy
+
+
+class RBA_Matrix(object):
+    &#34;&#34;&#34;
+    Class holding RBA-Linear Problem.
+    Required Object type for linear problems (matrices), to be used in this RBA-API.
+    Should include all fields, required for a linear problem in the COBRA format, as attributes.
+
+    Attributes
+    ----------
+    A : scipy.sparse.coo_matrix
+        Lefthandside of constraint Matrix (aka Constraint Matrix)
+    b : numpy.array
+        Righthandside of Constraint Matrix
+    row_signs : list
+        Type of constraints (&#39;E&#39; for equality &#39;L&#39; for lower-or-equal inequality) --&gt; Ax=b or Ax&lt;=b
+    f : numyp.array
+        Objective function linear get_coefficients
+    LB : numpy.array
+        Lower bounds of decision-variables
+    UB : numpy.array
+        Upper bounds of decision-variables
+    row_names : list
+        Names of constraints
+    col_names : list
+        Names of decision-variables
+    rowIndicesMap : dict
+        Dictionary mapping constraint names to their numeric index (generated automatically)
+    colIndicesMap : dict
+        Dictionary mapping variable names to their numeric index (generated automatically)
+
+    Methods
+    ----------
+    __init__()
+        Initiates with empty Problem. Attributes can be changed manually.
+
+    loadMatrix(matrix)
+        Imports information for attributes from input-objects
+
+    mapIndices():
+        Generates rowIndicesMap and colIndicesMap from attributes.
+
+    AtoLiL()
+        Transforms constraint matrix (LHS) to scipy.sparse.lil_matrix format.
+
+    AtoCOO()
+        Transforms constraint matrix (LHS) to scipy.sparse.coo_matrix format.
+
+    tofloat64()
+        Transforms all numerical attributes to number type numpy.float64.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        &#34;&#34;&#34;
+        Initiates with empty Problem. Attributes can be changed manually.
+        &#34;&#34;&#34;
+
+        self.A = scipy.sparse.coo.coo_matrix(numpy.array([]))
+        self.b = numpy.array([])
+        self.f = numpy.array([])
+        self.LB = numpy.array([])
+        self.UB = numpy.array([])
+        self.row_signs = []
+        self.row_names = []
+        self.col_names = []
+        self.mapIndices()
+
+        def AtoLiL(self):
+            self.A = self.A.tolil()
+
+        def AtoCOO(self):
+            self.A = self.A.tocoo()
+
+    def loadMatrix(self, matrix):
+        &#34;&#34;&#34;
+        Imports information from compatible object.
+
+        Imports information for attributes from input-objects (named matrix)
+        with the respectively named fields, required.
+        Required fields are:
+        &#39;A&#39;,&#39;b&#39;,&#39;row_signs&#39;,&#39;f&#39;,&#39;LB&#39;,&#39;UB&#39;,&#39;row_names&#39; and &#39;col_names&#39;.
+
+        Parameters
+        ----------
+        matrix : any LP-object holding the required fields
+            The matrix with elements to be added
+        &#34;&#34;&#34;
+
+        if checkForAttributes(matrix, [&#39;A&#39;, &#39;b&#39;, &#39;f&#39;, &#39;LB&#39;, &#39;UB&#39;, &#39;row_signs&#39;, &#39;row_names&#39;, &#39;col_names&#39;]):
+            if type(matrix.A) is scipy.sparse.coo.coo_matrix:
+                self.A = matrix.A.astype(&#39;float64&#39;)
+            elif type(matrix.A) is numpy.ndarray:
+                self.A = scipy.sparse.coo.coo_matrix(matrix.A.astype(&#39;float64&#39;))
+            elif type(matrix.A) is scipy.sparse.lil_matrix:
+                self.A = scipy.sparse.coo.coo_matrix(matrix.A.astype(&#39;float64&#39;))
+            else:
+                print(&#39;A must be of type coo_matrix or array&#39;)
+                return
+            if type(matrix.b) is list or type(matrix.b) is numpy.ndarray:
+                self.b = matrix.b.astype(&#39;float64&#39;)
+            else:
+                print(&#39;b must be of list&#39;)
+                return
+            if type(matrix.f) is numpy.ndarray:
+                self.f = matrix.f.astype(&#39;float64&#39;)
+            else:
+                print(&#39;f must be of type array&#39;)
+                return
+            if type(matrix.LB) is numpy.ndarray:
+                self.LB = matrix.LB.astype(&#39;float64&#39;)
+            else:
+                print(&#39;LB must be of type array&#39;)
+                return
+            if type(matrix.UB) is numpy.ndarray:
+                self.UB = matrix.UB.astype(&#39;float64&#39;)
+            else:
+                print(&#39;UB must be of type array&#39;)
+                return
+            if type(matrix.row_signs) is list:
+                self.row_signs = matrix.row_signs
+            else:
+                print(&#39;row_signs must be of list&#39;)
+                return
+            if type(matrix.row_names) is list:
+                self.row_names = matrix.row_names
+            else:
+                print(&#39;row_names must be of list&#39;)
+                return
+            if type(matrix.col_names) is list:
+                self.col_names = matrix.col_names
+            else:
+                print(&#39;col_names must be of list&#39;)
+                return
+        else:
+            print(&#39;Input does not have all necessary elements&#39;)
+            return
+        self.mapIndices()
+
+    def scaleLHS(self, factor):
+        self.A = self.A*factor
+
+    def mapIndices(self):
+        &#34;&#34;&#34;
+        Generates rowIndicesMap and colIndicesMap from attributes.
+
+        rowIndicesMap = Dictionary: {&#39;constraint_name&#39;:index,...}
+        colIndicesMap = Dictionary: {&#39;variable_name&#39;:index,...}
+        &#34;&#34;&#34;
+        self.rowIndicesMap = dict(zip(self.row_names, list(range(len(self.row_names)))))
+        self.colIndicesMap = dict(zip(self.col_names, list(range(len(self.col_names)))))
+
+    def AtoLiL(self):
+        &#34;&#34;&#34;
+        Transforms constraint matrix (LHS) to scipy.sparse.lil_matrix format.
+        &#34;&#34;&#34;
+        self.A = scipy.sparse.lil_matrix(self.A)
+
+    def AtoCOO(self):
+        &#34;&#34;&#34;
+        Transforms constraint matrix (LHS) to scipy.sparse.coo_matrix format.
+        &#34;&#34;&#34;
+        self.A = scipy.sparse.coo_matrix(self.A)
+
+    def tofloat64(self):
+        &#34;&#34;&#34;
+        Transforms all numerical attributes to number type numpy.float64.
+        &#34;&#34;&#34;
+        self.A = self.A.astype(&#39;float64&#39;)
+        self.b = self.b.astype(&#39;float64&#39;)
+        self.f = self.f.astype(&#39;float64&#39;)
+        self.LB = self.LB.astype(&#39;float64&#39;)
+        self.UB = self.UB.astype(&#39;float64&#39;)
+
+
+def checkForAttributes(obj, attr):
+    for i in attr:
+        x = getattr(obj, i, None)
+        if x is None:
+            return(True)
+    return(True)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="rbatools.rba_Matrix.checkForAttributes"><code class="name flex">
+<span>def <span class="ident">checkForAttributes</span></span>(<span>obj, attr)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def checkForAttributes(obj, attr):
+    for i in attr:
+        x = getattr(obj, i, None)
+        if x is None:
+            return(True)
+    return(True)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="rbatools.rba_Matrix.RBA_Matrix"><code class="flex name class">
+<span>class <span class="ident">RBA_Matrix</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class holding RBA-Linear Problem.
+Required Object type for linear problems (matrices), to be used in this RBA-API.
+Should include all fields, required for a linear problem in the COBRA format, as attributes.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>A</code></strong> :&ensp;<code>scipy.sparse.coo_matrix</code></dt>
+<dd>Lefthandside of constraint Matrix (aka Constraint Matrix)</dd>
+<dt><strong><code>b</code></strong> :&ensp;<code>numpy.array</code></dt>
+<dd>Righthandside of Constraint Matrix</dd>
+<dt><strong><code>row_signs</code></strong> :&ensp;<code>list</code></dt>
+<dd>Type of constraints ('E' for equality 'L' for lower-or-equal inequality) &ndash;&gt; Ax=b or Ax&lt;=b</dd>
+<dt><strong><code>f</code></strong> :&ensp;<code>numyp.array</code></dt>
+<dd>Objective function linear get_coefficients</dd>
+<dt><strong><code>LB</code></strong> :&ensp;<code>numpy.array</code></dt>
+<dd>Lower bounds of decision-variables</dd>
+<dt><strong><code>UB</code></strong> :&ensp;<code>numpy.array</code></dt>
+<dd>Upper bounds of decision-variables</dd>
+<dt><strong><code>row_names</code></strong> :&ensp;<code>list</code></dt>
+<dd>Names of constraints</dd>
+<dt><strong><code>col_names</code></strong> :&ensp;<code>list</code></dt>
+<dd>Names of decision-variables</dd>
+<dt><strong><code>rowIndicesMap</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dictionary mapping constraint names to their numeric index (generated automatically)</dd>
+<dt><strong><code>colIndicesMap</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dictionary mapping variable names to their numeric index (generated automatically)</dd>
+</dl>
+<h2 id="methods">Methods</h2>
+<p><strong>init</strong>()
+Initiates with empty Problem. Attributes can be changed manually.</p>
+<p>loadMatrix(matrix)
+Imports information for attributes from input-objects</p>
+<p>mapIndices():
+Generates rowIndicesMap and colIndicesMap from attributes.</p>
+<p>AtoLiL()
+Transforms constraint matrix (LHS) to scipy.sparse.lil_matrix format.</p>
+<p>AtoCOO()
+Transforms constraint matrix (LHS) to scipy.sparse.coo_matrix format.</p>
+<p>tofloat64()
+Transforms all numerical attributes to number type numpy.float64.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class RBA_Matrix(object):
+    &#34;&#34;&#34;
+    Class holding RBA-Linear Problem.
+    Required Object type for linear problems (matrices), to be used in this RBA-API.
+    Should include all fields, required for a linear problem in the COBRA format, as attributes.
+
+    Attributes
+    ----------
+    A : scipy.sparse.coo_matrix
+        Lefthandside of constraint Matrix (aka Constraint Matrix)
+    b : numpy.array
+        Righthandside of Constraint Matrix
+    row_signs : list
+        Type of constraints (&#39;E&#39; for equality &#39;L&#39; for lower-or-equal inequality) --&gt; Ax=b or Ax&lt;=b
+    f : numyp.array
+        Objective function linear get_coefficients
+    LB : numpy.array
+        Lower bounds of decision-variables
+    UB : numpy.array
+        Upper bounds of decision-variables
+    row_names : list
+        Names of constraints
+    col_names : list
+        Names of decision-variables
+    rowIndicesMap : dict
+        Dictionary mapping constraint names to their numeric index (generated automatically)
+    colIndicesMap : dict
+        Dictionary mapping variable names to their numeric index (generated automatically)
+
+    Methods
+    ----------
+    __init__()
+        Initiates with empty Problem. Attributes can be changed manually.
+
+    loadMatrix(matrix)
+        Imports information for attributes from input-objects
+
+    mapIndices():
+        Generates rowIndicesMap and colIndicesMap from attributes.
+
+    AtoLiL()
+        Transforms constraint matrix (LHS) to scipy.sparse.lil_matrix format.
+
+    AtoCOO()
+        Transforms constraint matrix (LHS) to scipy.sparse.coo_matrix format.
+
+    tofloat64()
+        Transforms all numerical attributes to number type numpy.float64.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        &#34;&#34;&#34;
+        Initiates with empty Problem. Attributes can be changed manually.
+        &#34;&#34;&#34;
+
+        self.A = scipy.sparse.coo.coo_matrix(numpy.array([]))
+        self.b = numpy.array([])
+        self.f = numpy.array([])
+        self.LB = numpy.array([])
+        self.UB = numpy.array([])
+        self.row_signs = []
+        self.row_names = []
+        self.col_names = []
+        self.mapIndices()
+
+        def AtoLiL(self):
+            self.A = self.A.tolil()
+
+        def AtoCOO(self):
+            self.A = self.A.tocoo()
+
+    def loadMatrix(self, matrix):
+        &#34;&#34;&#34;
+        Imports information from compatible object.
+
+        Imports information for attributes from input-objects (named matrix)
+        with the respectively named fields, required.
+        Required fields are:
+        &#39;A&#39;,&#39;b&#39;,&#39;row_signs&#39;,&#39;f&#39;,&#39;LB&#39;,&#39;UB&#39;,&#39;row_names&#39; and &#39;col_names&#39;.
+
+        Parameters
+        ----------
+        matrix : any LP-object holding the required fields
+            The matrix with elements to be added
+        &#34;&#34;&#34;
+
+        if checkForAttributes(matrix, [&#39;A&#39;, &#39;b&#39;, &#39;f&#39;, &#39;LB&#39;, &#39;UB&#39;, &#39;row_signs&#39;, &#39;row_names&#39;, &#39;col_names&#39;]):
+            if type(matrix.A) is scipy.sparse.coo.coo_matrix:
+                self.A = matrix.A.astype(&#39;float64&#39;)
+            elif type(matrix.A) is numpy.ndarray:
+                self.A = scipy.sparse.coo.coo_matrix(matrix.A.astype(&#39;float64&#39;))
+            elif type(matrix.A) is scipy.sparse.lil_matrix:
+                self.A = scipy.sparse.coo.coo_matrix(matrix.A.astype(&#39;float64&#39;))
+            else:
+                print(&#39;A must be of type coo_matrix or array&#39;)
+                return
+            if type(matrix.b) is list or type(matrix.b) is numpy.ndarray:
+                self.b = matrix.b.astype(&#39;float64&#39;)
+            else:
+                print(&#39;b must be of list&#39;)
+                return
+            if type(matrix.f) is numpy.ndarray:
+                self.f = matrix.f.astype(&#39;float64&#39;)
+            else:
+                print(&#39;f must be of type array&#39;)
+                return
+            if type(matrix.LB) is numpy.ndarray:
+                self.LB = matrix.LB.astype(&#39;float64&#39;)
+            else:
+                print(&#39;LB must be of type array&#39;)
+                return
+            if type(matrix.UB) is numpy.ndarray:
+                self.UB = matrix.UB.astype(&#39;float64&#39;)
+            else:
+                print(&#39;UB must be of type array&#39;)
+                return
+            if type(matrix.row_signs) is list:
+                self.row_signs = matrix.row_signs
+            else:
+                print(&#39;row_signs must be of list&#39;)
+                return
+            if type(matrix.row_names) is list:
+                self.row_names = matrix.row_names
+            else:
+                print(&#39;row_names must be of list&#39;)
+                return
+            if type(matrix.col_names) is list:
+                self.col_names = matrix.col_names
+            else:
+                print(&#39;col_names must be of list&#39;)
+                return
+        else:
+            print(&#39;Input does not have all necessary elements&#39;)
+            return
+        self.mapIndices()
+
+    def scaleLHS(self, factor):
+        self.A = self.A*factor
+
+    def mapIndices(self):
+        &#34;&#34;&#34;
+        Generates rowIndicesMap and colIndicesMap from attributes.
+
+        rowIndicesMap = Dictionary: {&#39;constraint_name&#39;:index,...}
+        colIndicesMap = Dictionary: {&#39;variable_name&#39;:index,...}
+        &#34;&#34;&#34;
+        self.rowIndicesMap = dict(zip(self.row_names, list(range(len(self.row_names)))))
+        self.colIndicesMap = dict(zip(self.col_names, list(range(len(self.col_names)))))
+
+    def AtoLiL(self):
+        &#34;&#34;&#34;
+        Transforms constraint matrix (LHS) to scipy.sparse.lil_matrix format.
+        &#34;&#34;&#34;
+        self.A = scipy.sparse.lil_matrix(self.A)
+
+    def AtoCOO(self):
+        &#34;&#34;&#34;
+        Transforms constraint matrix (LHS) to scipy.sparse.coo_matrix format.
+        &#34;&#34;&#34;
+        self.A = scipy.sparse.coo_matrix(self.A)
+
+    def tofloat64(self):
+        &#34;&#34;&#34;
+        Transforms all numerical attributes to number type numpy.float64.
+        &#34;&#34;&#34;
+        self.A = self.A.astype(&#39;float64&#39;)
+        self.b = self.b.astype(&#39;float64&#39;)
+        self.f = self.f.astype(&#39;float64&#39;)
+        self.LB = self.LB.astype(&#39;float64&#39;)
+        self.UB = self.UB.astype(&#39;float64&#39;)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="rbatools.rba_Matrix.RBA_Matrix.AtoCOO"><code class="name flex">
+<span>def <span class="ident">AtoCOO</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Transforms constraint matrix (LHS) to scipy.sparse.coo_matrix format.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def AtoCOO(self):
+    &#34;&#34;&#34;
+    Transforms constraint matrix (LHS) to scipy.sparse.coo_matrix format.
+    &#34;&#34;&#34;
+    self.A = scipy.sparse.coo_matrix(self.A)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Matrix.RBA_Matrix.AtoLiL"><code class="name flex">
+<span>def <span class="ident">AtoLiL</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Transforms constraint matrix (LHS) to scipy.sparse.lil_matrix format.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def AtoLiL(self):
+    &#34;&#34;&#34;
+    Transforms constraint matrix (LHS) to scipy.sparse.lil_matrix format.
+    &#34;&#34;&#34;
+    self.A = scipy.sparse.lil_matrix(self.A)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Matrix.RBA_Matrix.__init__"><code class="name flex">
+<span>def <span class="ident">__init__</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Initiates with empty Problem. Attributes can be changed manually.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def __init__(self):
+    &#34;&#34;&#34;
+    Initiates with empty Problem. Attributes can be changed manually.
+    &#34;&#34;&#34;
+
+    self.A = scipy.sparse.coo.coo_matrix(numpy.array([]))
+    self.b = numpy.array([])
+    self.f = numpy.array([])
+    self.LB = numpy.array([])
+    self.UB = numpy.array([])
+    self.row_signs = []
+    self.row_names = []
+    self.col_names = []
+    self.mapIndices()
+
+    def AtoLiL(self):
+        self.A = self.A.tolil()
+
+    def AtoCOO(self):
+        self.A = self.A.tocoo()</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Matrix.RBA_Matrix.loadMatrix"><code class="name flex">
+<span>def <span class="ident">loadMatrix</span></span>(<span>self, matrix)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Imports information from compatible object.</p>
+<p>Imports information for attributes from input-objects (named matrix)
+with the respectively named fields, required.
+Required fields are:
+'A','b','row_signs','f','LB','UB','row_names' and 'col_names'.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>matrix</code></strong> :&ensp;<code>any</code> <code>LP</code>-<code>object</code> <code>holding</code> <code>the</code> <code>required</code> <code>fields</code></dt>
+<dd>The matrix with elements to be added</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def loadMatrix(self, matrix):
+    &#34;&#34;&#34;
+    Imports information from compatible object.
+
+    Imports information for attributes from input-objects (named matrix)
+    with the respectively named fields, required.
+    Required fields are:
+    &#39;A&#39;,&#39;b&#39;,&#39;row_signs&#39;,&#39;f&#39;,&#39;LB&#39;,&#39;UB&#39;,&#39;row_names&#39; and &#39;col_names&#39;.
+
+    Parameters
+    ----------
+    matrix : any LP-object holding the required fields
+        The matrix with elements to be added
+    &#34;&#34;&#34;
+
+    if checkForAttributes(matrix, [&#39;A&#39;, &#39;b&#39;, &#39;f&#39;, &#39;LB&#39;, &#39;UB&#39;, &#39;row_signs&#39;, &#39;row_names&#39;, &#39;col_names&#39;]):
+        if type(matrix.A) is scipy.sparse.coo.coo_matrix:
+            self.A = matrix.A.astype(&#39;float64&#39;)
+        elif type(matrix.A) is numpy.ndarray:
+            self.A = scipy.sparse.coo.coo_matrix(matrix.A.astype(&#39;float64&#39;))
+        elif type(matrix.A) is scipy.sparse.lil_matrix:
+            self.A = scipy.sparse.coo.coo_matrix(matrix.A.astype(&#39;float64&#39;))
+        else:
+            print(&#39;A must be of type coo_matrix or array&#39;)
+            return
+        if type(matrix.b) is list or type(matrix.b) is numpy.ndarray:
+            self.b = matrix.b.astype(&#39;float64&#39;)
+        else:
+            print(&#39;b must be of list&#39;)
+            return
+        if type(matrix.f) is numpy.ndarray:
+            self.f = matrix.f.astype(&#39;float64&#39;)
+        else:
+            print(&#39;f must be of type array&#39;)
+            return
+        if type(matrix.LB) is numpy.ndarray:
+            self.LB = matrix.LB.astype(&#39;float64&#39;)
+        else:
+            print(&#39;LB must be of type array&#39;)
+            return
+        if type(matrix.UB) is numpy.ndarray:
+            self.UB = matrix.UB.astype(&#39;float64&#39;)
+        else:
+            print(&#39;UB must be of type array&#39;)
+            return
+        if type(matrix.row_signs) is list:
+            self.row_signs = matrix.row_signs
+        else:
+            print(&#39;row_signs must be of list&#39;)
+            return
+        if type(matrix.row_names) is list:
+            self.row_names = matrix.row_names
+        else:
+            print(&#39;row_names must be of list&#39;)
+            return
+        if type(matrix.col_names) is list:
+            self.col_names = matrix.col_names
+        else:
+            print(&#39;col_names must be of list&#39;)
+            return
+    else:
+        print(&#39;Input does not have all necessary elements&#39;)
+        return
+    self.mapIndices()</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Matrix.RBA_Matrix.mapIndices"><code class="name flex">
+<span>def <span class="ident">mapIndices</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generates rowIndicesMap and colIndicesMap from attributes.</p>
+<p>rowIndicesMap = Dictionary: {'constraint_name':index,&hellip;}
+colIndicesMap = Dictionary: {'variable_name':index,&hellip;}</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def mapIndices(self):
+    &#34;&#34;&#34;
+    Generates rowIndicesMap and colIndicesMap from attributes.
+
+    rowIndicesMap = Dictionary: {&#39;constraint_name&#39;:index,...}
+    colIndicesMap = Dictionary: {&#39;variable_name&#39;:index,...}
+    &#34;&#34;&#34;
+    self.rowIndicesMap = dict(zip(self.row_names, list(range(len(self.row_names)))))
+    self.colIndicesMap = dict(zip(self.col_names, list(range(len(self.col_names)))))</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Matrix.RBA_Matrix.scaleLHS"><code class="name flex">
+<span>def <span class="ident">scaleLHS</span></span>(<span>self, factor)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def scaleLHS(self, factor):
+    self.A = self.A*factor</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Matrix.RBA_Matrix.tofloat64"><code class="name flex">
+<span>def <span class="ident">tofloat64</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Transforms all numerical attributes to number type numpy.float64.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def tofloat64(self):
+    &#34;&#34;&#34;
+    Transforms all numerical attributes to number type numpy.float64.
+    &#34;&#34;&#34;
+    self.A = self.A.astype(&#39;float64&#39;)
+    self.b = self.b.astype(&#39;float64&#39;)
+    self.f = self.f.astype(&#39;float64&#39;)
+    self.LB = self.LB.astype(&#39;float64&#39;)
+    self.UB = self.UB.astype(&#39;float64&#39;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="rbatools" href="index.html">rbatools</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="rbatools.rba_Matrix.checkForAttributes" href="#rbatools.rba_Matrix.checkForAttributes">checkForAttributes</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="rbatools.rba_Matrix.RBA_Matrix" href="#rbatools.rba_Matrix.RBA_Matrix">RBA_Matrix</a></code></h4>
+<ul class="two-column">
+<li><code><a title="rbatools.rba_Matrix.RBA_Matrix.__init__" href="#rbatools.rba_Matrix.RBA_Matrix.__init__">__init__</a></code></li>
+<li><code><a title="rbatools.rba_Matrix.RBA_Matrix.AtoCOO" href="#rbatools.rba_Matrix.RBA_Matrix.AtoCOO">AtoCOO</a></code></li>
+<li><code><a title="rbatools.rba_Matrix.RBA_Matrix.AtoLiL" href="#rbatools.rba_Matrix.RBA_Matrix.AtoLiL">AtoLiL</a></code></li>
+<li><code><a title="rbatools.rba_Matrix.RBA_Matrix.loadMatrix" href="#rbatools.rba_Matrix.RBA_Matrix.loadMatrix">loadMatrix</a></code></li>
+<li><code><a title="rbatools.rba_Matrix.RBA_Matrix.mapIndices" href="#rbatools.rba_Matrix.RBA_Matrix.mapIndices">mapIndices</a></code></li>
+<li><code><a title="rbatools.rba_Matrix.RBA_Matrix.scaleLHS" href="#rbatools.rba_Matrix.RBA_Matrix.scaleLHS">scaleLHS</a></code></li>
+<li><code><a title="rbatools.rba_Matrix.RBA_Matrix.tofloat64" href="#rbatools.rba_Matrix.RBA_Matrix.tofloat64">tofloat64</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.5.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

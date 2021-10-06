@@ -1,0 +1,2791 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.5.3" />
+<title>rbatools.rba_Session API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.name small{font-weight:normal}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title"><code>rbatools.rba_Session</code> module</h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python"># python 2/3 compatibility
+from __future__ import division, print_function
+import sys
+import os.path
+import numpy
+import pandas
+import copy
+import difflib
+import scipy
+import collections
+import json
+# package imports
+import rba
+from rbatools.rba_SimulationData import RBA_SimulationData
+from rbatools.rba_SimulationParameters import RBA_SimulationParameters
+from rbatools.rba_ModelStructure import RBA_ModelStructure
+from rbatools.rba_Problem import RBA_Problem
+from rbatools.rba_Matrix import RBA_Matrix
+from rbatools.rba_LP import RBA_LP
+from rbatools.rba_LogBook import RBA_LogBook
+
+
+class RBA_Session(object):
+    &#34;&#34;&#34;
+    Top level of the RBA API.
+
+    Attributes
+    ----------
+    xml_dir : str
+        Current Growth rate as numeric value
+    model : rba.RbaModel
+        Current Growth rate as numeric value
+    matrices : rba.ConstraintMatrix
+        Current Growth rate as numeric value
+    solver : rba.Solver
+        Current Growth rate as numeric value
+    Problem : rbatools.RBA_Problem
+        Current Growth rate as numeric value
+    Medium : dict
+        Current Growth rate as numeric value
+    ModelStructure : rbatools.RBA_ModelStructure
+        Current Growth rate as numeric value
+    Results : dict
+        Current Growth rate as numeric value
+    Parameters : dict
+        Current Growth rate as numeric value
+    SimulationData : rbatools.RBA_SimulationData
+        Current Growth rate as numeric value
+    SimulationParameters : rbatools.RBA_SimulationParameters
+        Current Growth rate as numeric value
+
+    Methods
+    ----------
+    __init__(xml_dir)
+        Creates controler object from files
+
+    reloadModel()
+        Reloads model from files
+
+    recordResults(runName)
+        Records Simulation output for further use.
+
+    recordParameters(runName)
+        Records Simulation parameters for further use.
+
+    clearResults()
+        Removes all previosly recorded results.
+
+    clearParameters()
+        Removes all previosly recorded parameters.
+
+    writeResults(session_name=&#39;&#39;, digits=10)
+        Creates SimulationData and SimulationParameters objects from recordings.
+
+    setMu(Mu)
+        Sets growth-rate to desired value.
+
+    doSolve(runName=&#39;DontSave&#39;)
+        Solves problem to find solution.
+
+    findMaxGrowthRate(precision=0.00001, max=4, recording=False)
+        Applies dichotomy-search to find the maximal feasible growth-rate.
+
+    findMinMediumConcentration(metabolite, precision=0.00001, max=100, recording=False)
+        Applies dichotomy-search to find the minimal feasible concentration of
+        growth-substrate in medium.
+
+    setMedium(changes)
+        Sets the concentration of growth-substrate in medium.
+
+    knockOut(gene)
+        Emulates a gene knock out.
+
+    FeasibleRange(variables)
+        Determines the feasible range of model variables.
+
+    ConstraintSaturation(constraints)
+        Determines the saturation of model constraints at current solution.
+
+    ParetoFront(variables, N)
+        Determine Pareto front of two model variables.
+
+    addProtein(input)
+        Adds representation of individual proteins to problem.
+
+    returnExchangeFluxes()
+
+    &#34;&#34;&#34;
+
+    def __init__(self, xml_dir):
+        &#34;&#34;&#34;
+        Creates RBA_Session object from files
+
+        Parameters
+        ----------
+        xml_dir : str
+            Path to the directory where rba-model files are located.
+        &#34;&#34;&#34;
+        self.xml_dir = xml_dir
+        self.LogBook = RBA_LogBook(&#39;Controler&#39;)
+
+        if not hasattr(self, &#39;ModelStructure&#39;):
+            if os.path.isfile(str(self.xml_dir+&#39;/ModelStructure.json&#39;)):
+                self.ModelStructure = RBA_ModelStructure()
+                with open(str(self.xml_dir+&#39;/ModelStructure.json&#39;), &#39;r&#39;) as myfile:
+                    data = myfile.read()
+                self.ModelStructure.fromJSON(inputString=data)
+            else:
+                self.build_ModelStructure()
+
+        self.model = rba.RbaModel.from_xml(input_dir=xml_dir)
+        self.matrices = rba.ConstraintMatrix(model=self.model)
+        self.solver = rba.Solver(matrix=self.matrices)
+
+        self.LogBook.addEntry(&#39;Model loaded from {}.&#39;.format(self.xml_dir))
+        self.Problem = RBA_Problem(solver=self.solver)
+
+        medium = pandas.read_csv(xml_dir+&#39;/medium.tsv&#39;, sep=&#39;\t&#39;)
+        self.Medium = dict(zip(list(medium.iloc[:, 0]), [float(i)
+                                                         for i in list(medium.iloc[:, 1])]))
+
+        self.Mu = self.Problem.Mu
+        self.ExchangeMap = buildExchangeMap(self)
+
+    def build_ModelStructure(self):
+        &#34;&#34;&#34;
+        Rebuilds model structure object from model files and stores as json.
+        &#34;&#34;&#34;
+        self.ModelStructure = RBA_ModelStructure()
+        self.ModelStructure.fromFiles(xml_dir=self.xml_dir)
+        self.ModelStructure.exportJSON(path=self.xml_dir)
+
+    def rebuild_from_model(self):
+        &#34;&#34;&#34;
+        Rebuilds computational model-representation from own attribute &#34;model&#34; (rba.RbaModel-object).
+        &#34;&#34;&#34;
+        self.LogBook.addEntry(&#39;Model rebuilt.&#39;)
+        self.matrices = rba.ConstraintMatrix(model=self.model)
+        self.solver = rba.Solver(matrix=self.matrices)
+        self.Problem = RBA_Problem(solver=self.solver)
+        self.setMedium(changes=self.Medium)
+
+    def reloadModel(self):
+        &#34;&#34;&#34;
+        Reloads model from xml-files and then rebuild computational model-representation.
+        &#34;&#34;&#34;
+        self.LogBook.addEntry(&#39;Model reloaded from {}.&#39;.format(self.xml_dir))
+        self.model = rba.RbaModel.from_xml(input_dir=self.xml_dir)
+        self.rebuild_from_model()
+
+    def recordResults(self, runName):
+        &#34;&#34;&#34;
+        Records Simulation output for further use.
+        and strores them in own &#39;Results&#39;-attribute as pandas.DataFrames in a dictionary with the respective run-name being a column in all DataFrames.
+
+        Parameters
+        ----------
+        runName : str
+            Name of observation.
+            Serves as ID for all Data, originating from these.
+        &#34;&#34;&#34;
+        self.LogBook.addEntry(&#39;Solution recorded under {}.&#39;.format(runName))
+        if not hasattr(self, &#39;Results&#39;):
+            self.Results = {&#39;Reactions&#39;: pandas.DataFrame(index=list(self.ModelStructure.ReactionInfo.Elements.keys())),
+                            &#39;Enzymes&#39;: pandas.DataFrame(index=list(self.ModelStructure.EnzymeInfo.Elements.keys())),
+                            &#39;Processes&#39;: pandas.DataFrame(index=[self.ModelStructure.ProcessInfo.Elements[i][&#39;ID&#39;]+&#39;_machinery&#39; for i in self.ModelStructure.ProcessInfo.Elements.keys()]),
+                            &#39;Proteins&#39;: pandas.DataFrame(index=list(self.ModelStructure.ProteinMatrix[&#39;Proteins&#39;])),
+                            &#39;ProtoProteins&#39;: pandas.DataFrame(index=list(self.ModelStructure.ProteinGeneMatrix[&#39;ProtoProteins&#39;])),
+                            &#39;Constraints&#39;: pandas.DataFrame(index=self.Problem.LP.row_names),
+                            &#39;SolutionType&#39;: pandas.DataFrame(index=[&#39;SolutionType&#39;]),
+                            &#39;ObjectiveFunction&#39;: pandas.DataFrame(index=self.Problem.LP.col_names),
+                            &#39;Mu&#39;: pandas.DataFrame(index=[&#39;Mu&#39;]),
+                            &#39;ObjectiveValue&#39;: pandas.DataFrame(index=[&#39;ObjectiveValue&#39;]),
+                            &#39;ExchangeFluxes&#39;: pandas.DataFrame(index=list(self.ExchangeMap.keys()))}
+
+        Exchanges = self.returnExchangeFluxes()
+        for i in Exchanges.keys():
+            self.Results[&#39;ExchangeFluxes&#39;].loc[i, runName] = checkwithsolutionfeasibility(
+                Value=Exchanges[i], Session=self)
+
+        self.Results[&#39;Reactions&#39;][runName] = [checkwithsolutionfeasibility(
+            Value=self.Problem.SolutionValues[i], Session=self) for i in list(self.Results[&#39;Reactions&#39;].index)]
+        self.Results[&#39;Enzymes&#39;][runName] = [checkwithsolutionfeasibility(
+            Value=self.Problem.SolutionValues[i], Session=self) for i in list(self.Results[&#39;Enzymes&#39;].index)]
+        self.Results[&#39;Processes&#39;][runName] = [checkwithsolutionfeasibility(
+            Value=self.Problem.SolutionValues[i], Session=self) for i in list(self.Results[&#39;Processes&#39;].index)]
+        self.Results[&#39;Constraints&#39;][runName] = [checkwithsolutionfeasibility(
+            Value=self.Problem.DualValues[i], Session=self) for i in self.Problem.LP.row_names]
+        self.Results[&#39;Proteins&#39;][runName] = ProteomeRecording(self, runName)
+        self.Results[&#39;ProtoProteins&#39;][runName] = ProtoProteomeRecording(
+            self, runName, self.Results[&#39;Proteins&#39;])
+        self.Results[&#39;SolutionType&#39;][runName] = checkwithsolutionfeasibility(Value=self.Problem.SolutionType, Session=self)
+        self.Results[&#39;Mu&#39;][runName] = checkwithsolutionfeasibility(Value=self.Problem.Mu, Session=self)
+        self.Results[&#39;ObjectiveValue&#39;][runName] = checkwithsolutionfeasibility(
+            Value=self.Problem.ObjectiveValue, Session=self)
+        self.Results[&#39;ObjectiveFunction&#39;][runName] = list(self.Problem.getObjective().values())
+
+    def recordParameters(self, runName):
+        &#34;&#34;&#34;
+        Records Simulation parameters (LP-coefficients etc.) for further use.
+        and strores them in own &#39;Parameters&#39;-attribute as pandas.DataFrames in a dictionary with the respective run-name being a column in all DataFrames.
+
+        Parameters
+        ----------
+        runName : str
+            Name of observation.
+            Serves as ID for all Data, originating from these.
+        &#34;&#34;&#34;
+        self.LogBook.addEntry(&#39;Coefficients recorded under {}.&#39;.format(runName))
+        EnzymeCapacities = self.Problem.getEnzymeCapacities()
+        ProcessCapacities = self.Problem.getProcessCapacities()
+        CompartmentCapacities = self.Problem.getCompartmentCapacities()
+        if not hasattr(self, &#39;Parameters&#39;):
+            self.Parameters = {&#39;EnzymeEfficiencies_FW&#39;: pandas.DataFrame(index=list(EnzymeCapacities.keys())),
+                               &#39;EnzymeEfficiencies_BW&#39;: pandas.DataFrame(index=list(EnzymeCapacities.keys())),
+                               &#39;NetProcessEfficiencies&#39;: pandas.DataFrame(index=list(ProcessCapacities.keys())),
+                               &#39;CompartmentCapacities&#39;: pandas.DataFrame(index=list(CompartmentCapacities.keys()))}
+
+        self.Parameters[&#39;EnzymeEfficiencies_FW&#39;][runName] = [
+            EnzymeCapacities[i][&#39;Forward&#39;] for i in list(EnzymeCapacities.keys())]
+        self.Parameters[&#39;EnzymeEfficiencies_BW&#39;][runName] = [
+            EnzymeCapacities[i][&#39;Backward&#39;] for i in list(EnzymeCapacities.keys())]
+        self.Parameters[&#39;NetProcessEfficiencies&#39;][runName] = [ProcessCapacities[i]
+                                                              for i in list(ProcessCapacities.keys())]
+        self.Parameters[&#39;CompartmentCapacities&#39;][runName] = [CompartmentCapacities[i]
+                                                             for i in list(CompartmentCapacities.keys())]
+
+    def clearResults(self):
+        &#34;&#34;&#34;
+        Removes all previosly recorded results and deletes own &#39;Results&#39;-attribute.
+        &#34;&#34;&#34;
+        self.LogBook.addEntry(&#39;Results cleared.&#39;)
+
+        delattr(self, &#39;Results&#39;)
+
+    def clearParameters(self):
+        &#34;&#34;&#34;
+        Removes all previosly recorded parameters and deletes own &#39;Parameters&#39;-attribute.
+        &#34;&#34;&#34;
+
+        self.LogBook.addEntry(&#39;Parameters cleared.&#39;)
+        delattr(self, &#39;Parameters&#39;)
+
+    def writeResults(self, session_name=&#39;&#39;, digits=10, loggingIntermediateSteps=False):
+        &#34;&#34;&#34;
+        Creates SimulationData and SimulationParameters objects from recordings (&#39;Results&#39;.&#39;Parameters&#39;).
+
+        Stores them as rbatools.RBA_SimulationData
+        and rbatools.RBA_SimulationParameters objects as attributes.
+        Access via attributes .SimulationData and SimulationParameters respectively.
+
+        Parameters
+        ----------
+        digits : int
+            Number of decimal places in the numeric results
+            Default: 10
+        session_name : str
+            Name of Simulation session.
+            Default: &#39;&#39;
+        &#34;&#34;&#34;
+        self.LogBook.addEntry(&#39;Data written under {}.&#39;.format(session_name))
+        if hasattr(self, &#39;Results&#39;):
+            self.Results[&#39;uniqueReactions&#39;] = mapIsoReactions(Controller=self)
+            self.Results[&#39;Mu&#39;] = self.Results[&#39;Mu&#39;].round(digits)
+            self.Results[&#39;ObjectiveValue&#39;] = self.Results[&#39;ObjectiveValue&#39;].round(digits)
+            self.Results[&#39;Proteins&#39;] = self.Results[&#39;Proteins&#39;].round(digits)
+            self.Results[&#39;uniqueReactions&#39;] = self.Results[&#39;uniqueReactions&#39;].round(digits)
+            self.Results[&#39;Reactions&#39;] = self.Results[&#39;Reactions&#39;].round(digits)
+            self.Results[&#39;Enzymes&#39;] = self.Results[&#39;Enzymes&#39;].round(digits)
+            self.Results[&#39;Processes&#39;] = self.Results[&#39;Processes&#39;].round(digits)
+            self.Results[&#39;Constraints&#39;] = self.Results[&#39;Constraints&#39;].round(digits)
+            self.Results[&#39;ExchangeFluxes&#39;] = self.Results[&#39;ExchangeFluxes&#39;].round(digits)
+
+            self.SimulationData = RBA_SimulationData(StaticData=self.ModelStructure)
+            self.SimulationData.fromSimulationResults(Controller=self, session_name=session_name)
+
+        if hasattr(self, &#39;Parameters&#39;):
+            self.Parameters[&#39;EnzymeEfficiencies_FW&#39;] = self.Parameters[&#39;EnzymeEfficiencies_FW&#39;].round(
+                digits)
+            self.Parameters[&#39;EnzymeEfficiencies_BW&#39;] = self.Parameters[&#39;EnzymeEfficiencies_BW&#39;].round(
+                digits)
+            self.Parameters[&#39;NetProcessEfficiencies&#39;] = self.Parameters[&#39;NetProcessEfficiencies&#39;].round(
+                digits)
+            self.Parameters[&#39;CompartmentCapacities&#39;] = self.Parameters[&#39;CompartmentCapacities&#39;].round(
+                digits)
+            self.SimulationParameters = RBA_SimulationParameters(StaticData=self.ModelStructure)
+            self.SimulationParameters.fromSimulationResults(Controller=self)
+
+    def returnExchangeFluxes(self):
+        &#34;&#34;&#34;
+        Generates a dictonary with the exchang-rates of boundary-metabolites.
+
+        Returns
+        -------
+        Dictonary with exchange-keys and respective -rates.
+        &#34;&#34;&#34;
+        out = {}
+        for j in self.ExchangeMap.keys():
+            netflux = 0
+            for k in self.ExchangeMap[j].keys():
+                netflux += self.ExchangeMap[j][k]*self.Problem.SolutionValues[k]
+            if netflux != 0:
+                out[j] = netflux
+        return(out)
+
+    def setMu(self, Mu, loggingIntermediateSteps=False):
+        &#34;&#34;&#34;
+        Sets growth-rate to desired value.
+
+        Parameters
+        ----------
+        Mu : float
+            Growth rate
+        &#34;&#34;&#34;
+        self.LogBook.addEntry(&#39;Growth-rate changed:{} --&gt; {}&#39;.format(self.Mu, float(Mu)))
+        self.Problem.setMu(Mu=float(Mu), ModelStructure=self.ModelStructure,
+                           logging=loggingIntermediateSteps)
+        self.Mu = float(Mu)
+
+    def doSolve(self, runName=&#39;DontSave&#39;, feasibleStatuses=[1], try_unscaling_if_sol_status_is_five=True, loggingIntermediateSteps=False):
+        &#34;&#34;&#34;
+        Solves problem to find solution.
+
+        Does the same as rbatools.RBA_Problem.solveLP().
+        Just has some automatic option for results-recording.
+
+        Parameters
+        ----------
+        runName : str
+            Name of observation.
+            Serves as ID for all data, originating from this run.
+            Special values :
+                &#39;DontSave&#39; : Results are not recorded
+                &#39;Auto&#39; : Results are automatically recorded
+                         and appended to existing ones.
+                    Named with number.
+                Any other string: Results are recorded under this name.
+            Default: &#39;DontSave&#39;
+        feasibleStatuses : list of int
+            List with identifiers of acceptable solution statuses.
+            (consult ILOG-CPLEX documentation for information on them).
+            Default: [1]
+        try_unscaling_if_sol_status_is_five : bool
+                If true; the problem will be attempted to be solved without scaling,
+                if the scaled problem is feasible but the solution is not feasible
+                after unscaling (CPLEX solution-status 5).
+                Default: True
+        &#34;&#34;&#34;
+
+        self.Problem.solveLP(feasibleStatuses=feasibleStatuses, try_unscaling_if_sol_status_is_five=try_unscaling_if_sol_status_is_five, logging=loggingIntermediateSteps)
+        if self.Problem.Solved:
+            if runName is not &#39;DontSave&#39;:
+                if runName is &#39;Auto&#39;:
+                    if hasattr(self, &#39;Results&#39;):
+                        name = str(self.Results[&#39;Reactions&#39;].shape[1]+1)
+                    if not hasattr(self, &#39;Results&#39;):
+                        name = &#39;1&#39;
+                if runName is not &#39;Auto&#39;:
+                    name = runName
+                self.recordResults(runName=name)
+
+    def findMaxGrowthRate(self, precision=0.001, max=4, start_value=None, recording=False, loggingIntermediateSteps=False, omit_objective=False, feasibleStatuses=[1], try_unscaling_if_sol_status_is_five=True):
+        &#34;&#34;&#34;
+        Applies dichotomy-search to find the maximal feasible growth-rate.
+
+        Parameters
+        ----------
+        precision : float
+            Numberic precision with which maximum is approximated.
+            Default : 0.00001
+        max : float
+            Defines the highest growth rate to be screened for.
+            Default=4
+        recording : bool
+            Records intermediate feasible solutions
+            while approaching the maximum growth-rate.
+            Default : False
+        feasibleStatuses : list of int
+            List with identifiers of acceptable solution statuses.
+            (consult ILOG-CPLEX documentation for information on them).
+            Default: feasibleStatuses=[1]
+        try_unscaling_if_sol_status_is_five : bool
+                If true; the problem will be attempted to be solved without scaling,
+                if the scaled problem is feasible but the solution is not feasible
+                after unscaling (CPLEX solution-status 5).
+                Default: try_unscaling_if_sol_status_is_five=True
+
+        Returns
+        -------
+        maximum feasible growth rate as float.
+        &#34;&#34;&#34;
+
+        minMu = 0
+        maxMu = max
+        if start_value is None:
+            testMu = maxMu
+        else:
+            testMu = start_value
+        iteration = 0
+
+        if omit_objective:
+            old_Obj = self.Problem.getObjective()
+            self.Problem.clearObjective()
+
+        while (maxMu - minMu) &gt; precision:
+            self.setMu(Mu=testMu)
+            self.Problem.solveLP(feasibleStatuses=feasibleStatuses,try_unscaling_if_sol_status_is_five=try_unscaling_if_sol_status_is_five,logging=loggingIntermediateSteps)
+            if self.Problem.Solved:
+                iteration += 1
+                if recording:
+                    self.recordResults(&#39;DichotomyMu_iteration_&#39;+str(iteration))
+                minMu = testMu
+            else:
+                maxMu = testMu
+            testMu = numpy.mean([maxMu, minMu])
+        self.LogBook.addEntry(&#39;Maximal growth-rate found to be: {}.&#39;.format(minMu))
+        if minMu == max:
+            print(&#39;Warning: Maximum growth rate might exceed specified range. Try rerunning this method with larger max-argument.&#39;)
+
+        if omit_objective:
+            self.Problem.setObjectiveCoefficients(old_Obj)
+        self.setMu(Mu=minMu)
+        self.Problem.solveLP(feasibleStatuses=feasibleStatuses,try_unscaling_if_sol_status_is_five=try_unscaling_if_sol_status_is_five,logging=False)
+        return(minMu)
+
+    def setMedium(self, changes, loggingIntermediateSteps=False):
+        &#34;&#34;&#34;
+        Sets the concentration of specified growth-substrate(s) in medium.
+
+        Parameters
+        ----------
+        changes : dict
+            Keys : ID of metabolite(s) in medium.
+            Values : New concention(s)
+        &#34;&#34;&#34;
+
+        for species in (changes.keys()):
+            self.Medium[species] = float(changes[species])
+
+        self.Problem.ClassicRBAmatrix.set_medium(self.Medium)
+        self.Problem.ClassicRBAmatrix.build_matrices(self.Mu)
+
+        inputMatrix = RBA_Matrix()
+        inputMatrix.loadMatrix(matrix=self.Problem.ClassicRBAmatrix)
+        self.Problem.LP.updateMatrix(matrix=inputMatrix, Ainds=MediumDependentCoefficients_A(
+            self), Binds=[], CTinds=[], LBinds=None, UBinds=None)
+
+    def FeasibleRange(self, variables=None, loggingIntermediateSteps=False):
+        &#34;&#34;&#34;
+        Determines the feasible range of model variables.
+
+        Parameters
+        ----------
+        variables : str or list of str
+            Specifies variable(s) for which the feasible range is to be determined.
+            Optional input:
+                If not provided all model-variables are taken
+
+        Returns
+        -------
+        Dictionary with variable-names as keys and other dictionaries as values.
+        The &#39;inner&#39; dictionaries hold keys &#39;Min&#39; and &#39;Max&#39;
+        with values representing lower and upper bound of feasible range respectively.
+        E.g. : {&#39;variableA&#39;:{&#39;Min&#39;:42 , &#39;Max&#39;:9000},
+                &#39;variableB&#39;:{&#39;Min&#39;:-9000 , &#39;Max&#39;:-42}}
+        &#34;&#34;&#34;
+
+        if variables is not None:
+                if isinstance(variables, list):
+                        VariablesInQuestion=variables
+                elif isinstance(variables, str):
+                        VariablesInQuestion=[variables]
+        else:
+                VariablesInQuestion = self.Problem.LP.col_names
+
+        out = {}
+        for i in VariablesInQuestion:
+            min = numpy.nan
+            max = numpy.nan
+            self.Problem.clearObjective(logging=loggingIntermediateSteps)
+#            self.Problem.setObjectiveCoefficients(inputDict=dict(
+#                zip(self.Problem.LP.col_names, [0.0]*len(self.Problem.LP.col_names))))
+            self.Problem.setObjectiveCoefficients(
+                inputDict={i: 1.0}, logging=loggingIntermediateSteps)
+            self.Problem.solveLP(logging=loggingIntermediateSteps)
+            if self.Problem.Solved:
+                min = self.Problem.SolutionValues[i]
+            self.Problem.setObjectiveCoefficients(
+                inputDict={i: -1.0}, logging=loggingIntermediateSteps)
+            self.Problem.solveLP(logging=loggingIntermediateSteps)
+            if self.Problem.Solved:
+                max = self.Problem.SolutionValues[i]
+            out.update({i: {&#39;Min&#39;: min, &#39;Max&#39;: max}})
+            self.LogBook.addEntry(
+                &#39;Feasible-range of {} determined to be between {} and {}.&#39;.format(i, min, max))
+
+        return(out)
+
+    def ConstraintSaturation(self, constraints=None):
+        &#34;&#34;&#34;
+        Determines the saturation of model constraints at current solution.
+
+        Parameters
+        ----------
+        constraints : str or list of str
+            Specifies constraints(s) for which the saturation is to be determined.
+            Optional input:
+                If not provided all model-constraints are taken
+
+        Returns
+        -------
+        Pandas DataFrame with constraint-names as indices and the columns &#39;LHS&#39;, &#39;RHS&#39;, and &#39;Saturation&#39;.
+                &#39;LHS&#39;: The sum over the respoctive constraint-row multiplied elementwise with the solution vector.
+                &#39;RHS&#39;: The value of the problem&#39;s righthand side, correesponding to the respective constraint.
+                &#39;Saturation&#39;: The saturation of the respective constraint (&#39;LHS&#39;/&#39;RHS&#39;).
+        &#34;&#34;&#34;
+        if constraints is not None:
+                if isinstance(constraints, list):
+                        ConstraintsInQuestion=constraints
+                elif isinstance(constraints, str):
+                        ConstraintsInQuestion=[constraints]
+        else:
+                ConstraintsInQuestion = self.Problem.LP.row_names
+
+        rhs = self.Problem.getRighthandSideValue(ConstraintsInQuestion)
+        lhs = self.Problem.calculateLefthandSideValue(ConstraintsInQuestion)
+        Out = pandas.DataFrame(columns=[&#39;LHS&#39;, &#39;RHS&#39;, &#39;Saturation&#39;], index=ConstraintsInQuestion)
+        for i in ConstraintsInQuestion:
+            lhval = lhs[i]
+            rhval = rhs[i]
+            sat = numpy.nan
+            if rhval != 0:
+                sat = lhval/rhval
+            Out.loc[i, &#39;LHS&#39;] = lhval
+            Out.loc[i, &#39;RHS&#39;] = rhval
+            Out.loc[i, &#39;Saturation&#39;] = sat
+            self.LogBook.addEntry(
+                &#39;Saturation of constraint {} determined to be {}.&#39;.format(i, sat))
+        return(Out)
+
+    def addExchangeReactions(self):
+        &#34;&#34;&#34;
+        Adds explicit exchange-reactions of boundary-metabolites to RBA-problem,
+        named R_EX_ followed by metabolite name (without M_ prefix).
+        &#34;&#34;&#34;
+        Mets_external = [m.id for m in self.model.metabolism.species if m.boundary_condition]
+        Mets_internal = [m.id for m in self.model.metabolism.species if not m.boundary_condition]
+        Reactions = [r.id for r in self.model.metabolism.reactions]
+        full_S = rba.core.metabolism.build_S(
+            Mets_external+Mets_internal, self.model.metabolism.reactions)
+        S_M_ext = full_S[:len(Mets_external), ].toarray()
+        col_indices_toremove = []
+        for i in range(S_M_ext.shape[1]):
+            s_col_uniques = list(set(list(S_M_ext[:, i])))
+            if len(s_col_uniques) == 1:
+                if s_col_uniques[0] == 0:
+                    col_indices_toremove.append(i)
+        RemainingReactions = [i for i in Reactions if Reactions.index(
+            i) not in col_indices_toremove]
+        S_ext = numpy.delete(S_M_ext, col_indices_toremove, axis=1)
+        A = numpy.concatenate((S_ext, numpy.eye(len(Mets_external))), axis=1, out=None)
+        ColNames = RemainingReactions+[str(&#39;R_EX_&#39;+i.split(&#39;M_&#39;)[-1]) for i in Mets_external]
+        # print(str(&#39;R_EX_&#39;+i.split(&#39;M_&#39;)[-1]))
+        LBs = list([self.Problem.LP.LB[self.Problem.LP.col_names.index(i)]
+                    for i in RemainingReactions]+[-10000]*len(Mets_external))
+        UBs = list([self.Problem.LP.UB[self.Problem.LP.col_names.index(i)]
+                    for i in RemainingReactions]+[10000]*len(Mets_external))
+        b = [0]*len(Mets_external)
+        f = list([self.Problem.LP.f[self.Problem.LP.col_names.index(i)]
+                  for i in RemainingReactions]+[0]*len(Mets_external))
+
+        ExchangeMatrix = RBA_Matrix()
+        ExchangeMatrix.A = scipy.sparse.coo_matrix(A)
+        ExchangeMatrix.b = numpy.array([0]*len(Mets_external))
+        ExchangeMatrix.f = numpy.array(f)
+        ExchangeMatrix.LB = numpy.array(LBs)
+        ExchangeMatrix.UB = numpy.array(UBs)
+        ExchangeMatrix.row_signs = [&#39;E&#39;]*len(Mets_external)
+        ExchangeMatrix.row_names = Mets_external
+        ExchangeMatrix.col_names = ColNames
+        ExchangeMatrix.mapIndices()
+        self.Problem.LP.addMatrix(matrix=ExchangeMatrix)
+
+        self.ExchangeReactionMap = dict(
+            zip(Mets_external, [str(&#39;R_EX_&#39;+i.split(&#39;M_&#39;)[-1]) for i in Mets_external]))
+
+
+def MediumDependentCoefficients_A(Controler):
+    out = {}
+    MedDepRxns = [list(i.keys()) for i in list(Controler.ExchangeMap.values())]
+    MedDepRxnsFlatted = list(set([item for sublist in MedDepRxns for item in sublist]))
+    for i in Controler.ModelStructure.EnzymeConstraintsInfo.Elements.keys():
+        if Controler.ModelStructure.EnzymeConstraintsInfo.Elements[i][&#39;AssociatedReaction&#39;] in MedDepRxnsFlatted:
+            nonConst = False
+            for j in Controler.ModelStructure.EnzymeConstraintsInfo.Elements[i][&#39;CapacityParameter&#39;]:
+                if list(j.values())[0][&#39;FunctionType&#39;] != &#39;constant&#39;:
+                    nonConst = True
+            if nonConst:
+                if Controler.ModelStructure.EnzymeConstraintsInfo.Elements[i][&#39;AssociatedReaction&#39;] in list(out.keys()):
+                    out[Controler.ModelStructure.EnzymeConstraintsInfo.Elements[i]
+                        [&#39;AssociatedReaction&#39;]].append(i)
+                else:
+                    out.update(
+                        {Controler.ModelStructure.EnzymeConstraintsInfo.Elements[i][&#39;AssociatedReaction&#39;]: [i]})
+    return([(out[i][0], Controler.ModelStructure.ReactionInfo.Elements[i][&#39;Enzyme&#39;])for i in out.keys()])
+
+
+def QualitativeMediumChange(Controller, changes, species):
+    QualitativeMediumChange = False
+    if float(Controller.Medium[species]) == float(0):
+        if float(changes[species]) != float(0):
+            boundValue = 1000.0
+            QualitativeMediumChange = True
+        else:
+            return([QualitativeMediumChange])
+    if float(Controller.Medium[species]) != float(0):
+        if float(changes[species]) == float(0):
+            boundValue = 0.0
+            QualitativeMediumChange = True
+        else:
+            return([QualitativeMediumChange])
+    return([QualitativeMediumChange, float(boundValue)])
+
+
+def findExchangeReactions(Controller, species):
+    Reactions = list(Controller.ExchangeMap[species].keys())
+    exchanges = {}
+    for i in Reactions:
+        if Controller.ExchangeMap[species][i] &gt; 0:
+            exchanges.update({i: &#39;Product&#39;})
+        elif Controller.ExchangeMap[species][i] &lt; 0:
+            exchanges.update({i: &#39;Reactant&#39;})
+    return(exchanges)
+
+
+def determineCoefficient(x, changes, species):
+    multiplicativeFactors = []
+    for k in x:
+        result = 1
+        type = list(k.values())[0][&#39;FunctionType&#39;]
+        pars = list(k.values())[0][&#39;FunctionParameters&#39;]
+        if type == &#39;constant&#39;:
+            result = numpy.float64(pars[&#39;C&#39;])
+        if type == &#39;exponential&#39;:
+            L = 1
+            if &#39;Lambda&#39; in list(pars.keys()):
+                L = numpy.float64(pars[&#39;Lambda&#39;])
+            result = numpy.exp(float(changes[species])*L)
+        if type == &#39;indicator&#39;:
+            maxi = numpy.inf
+            mini = -numpy.inf
+            if &#39;xMax&#39; in list(pars.keys()):
+                maxi = numpy.float64(pars[&#39;xMax&#39;])
+            if &#39;xMin&#39; in list(pars.keys()):
+                mini = numpy.float64(pars[&#39;xMin&#39;])
+            result = (float(changes[species]) &gt; mini) and (float(changes[species]) &lt; maxi)
+        if type == &#39;linear&#39;:
+            X_maxi = numpy.inf
+            X_mini = -numpy.inf
+            Y_maxi = numpy.inf
+            Y_mini = -numpy.inf
+            A = 1
+            C = 0
+            if &#39;A&#39; in list(pars.keys()):
+                A = numpy.float64(pars[&#39;A&#39;])
+            if &#39;C&#39; in list(pars.keys()):
+                C = numpy.float64(pars[&#39;C&#39;])
+            if &#39;xMin&#39; in list(pars.keys()):
+                X_mini = numpy.float64(pars[&#39;xMin&#39;])
+            if &#39;xMax&#39; in list(pars.keys()):
+                X_maxi = numpy.float64(pars[&#39;xMax&#39;])
+            if &#39;yMin&#39; in list(pars.keys()):
+                Y_mini = numpy.float64(pars[&#39;yMin&#39;])
+            if &#39;yMax&#39; in list(pars.keys()):
+                Y_maxi = numpy.float64(pars[&#39;yMax&#39;])
+            X = float(changes[species])
+            if float(changes[species]) &lt; X_mini:
+                X = X_mini
+            if float(changes[species]) &gt; X_maxi:
+                X = X_maxi
+            Y = A*X + C
+            result = Y
+            if Y &lt; Y_mini:
+                result = Y_mini
+            if Y &gt; Y_maxi:
+                result = Y_maxi
+        if type == &#39;michaelisMenten&#39;:
+            Y_mini = -numpy.inf
+            KM = 0
+            VM = 1
+            if &#39;Km&#39; in list(pars.keys()):
+                KM = numpy.float64(pars[&#39;Km&#39;])
+            if &#39;Vmax&#39; in list(pars.keys()):
+                VM = numpy.float64(pars[&#39;Vmax&#39;])
+            if &#39;yMin&#39; in list(pars.keys()):
+                Y_mini = numpy.float64(pars[&#39;yMin&#39;])
+            Y = VM*float(changes[species])/(float(changes[species])+KM)
+            result = Y
+            if Y &lt; Y_mini:
+                result = Y_mini
+        if type == &#39;competitiveInhibition&#39;:
+            Y_mini = -numpy.inf
+            KM = 0
+            VM = 1
+            KI = 0
+            I = 0
+            if &#39;Ki&#39; in list(pars.keys()):
+                KI = numpy.float64(pars[&#39;Ki&#39;])
+            if &#39;I&#39; in list(pars.keys()):
+                I = numpy.float64(pars[&#39;I&#39;])
+            if &#39;Km&#39; in list(pars.keys()):
+                KM = numpy.float64(pars[&#39;Km&#39;])
+            if &#39;Vmax&#39; in list(pars.keys()):
+                VM = numpy.float64(pars[&#39;Vmax&#39;])
+            if &#39;yMin&#39; in list(pars.keys()):
+                Y_mini = numpy.float64(pars[&#39;yMin&#39;])
+            Y = VM*float(changes[species])/(float(changes[species])+KM*(1+I/KI))
+            result = Y
+            if Y &lt; Y_mini:
+                result = Y_mini
+        if type == &#39;inverse&#39;:
+            C = 1
+            if &#39;C&#39; in list(pars.keys()):
+                C = numpy.float64(pars[&#39;C&#39;])
+            result = 1
+            if float(changes[species]) is not 0:
+                result = C/float(changes[i])
+        multiplicativeFactors.append(result)
+        value = numpy.prod(numpy.array(multiplicativeFactors))
+    return(float(value))
+
+
+def ProtoProteomeRecording(Controller, run, Proteinlevels):
+    out = []
+    for i in list(Controller.ModelStructure.ProteinGeneMatrix[&#39;ProtoProteins&#39;]):
+        row_ind = list(Controller.ModelStructure.ProteinGeneMatrix[&#39;ProtoProteins&#39;]).index(i)
+        # print(row_ind)
+        nonZero = list(numpy.nonzero(
+            Controller.ModelStructure.ProteinGeneMatrix[&#39;Matrix&#39;][row_ind, :])[0])
+        level = 0
+        for j in nonZero:
+            id = Controller.ModelStructure.ProteinGeneMatrix[&#39;Proteins&#39;][j]
+            level += Proteinlevels.loc[id, run]
+        out.append(level)
+    return(out)
+
+
+def ProteomeRecording(Controller, run):
+
+    EnzDF = pandas.DataFrame(index=Controller.Problem.Enzymes)
+    PrcDF = pandas.DataFrame(index=Controller.Problem.Processes)
+    EnzDF[run] = [Controller.Problem.SolutionValues[i]for i in Controller.Problem.Enzymes]
+    PrcDF[run] = [Controller.Problem.SolutionValues[i]for i in Controller.Problem.Processes]
+
+    ProteinProteinMatrix = numpy.array(
+        Controller.ModelStructure.ProteinMatrix[&#39;Matrix&#39;]).astype(numpy.float64)
+    C = Controller.ModelStructure.ProteinMatrix[&#39;Consumers&#39;]
+    Consumers = []
+    for i in C:
+        if i.startswith(&#39;P_&#39;):
+            # Consumers.append(str(i+&#39;_machinery&#39;))
+            Consumers.append(str(i))
+        if not i.startswith(&#39;P_&#39;):
+            Consumers.append(i)
+    Proteins = Controller.ModelStructure.ProteinMatrix[&#39;Proteins&#39;]
+    DF = pandas.concat([EnzDF, PrcDF], axis=0)
+    ProteinLevels = pandas.DataFrame(index=Proteins)
+    vector = numpy.nan_to_num(DF[run].reindex(Consumers))
+    Level = ProteinProteinMatrix.dot(vector)
+    ProteinLevels[run] = Level
+    addedProts = [col for col in Controller.Problem.LP.col_names if col.startswith(&#39;TotalLevel_&#39;)]
+    if len(addedProts) &gt; 0:
+        for p in addedProts:
+            protID = p.split(&#39;TotalLevel_&#39;)[1]
+            ProteinLevels[run].loc[protID] = Controller.Problem.SolutionValues[p]
+    return(list(ProteinLevels[run]))
+
+
+def mapIsoReactions(Controller):
+    if hasattr(Controller, &#39;Results&#39;):
+        out = pandas.DataFrame()
+        for run in list(Controller.Results[&#39;Reactions&#39;].columns):
+            rf = dict(zip(list(Controller.Results[&#39;Reactions&#39;].index), list(
+                Controller.Results[&#39;Reactions&#39;][run])))
+            rf = {k: v for k, v in rf.items() if v != 0.}
+            rf_merged = collections.defaultdict(float)
+            for reac_id, flux_val in rf.items():
+                if &#34;duplicate&#34; in reac_id:
+                    last_idx = reac_id.index(&#39;duplicate&#39;) - 1
+                    rf_merged[reac_id[:last_idx]] += flux_val
+                else:
+                    rf_merged[reac_id] += flux_val
+            if len(list(out)) == 0:
+                out[run] = list(rf_merged.values())
+                out.index = list(rf_merged.keys())
+            else:
+                runDF = pandas.DataFrame(list(rf_merged.values()),
+                                         index=list(rf_merged.keys()), columns=[run])
+                runDF = runDF.reindex(list(set(list(out.index)).union(
+                    set(list(rf_merged.keys())))), fill_value=0)
+                out = out.reindex(list(set(list(out.index)).union(
+                    set(list(rf_merged.keys())))), fill_value=0)
+                out = out.join(runDF, how=&#39;outer&#39;)
+        return(out)
+
+
+def buildExchangeMap(Controller):
+    &#34;&#34;&#34;
+    Returns a map of all metabolites, the corresponding transport-reactions and stoichiometires;
+    exchanged with the medium.
+    {Metabolite1 : {ExchangeReaction1 : stoch-coefficient1 , ExchangeReaction2 : stoch-coefficient2},
+    {Metabolite2 : {ExchangeReaction1 : stoch-coefficient1 , ExchangeReaction2 : stoch-coefficient2}}
+
+    Metabolite1 - ... MetaboliteN : All metabolite-species in the medium (see medium.tsv file)
+    ExchangeReaction1 - ... ExchangeReactionN : All metabolic reactions, which exchange the respective metabolite with the medium.
+    stoch-coefficient : Stochiometric coefficient with which the respective metabolite is exchanged by the corresponding reaction.
+    (Negative when reaction transports metabolite out of the cell; and positive when inside the cell.)
+
+    Parameters
+    ----------
+    Controller : rbatools.NewControler.RBA_newControler
+
+    Returns
+    -------
+    Dict.
+    &#34;&#34;&#34;
+    BoundaryMetabolites = [i for i in list(Controller.ModelStructure.MetaboliteInfo.Elements.keys(
+    )) if Controller.ModelStructure.MetaboliteInfo.Elements[i][&#39;boundary&#39;]]
+    ExchangeMap = {}
+    for bM in BoundaryMetabolites:
+        for rxn in Controller.ModelStructure.MetaboliteInfo.Elements[bM][&#39;ReactionsInvolvedWith&#39;]:
+            Reactants = list(
+                Controller.ModelStructure.ReactionInfo.Elements[rxn][&#39;Reactants&#39;].keys())
+            Products = list(Controller.ModelStructure.ReactionInfo.Elements[rxn][&#39;Products&#39;].keys())
+            if len(list(set(list(Reactants+Products)))) &gt; 1:
+                for met in list(set(list(Reactants+Products))):
+                    # if met != bM:
+                    if met == bM:
+                        MediumSpecies = findExchangeMetInMedium(met, Controller.Medium)
+                        if met in Reactants:
+                            stochCoeff = - \
+                                Controller.ModelStructure.ReactionInfo.Elements[rxn][&#39;Reactants&#39;][met]
+                        elif met in Products:
+                            stochCoeff = Controller.ModelStructure.ReactionInfo.Elements[rxn][&#39;Products&#39;][met]
+                        if MediumSpecies in list(ExchangeMap.keys()):
+                            ExchangeMap[MediumSpecies].update({rxn: stochCoeff})
+                        else:
+                            ExchangeMap[MediumSpecies] = {rxn: stochCoeff}
+    return(ExchangeMap)
+
+
+def findExchangeMetInMedium(metabolite, Medium):
+    &#34;&#34;&#34;
+    Returns the most likely species in the Medium, for any Metabolic species.
+    Parameters
+    ----------
+    metabolite : str
+    Medium : dict
+    -------
+    Most likely ID as str
+    &#34;&#34;&#34;
+    if metabolite.endswith(&#39;_e&#39;):
+        out = difflib.get_close_matches(&#39;_e&#39;.join(metabolite.split(&#39;_e&#39;)[:-1]), Medium, 1)
+    else:
+        out = difflib.get_close_matches(metabolite, Medium, 1)
+    if len(out) &gt; 0:
+        return(out[0])
+    else:
+        return(&#39;&#39;)
+
+
+def checkwithsolutionfeasibility(Value, Session):
+    if Session.Problem.Solved:
+        return(Value)
+    else:
+        return(numpy.nan)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="rbatools.rba_Session.MediumDependentCoefficients_A"><code class="name flex">
+<span>def <span class="ident">MediumDependentCoefficients_A</span></span>(<span>Controler)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def MediumDependentCoefficients_A(Controler):
+    out = {}
+    MedDepRxns = [list(i.keys()) for i in list(Controler.ExchangeMap.values())]
+    MedDepRxnsFlatted = list(set([item for sublist in MedDepRxns for item in sublist]))
+    for i in Controler.ModelStructure.EnzymeConstraintsInfo.Elements.keys():
+        if Controler.ModelStructure.EnzymeConstraintsInfo.Elements[i][&#39;AssociatedReaction&#39;] in MedDepRxnsFlatted:
+            nonConst = False
+            for j in Controler.ModelStructure.EnzymeConstraintsInfo.Elements[i][&#39;CapacityParameter&#39;]:
+                if list(j.values())[0][&#39;FunctionType&#39;] != &#39;constant&#39;:
+                    nonConst = True
+            if nonConst:
+                if Controler.ModelStructure.EnzymeConstraintsInfo.Elements[i][&#39;AssociatedReaction&#39;] in list(out.keys()):
+                    out[Controler.ModelStructure.EnzymeConstraintsInfo.Elements[i]
+                        [&#39;AssociatedReaction&#39;]].append(i)
+                else:
+                    out.update(
+                        {Controler.ModelStructure.EnzymeConstraintsInfo.Elements[i][&#39;AssociatedReaction&#39;]: [i]})
+    return([(out[i][0], Controler.ModelStructure.ReactionInfo.Elements[i][&#39;Enzyme&#39;])for i in out.keys()])</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.ProteomeRecording"><code class="name flex">
+<span>def <span class="ident">ProteomeRecording</span></span>(<span>Controller, run)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def ProteomeRecording(Controller, run):
+
+    EnzDF = pandas.DataFrame(index=Controller.Problem.Enzymes)
+    PrcDF = pandas.DataFrame(index=Controller.Problem.Processes)
+    EnzDF[run] = [Controller.Problem.SolutionValues[i]for i in Controller.Problem.Enzymes]
+    PrcDF[run] = [Controller.Problem.SolutionValues[i]for i in Controller.Problem.Processes]
+
+    ProteinProteinMatrix = numpy.array(
+        Controller.ModelStructure.ProteinMatrix[&#39;Matrix&#39;]).astype(numpy.float64)
+    C = Controller.ModelStructure.ProteinMatrix[&#39;Consumers&#39;]
+    Consumers = []
+    for i in C:
+        if i.startswith(&#39;P_&#39;):
+            # Consumers.append(str(i+&#39;_machinery&#39;))
+            Consumers.append(str(i))
+        if not i.startswith(&#39;P_&#39;):
+            Consumers.append(i)
+    Proteins = Controller.ModelStructure.ProteinMatrix[&#39;Proteins&#39;]
+    DF = pandas.concat([EnzDF, PrcDF], axis=0)
+    ProteinLevels = pandas.DataFrame(index=Proteins)
+    vector = numpy.nan_to_num(DF[run].reindex(Consumers))
+    Level = ProteinProteinMatrix.dot(vector)
+    ProteinLevels[run] = Level
+    addedProts = [col for col in Controller.Problem.LP.col_names if col.startswith(&#39;TotalLevel_&#39;)]
+    if len(addedProts) &gt; 0:
+        for p in addedProts:
+            protID = p.split(&#39;TotalLevel_&#39;)[1]
+            ProteinLevels[run].loc[protID] = Controller.Problem.SolutionValues[p]
+    return(list(ProteinLevels[run]))</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.ProtoProteomeRecording"><code class="name flex">
+<span>def <span class="ident">ProtoProteomeRecording</span></span>(<span>Controller, run, Proteinlevels)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def ProtoProteomeRecording(Controller, run, Proteinlevels):
+    out = []
+    for i in list(Controller.ModelStructure.ProteinGeneMatrix[&#39;ProtoProteins&#39;]):
+        row_ind = list(Controller.ModelStructure.ProteinGeneMatrix[&#39;ProtoProteins&#39;]).index(i)
+        # print(row_ind)
+        nonZero = list(numpy.nonzero(
+            Controller.ModelStructure.ProteinGeneMatrix[&#39;Matrix&#39;][row_ind, :])[0])
+        level = 0
+        for j in nonZero:
+            id = Controller.ModelStructure.ProteinGeneMatrix[&#39;Proteins&#39;][j]
+            level += Proteinlevels.loc[id, run]
+        out.append(level)
+    return(out)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.QualitativeMediumChange"><code class="name flex">
+<span>def <span class="ident">QualitativeMediumChange</span></span>(<span>Controller, changes, species)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def QualitativeMediumChange(Controller, changes, species):
+    QualitativeMediumChange = False
+    if float(Controller.Medium[species]) == float(0):
+        if float(changes[species]) != float(0):
+            boundValue = 1000.0
+            QualitativeMediumChange = True
+        else:
+            return([QualitativeMediumChange])
+    if float(Controller.Medium[species]) != float(0):
+        if float(changes[species]) == float(0):
+            boundValue = 0.0
+            QualitativeMediumChange = True
+        else:
+            return([QualitativeMediumChange])
+    return([QualitativeMediumChange, float(boundValue)])</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.buildExchangeMap"><code class="name flex">
+<span>def <span class="ident">buildExchangeMap</span></span>(<span>Controller)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns a map of all metabolites, the corresponding transport-reactions and stoichiometires;
+exchanged with the medium.
+{Metabolite1 : {ExchangeReaction1 : stoch-coefficient1 , ExchangeReaction2 : stoch-coefficient2},
+{Metabolite2 : {ExchangeReaction1 : stoch-coefficient1 , ExchangeReaction2 : stoch-coefficient2}}</p>
+<p>Metabolite1 - &hellip; MetaboliteN : All metabolite-species in the medium (see medium.tsv file)
+ExchangeReaction1 - &hellip; ExchangeReactionN : All metabolic reactions, which exchange the respective metabolite with the medium.
+stoch-coefficient : Stochiometric coefficient with which the respective metabolite is exchanged by the corresponding reaction.
+(Negative when reaction transports metabolite out of the cell; and positive when inside the cell.)</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>Controller</code></strong> :&ensp;<code>rbatools.NewControler.RBA_newControler</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Dict.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def buildExchangeMap(Controller):
+    &#34;&#34;&#34;
+    Returns a map of all metabolites, the corresponding transport-reactions and stoichiometires;
+    exchanged with the medium.
+    {Metabolite1 : {ExchangeReaction1 : stoch-coefficient1 , ExchangeReaction2 : stoch-coefficient2},
+    {Metabolite2 : {ExchangeReaction1 : stoch-coefficient1 , ExchangeReaction2 : stoch-coefficient2}}
+
+    Metabolite1 - ... MetaboliteN : All metabolite-species in the medium (see medium.tsv file)
+    ExchangeReaction1 - ... ExchangeReactionN : All metabolic reactions, which exchange the respective metabolite with the medium.
+    stoch-coefficient : Stochiometric coefficient with which the respective metabolite is exchanged by the corresponding reaction.
+    (Negative when reaction transports metabolite out of the cell; and positive when inside the cell.)
+
+    Parameters
+    ----------
+    Controller : rbatools.NewControler.RBA_newControler
+
+    Returns
+    -------
+    Dict.
+    &#34;&#34;&#34;
+    BoundaryMetabolites = [i for i in list(Controller.ModelStructure.MetaboliteInfo.Elements.keys(
+    )) if Controller.ModelStructure.MetaboliteInfo.Elements[i][&#39;boundary&#39;]]
+    ExchangeMap = {}
+    for bM in BoundaryMetabolites:
+        for rxn in Controller.ModelStructure.MetaboliteInfo.Elements[bM][&#39;ReactionsInvolvedWith&#39;]:
+            Reactants = list(
+                Controller.ModelStructure.ReactionInfo.Elements[rxn][&#39;Reactants&#39;].keys())
+            Products = list(Controller.ModelStructure.ReactionInfo.Elements[rxn][&#39;Products&#39;].keys())
+            if len(list(set(list(Reactants+Products)))) &gt; 1:
+                for met in list(set(list(Reactants+Products))):
+                    # if met != bM:
+                    if met == bM:
+                        MediumSpecies = findExchangeMetInMedium(met, Controller.Medium)
+                        if met in Reactants:
+                            stochCoeff = - \
+                                Controller.ModelStructure.ReactionInfo.Elements[rxn][&#39;Reactants&#39;][met]
+                        elif met in Products:
+                            stochCoeff = Controller.ModelStructure.ReactionInfo.Elements[rxn][&#39;Products&#39;][met]
+                        if MediumSpecies in list(ExchangeMap.keys()):
+                            ExchangeMap[MediumSpecies].update({rxn: stochCoeff})
+                        else:
+                            ExchangeMap[MediumSpecies] = {rxn: stochCoeff}
+    return(ExchangeMap)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.checkwithsolutionfeasibility"><code class="name flex">
+<span>def <span class="ident">checkwithsolutionfeasibility</span></span>(<span>Value, Session)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def checkwithsolutionfeasibility(Value, Session):
+    if Session.Problem.Solved:
+        return(Value)
+    else:
+        return(numpy.nan)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.determineCoefficient"><code class="name flex">
+<span>def <span class="ident">determineCoefficient</span></span>(<span>x, changes, species)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def determineCoefficient(x, changes, species):
+    multiplicativeFactors = []
+    for k in x:
+        result = 1
+        type = list(k.values())[0][&#39;FunctionType&#39;]
+        pars = list(k.values())[0][&#39;FunctionParameters&#39;]
+        if type == &#39;constant&#39;:
+            result = numpy.float64(pars[&#39;C&#39;])
+        if type == &#39;exponential&#39;:
+            L = 1
+            if &#39;Lambda&#39; in list(pars.keys()):
+                L = numpy.float64(pars[&#39;Lambda&#39;])
+            result = numpy.exp(float(changes[species])*L)
+        if type == &#39;indicator&#39;:
+            maxi = numpy.inf
+            mini = -numpy.inf
+            if &#39;xMax&#39; in list(pars.keys()):
+                maxi = numpy.float64(pars[&#39;xMax&#39;])
+            if &#39;xMin&#39; in list(pars.keys()):
+                mini = numpy.float64(pars[&#39;xMin&#39;])
+            result = (float(changes[species]) &gt; mini) and (float(changes[species]) &lt; maxi)
+        if type == &#39;linear&#39;:
+            X_maxi = numpy.inf
+            X_mini = -numpy.inf
+            Y_maxi = numpy.inf
+            Y_mini = -numpy.inf
+            A = 1
+            C = 0
+            if &#39;A&#39; in list(pars.keys()):
+                A = numpy.float64(pars[&#39;A&#39;])
+            if &#39;C&#39; in list(pars.keys()):
+                C = numpy.float64(pars[&#39;C&#39;])
+            if &#39;xMin&#39; in list(pars.keys()):
+                X_mini = numpy.float64(pars[&#39;xMin&#39;])
+            if &#39;xMax&#39; in list(pars.keys()):
+                X_maxi = numpy.float64(pars[&#39;xMax&#39;])
+            if &#39;yMin&#39; in list(pars.keys()):
+                Y_mini = numpy.float64(pars[&#39;yMin&#39;])
+            if &#39;yMax&#39; in list(pars.keys()):
+                Y_maxi = numpy.float64(pars[&#39;yMax&#39;])
+            X = float(changes[species])
+            if float(changes[species]) &lt; X_mini:
+                X = X_mini
+            if float(changes[species]) &gt; X_maxi:
+                X = X_maxi
+            Y = A*X + C
+            result = Y
+            if Y &lt; Y_mini:
+                result = Y_mini
+            if Y &gt; Y_maxi:
+                result = Y_maxi
+        if type == &#39;michaelisMenten&#39;:
+            Y_mini = -numpy.inf
+            KM = 0
+            VM = 1
+            if &#39;Km&#39; in list(pars.keys()):
+                KM = numpy.float64(pars[&#39;Km&#39;])
+            if &#39;Vmax&#39; in list(pars.keys()):
+                VM = numpy.float64(pars[&#39;Vmax&#39;])
+            if &#39;yMin&#39; in list(pars.keys()):
+                Y_mini = numpy.float64(pars[&#39;yMin&#39;])
+            Y = VM*float(changes[species])/(float(changes[species])+KM)
+            result = Y
+            if Y &lt; Y_mini:
+                result = Y_mini
+        if type == &#39;competitiveInhibition&#39;:
+            Y_mini = -numpy.inf
+            KM = 0
+            VM = 1
+            KI = 0
+            I = 0
+            if &#39;Ki&#39; in list(pars.keys()):
+                KI = numpy.float64(pars[&#39;Ki&#39;])
+            if &#39;I&#39; in list(pars.keys()):
+                I = numpy.float64(pars[&#39;I&#39;])
+            if &#39;Km&#39; in list(pars.keys()):
+                KM = numpy.float64(pars[&#39;Km&#39;])
+            if &#39;Vmax&#39; in list(pars.keys()):
+                VM = numpy.float64(pars[&#39;Vmax&#39;])
+            if &#39;yMin&#39; in list(pars.keys()):
+                Y_mini = numpy.float64(pars[&#39;yMin&#39;])
+            Y = VM*float(changes[species])/(float(changes[species])+KM*(1+I/KI))
+            result = Y
+            if Y &lt; Y_mini:
+                result = Y_mini
+        if type == &#39;inverse&#39;:
+            C = 1
+            if &#39;C&#39; in list(pars.keys()):
+                C = numpy.float64(pars[&#39;C&#39;])
+            result = 1
+            if float(changes[species]) is not 0:
+                result = C/float(changes[i])
+        multiplicativeFactors.append(result)
+        value = numpy.prod(numpy.array(multiplicativeFactors))
+    return(float(value))</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.findExchangeMetInMedium"><code class="name flex">
+<span>def <span class="ident">findExchangeMetInMedium</span></span>(<span>metabolite, Medium)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the most likely species in the Medium, for any Metabolic species.
+Parameters</p>
+<hr>
+<dl>
+<dt><strong><code>metabolite</code></strong> :&ensp;<code>str</code></dt>
+<dd>&nbsp;</dd>
+<dt><strong><code>Medium</code></strong> :&ensp;<code>dict</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<hr>
+<p>Most likely ID as str</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def findExchangeMetInMedium(metabolite, Medium):
+    &#34;&#34;&#34;
+    Returns the most likely species in the Medium, for any Metabolic species.
+    Parameters
+    ----------
+    metabolite : str
+    Medium : dict
+    -------
+    Most likely ID as str
+    &#34;&#34;&#34;
+    if metabolite.endswith(&#39;_e&#39;):
+        out = difflib.get_close_matches(&#39;_e&#39;.join(metabolite.split(&#39;_e&#39;)[:-1]), Medium, 1)
+    else:
+        out = difflib.get_close_matches(metabolite, Medium, 1)
+    if len(out) &gt; 0:
+        return(out[0])
+    else:
+        return(&#39;&#39;)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.findExchangeReactions"><code class="name flex">
+<span>def <span class="ident">findExchangeReactions</span></span>(<span>Controller, species)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def findExchangeReactions(Controller, species):
+    Reactions = list(Controller.ExchangeMap[species].keys())
+    exchanges = {}
+    for i in Reactions:
+        if Controller.ExchangeMap[species][i] &gt; 0:
+            exchanges.update({i: &#39;Product&#39;})
+        elif Controller.ExchangeMap[species][i] &lt; 0:
+            exchanges.update({i: &#39;Reactant&#39;})
+    return(exchanges)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.mapIsoReactions"><code class="name flex">
+<span>def <span class="ident">mapIsoReactions</span></span>(<span>Controller)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def mapIsoReactions(Controller):
+    if hasattr(Controller, &#39;Results&#39;):
+        out = pandas.DataFrame()
+        for run in list(Controller.Results[&#39;Reactions&#39;].columns):
+            rf = dict(zip(list(Controller.Results[&#39;Reactions&#39;].index), list(
+                Controller.Results[&#39;Reactions&#39;][run])))
+            rf = {k: v for k, v in rf.items() if v != 0.}
+            rf_merged = collections.defaultdict(float)
+            for reac_id, flux_val in rf.items():
+                if &#34;duplicate&#34; in reac_id:
+                    last_idx = reac_id.index(&#39;duplicate&#39;) - 1
+                    rf_merged[reac_id[:last_idx]] += flux_val
+                else:
+                    rf_merged[reac_id] += flux_val
+            if len(list(out)) == 0:
+                out[run] = list(rf_merged.values())
+                out.index = list(rf_merged.keys())
+            else:
+                runDF = pandas.DataFrame(list(rf_merged.values()),
+                                         index=list(rf_merged.keys()), columns=[run])
+                runDF = runDF.reindex(list(set(list(out.index)).union(
+                    set(list(rf_merged.keys())))), fill_value=0)
+                out = out.reindex(list(set(list(out.index)).union(
+                    set(list(rf_merged.keys())))), fill_value=0)
+                out = out.join(runDF, how=&#39;outer&#39;)
+        return(out)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="rbatools.rba_Session.RBA_Session"><code class="flex name class">
+<span>class <span class="ident">RBA_Session</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Top level of the RBA API.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>xml_dir</code></strong> :&ensp;<code>str</code></dt>
+<dd>Current Growth rate as numeric value</dd>
+<dt><strong><code>model</code></strong> :&ensp;<code>rba.RbaModel</code></dt>
+<dd>Current Growth rate as numeric value</dd>
+<dt><strong><code>matrices</code></strong> :&ensp;<code>rba.ConstraintMatrix</code></dt>
+<dd>Current Growth rate as numeric value</dd>
+<dt><strong><code>solver</code></strong> :&ensp;<code>rba.Solver</code></dt>
+<dd>Current Growth rate as numeric value</dd>
+<dt><strong><code>Problem</code></strong> :&ensp;<code>rbatools.RBA_Problem</code></dt>
+<dd>Current Growth rate as numeric value</dd>
+<dt><strong><code>Medium</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Current Growth rate as numeric value</dd>
+<dt><strong><code>ModelStructure</code></strong> :&ensp;<code>rbatools.RBA_ModelStructure</code></dt>
+<dd>Current Growth rate as numeric value</dd>
+<dt><strong><code>Results</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Current Growth rate as numeric value</dd>
+<dt><strong><code>Parameters</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Current Growth rate as numeric value</dd>
+<dt><strong><code>SimulationData</code></strong> :&ensp;<code>rbatools.RBA_SimulationData</code></dt>
+<dd>Current Growth rate as numeric value</dd>
+<dt><strong><code>SimulationParameters</code></strong> :&ensp;<code>rbatools.RBA_SimulationParameters</code></dt>
+<dd>Current Growth rate as numeric value</dd>
+</dl>
+<h2 id="methods">Methods</h2>
+<p><strong>init</strong>(xml_dir)
+Creates controler object from files</p>
+<p>reloadModel()
+Reloads model from files</p>
+<p>recordResults(runName)
+Records Simulation output for further use.</p>
+<p>recordParameters(runName)
+Records Simulation parameters for further use.</p>
+<p>clearResults()
+Removes all previosly recorded results.</p>
+<p>clearParameters()
+Removes all previosly recorded parameters.</p>
+<p>writeResults(session_name='', digits=10)
+Creates SimulationData and SimulationParameters objects from recordings.</p>
+<p>setMu(Mu)
+Sets growth-rate to desired value.</p>
+<p>doSolve(runName='DontSave')
+Solves problem to find solution.</p>
+<p>findMaxGrowthRate(precision=0.00001, max=4, recording=False)
+Applies dichotomy-search to find the maximal feasible growth-rate.</p>
+<p>findMinMediumConcentration(metabolite, precision=0.00001, max=100, recording=False)
+Applies dichotomy-search to find the minimal feasible concentration of
+growth-substrate in medium.</p>
+<p>setMedium(changes)
+Sets the concentration of growth-substrate in medium.</p>
+<p>knockOut(gene)
+Emulates a gene knock out.</p>
+<p>FeasibleRange(variables)
+Determines the feasible range of model variables.</p>
+<p>ConstraintSaturation(constraints)
+Determines the saturation of model constraints at current solution.</p>
+<p>ParetoFront(variables, N)
+Determine Pareto front of two model variables.</p>
+<p>addProtein(input)
+Adds representation of individual proteins to problem.</p>
+<p>returnExchangeFluxes()</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class RBA_Session(object):
+    &#34;&#34;&#34;
+    Top level of the RBA API.
+
+    Attributes
+    ----------
+    xml_dir : str
+        Current Growth rate as numeric value
+    model : rba.RbaModel
+        Current Growth rate as numeric value
+    matrices : rba.ConstraintMatrix
+        Current Growth rate as numeric value
+    solver : rba.Solver
+        Current Growth rate as numeric value
+    Problem : rbatools.RBA_Problem
+        Current Growth rate as numeric value
+    Medium : dict
+        Current Growth rate as numeric value
+    ModelStructure : rbatools.RBA_ModelStructure
+        Current Growth rate as numeric value
+    Results : dict
+        Current Growth rate as numeric value
+    Parameters : dict
+        Current Growth rate as numeric value
+    SimulationData : rbatools.RBA_SimulationData
+        Current Growth rate as numeric value
+    SimulationParameters : rbatools.RBA_SimulationParameters
+        Current Growth rate as numeric value
+
+    Methods
+    ----------
+    __init__(xml_dir)
+        Creates controler object from files
+
+    reloadModel()
+        Reloads model from files
+
+    recordResults(runName)
+        Records Simulation output for further use.
+
+    recordParameters(runName)
+        Records Simulation parameters for further use.
+
+    clearResults()
+        Removes all previosly recorded results.
+
+    clearParameters()
+        Removes all previosly recorded parameters.
+
+    writeResults(session_name=&#39;&#39;, digits=10)
+        Creates SimulationData and SimulationParameters objects from recordings.
+
+    setMu(Mu)
+        Sets growth-rate to desired value.
+
+    doSolve(runName=&#39;DontSave&#39;)
+        Solves problem to find solution.
+
+    findMaxGrowthRate(precision=0.00001, max=4, recording=False)
+        Applies dichotomy-search to find the maximal feasible growth-rate.
+
+    findMinMediumConcentration(metabolite, precision=0.00001, max=100, recording=False)
+        Applies dichotomy-search to find the minimal feasible concentration of
+        growth-substrate in medium.
+
+    setMedium(changes)
+        Sets the concentration of growth-substrate in medium.
+
+    knockOut(gene)
+        Emulates a gene knock out.
+
+    FeasibleRange(variables)
+        Determines the feasible range of model variables.
+
+    ConstraintSaturation(constraints)
+        Determines the saturation of model constraints at current solution.
+
+    ParetoFront(variables, N)
+        Determine Pareto front of two model variables.
+
+    addProtein(input)
+        Adds representation of individual proteins to problem.
+
+    returnExchangeFluxes()
+
+    &#34;&#34;&#34;
+
+    def __init__(self, xml_dir):
+        &#34;&#34;&#34;
+        Creates RBA_Session object from files
+
+        Parameters
+        ----------
+        xml_dir : str
+            Path to the directory where rba-model files are located.
+        &#34;&#34;&#34;
+        self.xml_dir = xml_dir
+        self.LogBook = RBA_LogBook(&#39;Controler&#39;)
+
+        if not hasattr(self, &#39;ModelStructure&#39;):
+            if os.path.isfile(str(self.xml_dir+&#39;/ModelStructure.json&#39;)):
+                self.ModelStructure = RBA_ModelStructure()
+                with open(str(self.xml_dir+&#39;/ModelStructure.json&#39;), &#39;r&#39;) as myfile:
+                    data = myfile.read()
+                self.ModelStructure.fromJSON(inputString=data)
+            else:
+                self.build_ModelStructure()
+
+        self.model = rba.RbaModel.from_xml(input_dir=xml_dir)
+        self.matrices = rba.ConstraintMatrix(model=self.model)
+        self.solver = rba.Solver(matrix=self.matrices)
+
+        self.LogBook.addEntry(&#39;Model loaded from {}.&#39;.format(self.xml_dir))
+        self.Problem = RBA_Problem(solver=self.solver)
+
+        medium = pandas.read_csv(xml_dir+&#39;/medium.tsv&#39;, sep=&#39;\t&#39;)
+        self.Medium = dict(zip(list(medium.iloc[:, 0]), [float(i)
+                                                         for i in list(medium.iloc[:, 1])]))
+
+        self.Mu = self.Problem.Mu
+        self.ExchangeMap = buildExchangeMap(self)
+
+    def build_ModelStructure(self):
+        &#34;&#34;&#34;
+        Rebuilds model structure object from model files and stores as json.
+        &#34;&#34;&#34;
+        self.ModelStructure = RBA_ModelStructure()
+        self.ModelStructure.fromFiles(xml_dir=self.xml_dir)
+        self.ModelStructure.exportJSON(path=self.xml_dir)
+
+    def rebuild_from_model(self):
+        &#34;&#34;&#34;
+        Rebuilds computational model-representation from own attribute &#34;model&#34; (rba.RbaModel-object).
+        &#34;&#34;&#34;
+        self.LogBook.addEntry(&#39;Model rebuilt.&#39;)
+        self.matrices = rba.ConstraintMatrix(model=self.model)
+        self.solver = rba.Solver(matrix=self.matrices)
+        self.Problem = RBA_Problem(solver=self.solver)
+        self.setMedium(changes=self.Medium)
+
+    def reloadModel(self):
+        &#34;&#34;&#34;
+        Reloads model from xml-files and then rebuild computational model-representation.
+        &#34;&#34;&#34;
+        self.LogBook.addEntry(&#39;Model reloaded from {}.&#39;.format(self.xml_dir))
+        self.model = rba.RbaModel.from_xml(input_dir=self.xml_dir)
+        self.rebuild_from_model()
+
+    def recordResults(self, runName):
+        &#34;&#34;&#34;
+        Records Simulation output for further use.
+        and strores them in own &#39;Results&#39;-attribute as pandas.DataFrames in a dictionary with the respective run-name being a column in all DataFrames.
+
+        Parameters
+        ----------
+        runName : str
+            Name of observation.
+            Serves as ID for all Data, originating from these.
+        &#34;&#34;&#34;
+        self.LogBook.addEntry(&#39;Solution recorded under {}.&#39;.format(runName))
+        if not hasattr(self, &#39;Results&#39;):
+            self.Results = {&#39;Reactions&#39;: pandas.DataFrame(index=list(self.ModelStructure.ReactionInfo.Elements.keys())),
+                            &#39;Enzymes&#39;: pandas.DataFrame(index=list(self.ModelStructure.EnzymeInfo.Elements.keys())),
+                            &#39;Processes&#39;: pandas.DataFrame(index=[self.ModelStructure.ProcessInfo.Elements[i][&#39;ID&#39;]+&#39;_machinery&#39; for i in self.ModelStructure.ProcessInfo.Elements.keys()]),
+                            &#39;Proteins&#39;: pandas.DataFrame(index=list(self.ModelStructure.ProteinMatrix[&#39;Proteins&#39;])),
+                            &#39;ProtoProteins&#39;: pandas.DataFrame(index=list(self.ModelStructure.ProteinGeneMatrix[&#39;ProtoProteins&#39;])),
+                            &#39;Constraints&#39;: pandas.DataFrame(index=self.Problem.LP.row_names),
+                            &#39;SolutionType&#39;: pandas.DataFrame(index=[&#39;SolutionType&#39;]),
+                            &#39;ObjectiveFunction&#39;: pandas.DataFrame(index=self.Problem.LP.col_names),
+                            &#39;Mu&#39;: pandas.DataFrame(index=[&#39;Mu&#39;]),
+                            &#39;ObjectiveValue&#39;: pandas.DataFrame(index=[&#39;ObjectiveValue&#39;]),
+                            &#39;ExchangeFluxes&#39;: pandas.DataFrame(index=list(self.ExchangeMap.keys()))}
+
+        Exchanges = self.returnExchangeFluxes()
+        for i in Exchanges.keys():
+            self.Results[&#39;ExchangeFluxes&#39;].loc[i, runName] = checkwithsolutionfeasibility(
+                Value=Exchanges[i], Session=self)
+
+        self.Results[&#39;Reactions&#39;][runName] = [checkwithsolutionfeasibility(
+            Value=self.Problem.SolutionValues[i], Session=self) for i in list(self.Results[&#39;Reactions&#39;].index)]
+        self.Results[&#39;Enzymes&#39;][runName] = [checkwithsolutionfeasibility(
+            Value=self.Problem.SolutionValues[i], Session=self) for i in list(self.Results[&#39;Enzymes&#39;].index)]
+        self.Results[&#39;Processes&#39;][runName] = [checkwithsolutionfeasibility(
+            Value=self.Problem.SolutionValues[i], Session=self) for i in list(self.Results[&#39;Processes&#39;].index)]
+        self.Results[&#39;Constraints&#39;][runName] = [checkwithsolutionfeasibility(
+            Value=self.Problem.DualValues[i], Session=self) for i in self.Problem.LP.row_names]
+        self.Results[&#39;Proteins&#39;][runName] = ProteomeRecording(self, runName)
+        self.Results[&#39;ProtoProteins&#39;][runName] = ProtoProteomeRecording(
+            self, runName, self.Results[&#39;Proteins&#39;])
+        self.Results[&#39;SolutionType&#39;][runName] = checkwithsolutionfeasibility(Value=self.Problem.SolutionType, Session=self)
+        self.Results[&#39;Mu&#39;][runName] = checkwithsolutionfeasibility(Value=self.Problem.Mu, Session=self)
+        self.Results[&#39;ObjectiveValue&#39;][runName] = checkwithsolutionfeasibility(
+            Value=self.Problem.ObjectiveValue, Session=self)
+        self.Results[&#39;ObjectiveFunction&#39;][runName] = list(self.Problem.getObjective().values())
+
+    def recordParameters(self, runName):
+        &#34;&#34;&#34;
+        Records Simulation parameters (LP-coefficients etc.) for further use.
+        and strores them in own &#39;Parameters&#39;-attribute as pandas.DataFrames in a dictionary with the respective run-name being a column in all DataFrames.
+
+        Parameters
+        ----------
+        runName : str
+            Name of observation.
+            Serves as ID for all Data, originating from these.
+        &#34;&#34;&#34;
+        self.LogBook.addEntry(&#39;Coefficients recorded under {}.&#39;.format(runName))
+        EnzymeCapacities = self.Problem.getEnzymeCapacities()
+        ProcessCapacities = self.Problem.getProcessCapacities()
+        CompartmentCapacities = self.Problem.getCompartmentCapacities()
+        if not hasattr(self, &#39;Parameters&#39;):
+            self.Parameters = {&#39;EnzymeEfficiencies_FW&#39;: pandas.DataFrame(index=list(EnzymeCapacities.keys())),
+                               &#39;EnzymeEfficiencies_BW&#39;: pandas.DataFrame(index=list(EnzymeCapacities.keys())),
+                               &#39;NetProcessEfficiencies&#39;: pandas.DataFrame(index=list(ProcessCapacities.keys())),
+                               &#39;CompartmentCapacities&#39;: pandas.DataFrame(index=list(CompartmentCapacities.keys()))}
+
+        self.Parameters[&#39;EnzymeEfficiencies_FW&#39;][runName] = [
+            EnzymeCapacities[i][&#39;Forward&#39;] for i in list(EnzymeCapacities.keys())]
+        self.Parameters[&#39;EnzymeEfficiencies_BW&#39;][runName] = [
+            EnzymeCapacities[i][&#39;Backward&#39;] for i in list(EnzymeCapacities.keys())]
+        self.Parameters[&#39;NetProcessEfficiencies&#39;][runName] = [ProcessCapacities[i]
+                                                              for i in list(ProcessCapacities.keys())]
+        self.Parameters[&#39;CompartmentCapacities&#39;][runName] = [CompartmentCapacities[i]
+                                                             for i in list(CompartmentCapacities.keys())]
+
+    def clearResults(self):
+        &#34;&#34;&#34;
+        Removes all previosly recorded results and deletes own &#39;Results&#39;-attribute.
+        &#34;&#34;&#34;
+        self.LogBook.addEntry(&#39;Results cleared.&#39;)
+
+        delattr(self, &#39;Results&#39;)
+
+    def clearParameters(self):
+        &#34;&#34;&#34;
+        Removes all previosly recorded parameters and deletes own &#39;Parameters&#39;-attribute.
+        &#34;&#34;&#34;
+
+        self.LogBook.addEntry(&#39;Parameters cleared.&#39;)
+        delattr(self, &#39;Parameters&#39;)
+
+    def writeResults(self, session_name=&#39;&#39;, digits=10, loggingIntermediateSteps=False):
+        &#34;&#34;&#34;
+        Creates SimulationData and SimulationParameters objects from recordings (&#39;Results&#39;.&#39;Parameters&#39;).
+
+        Stores them as rbatools.RBA_SimulationData
+        and rbatools.RBA_SimulationParameters objects as attributes.
+        Access via attributes .SimulationData and SimulationParameters respectively.
+
+        Parameters
+        ----------
+        digits : int
+            Number of decimal places in the numeric results
+            Default: 10
+        session_name : str
+            Name of Simulation session.
+            Default: &#39;&#39;
+        &#34;&#34;&#34;
+        self.LogBook.addEntry(&#39;Data written under {}.&#39;.format(session_name))
+        if hasattr(self, &#39;Results&#39;):
+            self.Results[&#39;uniqueReactions&#39;] = mapIsoReactions(Controller=self)
+            self.Results[&#39;Mu&#39;] = self.Results[&#39;Mu&#39;].round(digits)
+            self.Results[&#39;ObjectiveValue&#39;] = self.Results[&#39;ObjectiveValue&#39;].round(digits)
+            self.Results[&#39;Proteins&#39;] = self.Results[&#39;Proteins&#39;].round(digits)
+            self.Results[&#39;uniqueReactions&#39;] = self.Results[&#39;uniqueReactions&#39;].round(digits)
+            self.Results[&#39;Reactions&#39;] = self.Results[&#39;Reactions&#39;].round(digits)
+            self.Results[&#39;Enzymes&#39;] = self.Results[&#39;Enzymes&#39;].round(digits)
+            self.Results[&#39;Processes&#39;] = self.Results[&#39;Processes&#39;].round(digits)
+            self.Results[&#39;Constraints&#39;] = self.Results[&#39;Constraints&#39;].round(digits)
+            self.Results[&#39;ExchangeFluxes&#39;] = self.Results[&#39;ExchangeFluxes&#39;].round(digits)
+
+            self.SimulationData = RBA_SimulationData(StaticData=self.ModelStructure)
+            self.SimulationData.fromSimulationResults(Controller=self, session_name=session_name)
+
+        if hasattr(self, &#39;Parameters&#39;):
+            self.Parameters[&#39;EnzymeEfficiencies_FW&#39;] = self.Parameters[&#39;EnzymeEfficiencies_FW&#39;].round(
+                digits)
+            self.Parameters[&#39;EnzymeEfficiencies_BW&#39;] = self.Parameters[&#39;EnzymeEfficiencies_BW&#39;].round(
+                digits)
+            self.Parameters[&#39;NetProcessEfficiencies&#39;] = self.Parameters[&#39;NetProcessEfficiencies&#39;].round(
+                digits)
+            self.Parameters[&#39;CompartmentCapacities&#39;] = self.Parameters[&#39;CompartmentCapacities&#39;].round(
+                digits)
+            self.SimulationParameters = RBA_SimulationParameters(StaticData=self.ModelStructure)
+            self.SimulationParameters.fromSimulationResults(Controller=self)
+
+    def returnExchangeFluxes(self):
+        &#34;&#34;&#34;
+        Generates a dictonary with the exchang-rates of boundary-metabolites.
+
+        Returns
+        -------
+        Dictonary with exchange-keys and respective -rates.
+        &#34;&#34;&#34;
+        out = {}
+        for j in self.ExchangeMap.keys():
+            netflux = 0
+            for k in self.ExchangeMap[j].keys():
+                netflux += self.ExchangeMap[j][k]*self.Problem.SolutionValues[k]
+            if netflux != 0:
+                out[j] = netflux
+        return(out)
+
+    def setMu(self, Mu, loggingIntermediateSteps=False):
+        &#34;&#34;&#34;
+        Sets growth-rate to desired value.
+
+        Parameters
+        ----------
+        Mu : float
+            Growth rate
+        &#34;&#34;&#34;
+        self.LogBook.addEntry(&#39;Growth-rate changed:{} --&gt; {}&#39;.format(self.Mu, float(Mu)))
+        self.Problem.setMu(Mu=float(Mu), ModelStructure=self.ModelStructure,
+                           logging=loggingIntermediateSteps)
+        self.Mu = float(Mu)
+
+    def doSolve(self, runName=&#39;DontSave&#39;, feasibleStatuses=[1], try_unscaling_if_sol_status_is_five=True, loggingIntermediateSteps=False):
+        &#34;&#34;&#34;
+        Solves problem to find solution.
+
+        Does the same as rbatools.RBA_Problem.solveLP().
+        Just has some automatic option for results-recording.
+
+        Parameters
+        ----------
+        runName : str
+            Name of observation.
+            Serves as ID for all data, originating from this run.
+            Special values :
+                &#39;DontSave&#39; : Results are not recorded
+                &#39;Auto&#39; : Results are automatically recorded
+                         and appended to existing ones.
+                    Named with number.
+                Any other string: Results are recorded under this name.
+            Default: &#39;DontSave&#39;
+        feasibleStatuses : list of int
+            List with identifiers of acceptable solution statuses.
+            (consult ILOG-CPLEX documentation for information on them).
+            Default: [1]
+        try_unscaling_if_sol_status_is_five : bool
+                If true; the problem will be attempted to be solved without scaling,
+                if the scaled problem is feasible but the solution is not feasible
+                after unscaling (CPLEX solution-status 5).
+                Default: True
+        &#34;&#34;&#34;
+
+        self.Problem.solveLP(feasibleStatuses=feasibleStatuses, try_unscaling_if_sol_status_is_five=try_unscaling_if_sol_status_is_five, logging=loggingIntermediateSteps)
+        if self.Problem.Solved:
+            if runName is not &#39;DontSave&#39;:
+                if runName is &#39;Auto&#39;:
+                    if hasattr(self, &#39;Results&#39;):
+                        name = str(self.Results[&#39;Reactions&#39;].shape[1]+1)
+                    if not hasattr(self, &#39;Results&#39;):
+                        name = &#39;1&#39;
+                if runName is not &#39;Auto&#39;:
+                    name = runName
+                self.recordResults(runName=name)
+
+    def findMaxGrowthRate(self, precision=0.001, max=4, start_value=None, recording=False, loggingIntermediateSteps=False, omit_objective=False, feasibleStatuses=[1], try_unscaling_if_sol_status_is_five=True):
+        &#34;&#34;&#34;
+        Applies dichotomy-search to find the maximal feasible growth-rate.
+
+        Parameters
+        ----------
+        precision : float
+            Numberic precision with which maximum is approximated.
+            Default : 0.00001
+        max : float
+            Defines the highest growth rate to be screened for.
+            Default=4
+        recording : bool
+            Records intermediate feasible solutions
+            while approaching the maximum growth-rate.
+            Default : False
+        feasibleStatuses : list of int
+            List with identifiers of acceptable solution statuses.
+            (consult ILOG-CPLEX documentation for information on them).
+            Default: feasibleStatuses=[1]
+        try_unscaling_if_sol_status_is_five : bool
+                If true; the problem will be attempted to be solved without scaling,
+                if the scaled problem is feasible but the solution is not feasible
+                after unscaling (CPLEX solution-status 5).
+                Default: try_unscaling_if_sol_status_is_five=True
+
+        Returns
+        -------
+        maximum feasible growth rate as float.
+        &#34;&#34;&#34;
+
+        minMu = 0
+        maxMu = max
+        if start_value is None:
+            testMu = maxMu
+        else:
+            testMu = start_value
+        iteration = 0
+
+        if omit_objective:
+            old_Obj = self.Problem.getObjective()
+            self.Problem.clearObjective()
+
+        while (maxMu - minMu) &gt; precision:
+            self.setMu(Mu=testMu)
+            self.Problem.solveLP(feasibleStatuses=feasibleStatuses,try_unscaling_if_sol_status_is_five=try_unscaling_if_sol_status_is_five,logging=loggingIntermediateSteps)
+            if self.Problem.Solved:
+                iteration += 1
+                if recording:
+                    self.recordResults(&#39;DichotomyMu_iteration_&#39;+str(iteration))
+                minMu = testMu
+            else:
+                maxMu = testMu
+            testMu = numpy.mean([maxMu, minMu])
+        self.LogBook.addEntry(&#39;Maximal growth-rate found to be: {}.&#39;.format(minMu))
+        if minMu == max:
+            print(&#39;Warning: Maximum growth rate might exceed specified range. Try rerunning this method with larger max-argument.&#39;)
+
+        if omit_objective:
+            self.Problem.setObjectiveCoefficients(old_Obj)
+        self.setMu(Mu=minMu)
+        self.Problem.solveLP(feasibleStatuses=feasibleStatuses,try_unscaling_if_sol_status_is_five=try_unscaling_if_sol_status_is_five,logging=False)
+        return(minMu)
+
+    def setMedium(self, changes, loggingIntermediateSteps=False):
+        &#34;&#34;&#34;
+        Sets the concentration of specified growth-substrate(s) in medium.
+
+        Parameters
+        ----------
+        changes : dict
+            Keys : ID of metabolite(s) in medium.
+            Values : New concention(s)
+        &#34;&#34;&#34;
+
+        for species in (changes.keys()):
+            self.Medium[species] = float(changes[species])
+
+        self.Problem.ClassicRBAmatrix.set_medium(self.Medium)
+        self.Problem.ClassicRBAmatrix.build_matrices(self.Mu)
+
+        inputMatrix = RBA_Matrix()
+        inputMatrix.loadMatrix(matrix=self.Problem.ClassicRBAmatrix)
+        self.Problem.LP.updateMatrix(matrix=inputMatrix, Ainds=MediumDependentCoefficients_A(
+            self), Binds=[], CTinds=[], LBinds=None, UBinds=None)
+
+    def FeasibleRange(self, variables=None, loggingIntermediateSteps=False):
+        &#34;&#34;&#34;
+        Determines the feasible range of model variables.
+
+        Parameters
+        ----------
+        variables : str or list of str
+            Specifies variable(s) for which the feasible range is to be determined.
+            Optional input:
+                If not provided all model-variables are taken
+
+        Returns
+        -------
+        Dictionary with variable-names as keys and other dictionaries as values.
+        The &#39;inner&#39; dictionaries hold keys &#39;Min&#39; and &#39;Max&#39;
+        with values representing lower and upper bound of feasible range respectively.
+        E.g. : {&#39;variableA&#39;:{&#39;Min&#39;:42 , &#39;Max&#39;:9000},
+                &#39;variableB&#39;:{&#39;Min&#39;:-9000 , &#39;Max&#39;:-42}}
+        &#34;&#34;&#34;
+
+        if variables is not None:
+                if isinstance(variables, list):
+                        VariablesInQuestion=variables
+                elif isinstance(variables, str):
+                        VariablesInQuestion=[variables]
+        else:
+                VariablesInQuestion = self.Problem.LP.col_names
+
+        out = {}
+        for i in VariablesInQuestion:
+            min = numpy.nan
+            max = numpy.nan
+            self.Problem.clearObjective(logging=loggingIntermediateSteps)
+#            self.Problem.setObjectiveCoefficients(inputDict=dict(
+#                zip(self.Problem.LP.col_names, [0.0]*len(self.Problem.LP.col_names))))
+            self.Problem.setObjectiveCoefficients(
+                inputDict={i: 1.0}, logging=loggingIntermediateSteps)
+            self.Problem.solveLP(logging=loggingIntermediateSteps)
+            if self.Problem.Solved:
+                min = self.Problem.SolutionValues[i]
+            self.Problem.setObjectiveCoefficients(
+                inputDict={i: -1.0}, logging=loggingIntermediateSteps)
+            self.Problem.solveLP(logging=loggingIntermediateSteps)
+            if self.Problem.Solved:
+                max = self.Problem.SolutionValues[i]
+            out.update({i: {&#39;Min&#39;: min, &#39;Max&#39;: max}})
+            self.LogBook.addEntry(
+                &#39;Feasible-range of {} determined to be between {} and {}.&#39;.format(i, min, max))
+
+        return(out)
+
+    def ConstraintSaturation(self, constraints=None):
+        &#34;&#34;&#34;
+        Determines the saturation of model constraints at current solution.
+
+        Parameters
+        ----------
+        constraints : str or list of str
+            Specifies constraints(s) for which the saturation is to be determined.
+            Optional input:
+                If not provided all model-constraints are taken
+
+        Returns
+        -------
+        Pandas DataFrame with constraint-names as indices and the columns &#39;LHS&#39;, &#39;RHS&#39;, and &#39;Saturation&#39;.
+                &#39;LHS&#39;: The sum over the respoctive constraint-row multiplied elementwise with the solution vector.
+                &#39;RHS&#39;: The value of the problem&#39;s righthand side, correesponding to the respective constraint.
+                &#39;Saturation&#39;: The saturation of the respective constraint (&#39;LHS&#39;/&#39;RHS&#39;).
+        &#34;&#34;&#34;
+        if constraints is not None:
+                if isinstance(constraints, list):
+                        ConstraintsInQuestion=constraints
+                elif isinstance(constraints, str):
+                        ConstraintsInQuestion=[constraints]
+        else:
+                ConstraintsInQuestion = self.Problem.LP.row_names
+
+        rhs = self.Problem.getRighthandSideValue(ConstraintsInQuestion)
+        lhs = self.Problem.calculateLefthandSideValue(ConstraintsInQuestion)
+        Out = pandas.DataFrame(columns=[&#39;LHS&#39;, &#39;RHS&#39;, &#39;Saturation&#39;], index=ConstraintsInQuestion)
+        for i in ConstraintsInQuestion:
+            lhval = lhs[i]
+            rhval = rhs[i]
+            sat = numpy.nan
+            if rhval != 0:
+                sat = lhval/rhval
+            Out.loc[i, &#39;LHS&#39;] = lhval
+            Out.loc[i, &#39;RHS&#39;] = rhval
+            Out.loc[i, &#39;Saturation&#39;] = sat
+            self.LogBook.addEntry(
+                &#39;Saturation of constraint {} determined to be {}.&#39;.format(i, sat))
+        return(Out)
+
+    def addExchangeReactions(self):
+        &#34;&#34;&#34;
+        Adds explicit exchange-reactions of boundary-metabolites to RBA-problem,
+        named R_EX_ followed by metabolite name (without M_ prefix).
+        &#34;&#34;&#34;
+        Mets_external = [m.id for m in self.model.metabolism.species if m.boundary_condition]
+        Mets_internal = [m.id for m in self.model.metabolism.species if not m.boundary_condition]
+        Reactions = [r.id for r in self.model.metabolism.reactions]
+        full_S = rba.core.metabolism.build_S(
+            Mets_external+Mets_internal, self.model.metabolism.reactions)
+        S_M_ext = full_S[:len(Mets_external), ].toarray()
+        col_indices_toremove = []
+        for i in range(S_M_ext.shape[1]):
+            s_col_uniques = list(set(list(S_M_ext[:, i])))
+            if len(s_col_uniques) == 1:
+                if s_col_uniques[0] == 0:
+                    col_indices_toremove.append(i)
+        RemainingReactions = [i for i in Reactions if Reactions.index(
+            i) not in col_indices_toremove]
+        S_ext = numpy.delete(S_M_ext, col_indices_toremove, axis=1)
+        A = numpy.concatenate((S_ext, numpy.eye(len(Mets_external))), axis=1, out=None)
+        ColNames = RemainingReactions+[str(&#39;R_EX_&#39;+i.split(&#39;M_&#39;)[-1]) for i in Mets_external]
+        # print(str(&#39;R_EX_&#39;+i.split(&#39;M_&#39;)[-1]))
+        LBs = list([self.Problem.LP.LB[self.Problem.LP.col_names.index(i)]
+                    for i in RemainingReactions]+[-10000]*len(Mets_external))
+        UBs = list([self.Problem.LP.UB[self.Problem.LP.col_names.index(i)]
+                    for i in RemainingReactions]+[10000]*len(Mets_external))
+        b = [0]*len(Mets_external)
+        f = list([self.Problem.LP.f[self.Problem.LP.col_names.index(i)]
+                  for i in RemainingReactions]+[0]*len(Mets_external))
+
+        ExchangeMatrix = RBA_Matrix()
+        ExchangeMatrix.A = scipy.sparse.coo_matrix(A)
+        ExchangeMatrix.b = numpy.array([0]*len(Mets_external))
+        ExchangeMatrix.f = numpy.array(f)
+        ExchangeMatrix.LB = numpy.array(LBs)
+        ExchangeMatrix.UB = numpy.array(UBs)
+        ExchangeMatrix.row_signs = [&#39;E&#39;]*len(Mets_external)
+        ExchangeMatrix.row_names = Mets_external
+        ExchangeMatrix.col_names = ColNames
+        ExchangeMatrix.mapIndices()
+        self.Problem.LP.addMatrix(matrix=ExchangeMatrix)
+
+        self.ExchangeReactionMap = dict(
+            zip(Mets_external, [str(&#39;R_EX_&#39;+i.split(&#39;M_&#39;)[-1]) for i in Mets_external]))</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="rbatools.rba_Session.RBA_Session.ConstraintSaturation"><code class="name flex">
+<span>def <span class="ident">ConstraintSaturation</span></span>(<span>self, constraints=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Determines the saturation of model constraints at current solution.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>constraints</code></strong> :&ensp;<code>str</code> or <code>list</code> of <code>str</code></dt>
+<dd>Specifies constraints(s) for which the saturation is to be determined.
+Optional input:
+If not provided all model-constraints are taken</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Pandas DataFrame with constraint-names as indices and the columns 'LHS', 'RHS', and 'Saturation'.
+'LHS': The sum over the respoctive constraint-row multiplied elementwise with the solution vector.
+'RHS': The value of the problem's righthand side, correesponding to the respective constraint.
+'Saturation': The saturation of the respective constraint ('LHS'/'RHS').</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def ConstraintSaturation(self, constraints=None):
+    &#34;&#34;&#34;
+    Determines the saturation of model constraints at current solution.
+
+    Parameters
+    ----------
+    constraints : str or list of str
+        Specifies constraints(s) for which the saturation is to be determined.
+        Optional input:
+            If not provided all model-constraints are taken
+
+    Returns
+    -------
+    Pandas DataFrame with constraint-names as indices and the columns &#39;LHS&#39;, &#39;RHS&#39;, and &#39;Saturation&#39;.
+            &#39;LHS&#39;: The sum over the respoctive constraint-row multiplied elementwise with the solution vector.
+            &#39;RHS&#39;: The value of the problem&#39;s righthand side, correesponding to the respective constraint.
+            &#39;Saturation&#39;: The saturation of the respective constraint (&#39;LHS&#39;/&#39;RHS&#39;).
+    &#34;&#34;&#34;
+    if constraints is not None:
+            if isinstance(constraints, list):
+                    ConstraintsInQuestion=constraints
+            elif isinstance(constraints, str):
+                    ConstraintsInQuestion=[constraints]
+    else:
+            ConstraintsInQuestion = self.Problem.LP.row_names
+
+    rhs = self.Problem.getRighthandSideValue(ConstraintsInQuestion)
+    lhs = self.Problem.calculateLefthandSideValue(ConstraintsInQuestion)
+    Out = pandas.DataFrame(columns=[&#39;LHS&#39;, &#39;RHS&#39;, &#39;Saturation&#39;], index=ConstraintsInQuestion)
+    for i in ConstraintsInQuestion:
+        lhval = lhs[i]
+        rhval = rhs[i]
+        sat = numpy.nan
+        if rhval != 0:
+            sat = lhval/rhval
+        Out.loc[i, &#39;LHS&#39;] = lhval
+        Out.loc[i, &#39;RHS&#39;] = rhval
+        Out.loc[i, &#39;Saturation&#39;] = sat
+        self.LogBook.addEntry(
+            &#39;Saturation of constraint {} determined to be {}.&#39;.format(i, sat))
+    return(Out)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.FeasibleRange"><code class="name flex">
+<span>def <span class="ident">FeasibleRange</span></span>(<span>self, variables=None, loggingIntermediateSteps=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Determines the feasible range of model variables.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>variables</code></strong> :&ensp;<code>str</code> or <code>list</code> of <code>str</code></dt>
+<dd>Specifies variable(s) for which the feasible range is to be determined.
+Optional input:
+If not provided all model-variables are taken</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Dictionary with variable-names as keys and other dictionaries as values.
+The 'inner' dictionaries hold keys 'Min' and 'Max'
+with values representing lower and upper bound of feasible range respectively.
+E.g. : {'variableA':{'Min':42 , 'Max':9000},
+'variableB':{'Min':-9000 , 'Max':-42}}</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">    def FeasibleRange(self, variables=None, loggingIntermediateSteps=False):
+        &#34;&#34;&#34;
+        Determines the feasible range of model variables.
+
+        Parameters
+        ----------
+        variables : str or list of str
+            Specifies variable(s) for which the feasible range is to be determined.
+            Optional input:
+                If not provided all model-variables are taken
+
+        Returns
+        -------
+        Dictionary with variable-names as keys and other dictionaries as values.
+        The &#39;inner&#39; dictionaries hold keys &#39;Min&#39; and &#39;Max&#39;
+        with values representing lower and upper bound of feasible range respectively.
+        E.g. : {&#39;variableA&#39;:{&#39;Min&#39;:42 , &#39;Max&#39;:9000},
+                &#39;variableB&#39;:{&#39;Min&#39;:-9000 , &#39;Max&#39;:-42}}
+        &#34;&#34;&#34;
+
+        if variables is not None:
+                if isinstance(variables, list):
+                        VariablesInQuestion=variables
+                elif isinstance(variables, str):
+                        VariablesInQuestion=[variables]
+        else:
+                VariablesInQuestion = self.Problem.LP.col_names
+
+        out = {}
+        for i in VariablesInQuestion:
+            min = numpy.nan
+            max = numpy.nan
+            self.Problem.clearObjective(logging=loggingIntermediateSteps)
+#            self.Problem.setObjectiveCoefficients(inputDict=dict(
+#                zip(self.Problem.LP.col_names, [0.0]*len(self.Problem.LP.col_names))))
+            self.Problem.setObjectiveCoefficients(
+                inputDict={i: 1.0}, logging=loggingIntermediateSteps)
+            self.Problem.solveLP(logging=loggingIntermediateSteps)
+            if self.Problem.Solved:
+                min = self.Problem.SolutionValues[i]
+            self.Problem.setObjectiveCoefficients(
+                inputDict={i: -1.0}, logging=loggingIntermediateSteps)
+            self.Problem.solveLP(logging=loggingIntermediateSteps)
+            if self.Problem.Solved:
+                max = self.Problem.SolutionValues[i]
+            out.update({i: {&#39;Min&#39;: min, &#39;Max&#39;: max}})
+            self.LogBook.addEntry(
+                &#39;Feasible-range of {} determined to be between {} and {}.&#39;.format(i, min, max))
+
+        return(out)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.__init__"><code class="name flex">
+<span>def <span class="ident">__init__</span></span>(<span>self, xml_dir)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Creates RBA_Session object from files</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>xml_dir</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path to the directory where rba-model files are located.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def __init__(self, xml_dir):
+    &#34;&#34;&#34;
+    Creates RBA_Session object from files
+
+    Parameters
+    ----------
+    xml_dir : str
+        Path to the directory where rba-model files are located.
+    &#34;&#34;&#34;
+    self.xml_dir = xml_dir
+    self.LogBook = RBA_LogBook(&#39;Controler&#39;)
+
+    if not hasattr(self, &#39;ModelStructure&#39;):
+        if os.path.isfile(str(self.xml_dir+&#39;/ModelStructure.json&#39;)):
+            self.ModelStructure = RBA_ModelStructure()
+            with open(str(self.xml_dir+&#39;/ModelStructure.json&#39;), &#39;r&#39;) as myfile:
+                data = myfile.read()
+            self.ModelStructure.fromJSON(inputString=data)
+        else:
+            self.build_ModelStructure()
+
+    self.model = rba.RbaModel.from_xml(input_dir=xml_dir)
+    self.matrices = rba.ConstraintMatrix(model=self.model)
+    self.solver = rba.Solver(matrix=self.matrices)
+
+    self.LogBook.addEntry(&#39;Model loaded from {}.&#39;.format(self.xml_dir))
+    self.Problem = RBA_Problem(solver=self.solver)
+
+    medium = pandas.read_csv(xml_dir+&#39;/medium.tsv&#39;, sep=&#39;\t&#39;)
+    self.Medium = dict(zip(list(medium.iloc[:, 0]), [float(i)
+                                                     for i in list(medium.iloc[:, 1])]))
+
+    self.Mu = self.Problem.Mu
+    self.ExchangeMap = buildExchangeMap(self)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.addExchangeReactions"><code class="name flex">
+<span>def <span class="ident">addExchangeReactions</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Adds explicit exchange-reactions of boundary-metabolites to RBA-problem,
+named R_EX_ followed by metabolite name (without M_ prefix).</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def addExchangeReactions(self):
+    &#34;&#34;&#34;
+    Adds explicit exchange-reactions of boundary-metabolites to RBA-problem,
+    named R_EX_ followed by metabolite name (without M_ prefix).
+    &#34;&#34;&#34;
+    Mets_external = [m.id for m in self.model.metabolism.species if m.boundary_condition]
+    Mets_internal = [m.id for m in self.model.metabolism.species if not m.boundary_condition]
+    Reactions = [r.id for r in self.model.metabolism.reactions]
+    full_S = rba.core.metabolism.build_S(
+        Mets_external+Mets_internal, self.model.metabolism.reactions)
+    S_M_ext = full_S[:len(Mets_external), ].toarray()
+    col_indices_toremove = []
+    for i in range(S_M_ext.shape[1]):
+        s_col_uniques = list(set(list(S_M_ext[:, i])))
+        if len(s_col_uniques) == 1:
+            if s_col_uniques[0] == 0:
+                col_indices_toremove.append(i)
+    RemainingReactions = [i for i in Reactions if Reactions.index(
+        i) not in col_indices_toremove]
+    S_ext = numpy.delete(S_M_ext, col_indices_toremove, axis=1)
+    A = numpy.concatenate((S_ext, numpy.eye(len(Mets_external))), axis=1, out=None)
+    ColNames = RemainingReactions+[str(&#39;R_EX_&#39;+i.split(&#39;M_&#39;)[-1]) for i in Mets_external]
+    # print(str(&#39;R_EX_&#39;+i.split(&#39;M_&#39;)[-1]))
+    LBs = list([self.Problem.LP.LB[self.Problem.LP.col_names.index(i)]
+                for i in RemainingReactions]+[-10000]*len(Mets_external))
+    UBs = list([self.Problem.LP.UB[self.Problem.LP.col_names.index(i)]
+                for i in RemainingReactions]+[10000]*len(Mets_external))
+    b = [0]*len(Mets_external)
+    f = list([self.Problem.LP.f[self.Problem.LP.col_names.index(i)]
+              for i in RemainingReactions]+[0]*len(Mets_external))
+
+    ExchangeMatrix = RBA_Matrix()
+    ExchangeMatrix.A = scipy.sparse.coo_matrix(A)
+    ExchangeMatrix.b = numpy.array([0]*len(Mets_external))
+    ExchangeMatrix.f = numpy.array(f)
+    ExchangeMatrix.LB = numpy.array(LBs)
+    ExchangeMatrix.UB = numpy.array(UBs)
+    ExchangeMatrix.row_signs = [&#39;E&#39;]*len(Mets_external)
+    ExchangeMatrix.row_names = Mets_external
+    ExchangeMatrix.col_names = ColNames
+    ExchangeMatrix.mapIndices()
+    self.Problem.LP.addMatrix(matrix=ExchangeMatrix)
+
+    self.ExchangeReactionMap = dict(
+        zip(Mets_external, [str(&#39;R_EX_&#39;+i.split(&#39;M_&#39;)[-1]) for i in Mets_external]))</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.build_ModelStructure"><code class="name flex">
+<span>def <span class="ident">build_ModelStructure</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Rebuilds model structure object from model files and stores as json.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def build_ModelStructure(self):
+    &#34;&#34;&#34;
+    Rebuilds model structure object from model files and stores as json.
+    &#34;&#34;&#34;
+    self.ModelStructure = RBA_ModelStructure()
+    self.ModelStructure.fromFiles(xml_dir=self.xml_dir)
+    self.ModelStructure.exportJSON(path=self.xml_dir)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.clearParameters"><code class="name flex">
+<span>def <span class="ident">clearParameters</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Removes all previosly recorded parameters and deletes own 'Parameters'-attribute.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def clearParameters(self):
+    &#34;&#34;&#34;
+    Removes all previosly recorded parameters and deletes own &#39;Parameters&#39;-attribute.
+    &#34;&#34;&#34;
+
+    self.LogBook.addEntry(&#39;Parameters cleared.&#39;)
+    delattr(self, &#39;Parameters&#39;)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.clearResults"><code class="name flex">
+<span>def <span class="ident">clearResults</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Removes all previosly recorded results and deletes own 'Results'-attribute.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def clearResults(self):
+    &#34;&#34;&#34;
+    Removes all previosly recorded results and deletes own &#39;Results&#39;-attribute.
+    &#34;&#34;&#34;
+    self.LogBook.addEntry(&#39;Results cleared.&#39;)
+
+    delattr(self, &#39;Results&#39;)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.doSolve"><code class="name flex">
+<span>def <span class="ident">doSolve</span></span>(<span>self, runName=&#39;DontSave&#39;, feasibleStatuses=[1], try_unscaling_if_sol_status_is_five=True, loggingIntermediateSteps=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Solves problem to find solution.</p>
+<p>Does the same as rbatools.RBA_Problem.solveLP().
+Just has some automatic option for results-recording.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>runName</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of observation.
+Serves as ID for all data, originating from this run.
+Special values :
+'DontSave' : Results are not recorded
+'Auto' : Results are automatically recorded
+and appended to existing ones.
+Named with number.
+Any other string: Results are recorded under this name.
+Default: 'DontSave'</dd>
+<dt><strong><code>feasibleStatuses</code></strong> :&ensp;<code>list</code> of <code>int</code></dt>
+<dd>List with identifiers of acceptable solution statuses.
+(consult ILOG-CPLEX documentation for information on them).
+Default: [1]</dd>
+<dt><strong><code>try_unscaling_if_sol_status_is_five</code></strong> :&ensp;<code>bool</code></dt>
+<dd>If true; the problem will be attempted to be solved without scaling,
+if the scaled problem is feasible but the solution is not feasible
+after unscaling (CPLEX solution-status 5).
+Default: True</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def doSolve(self, runName=&#39;DontSave&#39;, feasibleStatuses=[1], try_unscaling_if_sol_status_is_five=True, loggingIntermediateSteps=False):
+    &#34;&#34;&#34;
+    Solves problem to find solution.
+
+    Does the same as rbatools.RBA_Problem.solveLP().
+    Just has some automatic option for results-recording.
+
+    Parameters
+    ----------
+    runName : str
+        Name of observation.
+        Serves as ID for all data, originating from this run.
+        Special values :
+            &#39;DontSave&#39; : Results are not recorded
+            &#39;Auto&#39; : Results are automatically recorded
+                     and appended to existing ones.
+                Named with number.
+            Any other string: Results are recorded under this name.
+        Default: &#39;DontSave&#39;
+    feasibleStatuses : list of int
+        List with identifiers of acceptable solution statuses.
+        (consult ILOG-CPLEX documentation for information on them).
+        Default: [1]
+    try_unscaling_if_sol_status_is_five : bool
+            If true; the problem will be attempted to be solved without scaling,
+            if the scaled problem is feasible but the solution is not feasible
+            after unscaling (CPLEX solution-status 5).
+            Default: True
+    &#34;&#34;&#34;
+
+    self.Problem.solveLP(feasibleStatuses=feasibleStatuses, try_unscaling_if_sol_status_is_five=try_unscaling_if_sol_status_is_five, logging=loggingIntermediateSteps)
+    if self.Problem.Solved:
+        if runName is not &#39;DontSave&#39;:
+            if runName is &#39;Auto&#39;:
+                if hasattr(self, &#39;Results&#39;):
+                    name = str(self.Results[&#39;Reactions&#39;].shape[1]+1)
+                if not hasattr(self, &#39;Results&#39;):
+                    name = &#39;1&#39;
+            if runName is not &#39;Auto&#39;:
+                name = runName
+            self.recordResults(runName=name)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.findMaxGrowthRate"><code class="name flex">
+<span>def <span class="ident">findMaxGrowthRate</span></span>(<span>self, precision=0.001, max=4, start_value=None, recording=False, loggingIntermediateSteps=False, omit_objective=False, feasibleStatuses=[1], try_unscaling_if_sol_status_is_five=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Applies dichotomy-search to find the maximal feasible growth-rate.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>precision</code></strong> :&ensp;<code>float</code></dt>
+<dd>Numberic precision with which maximum is approximated.
+Default : 0.00001</dd>
+<dt><strong><code>max</code></strong> :&ensp;<code>float</code></dt>
+<dd>Defines the highest growth rate to be screened for.
+Default=4</dd>
+<dt><strong><code>recording</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Records intermediate feasible solutions
+while approaching the maximum growth-rate.
+Default : False</dd>
+<dt><strong><code>feasibleStatuses</code></strong> :&ensp;<code>list</code> of <code>int</code></dt>
+<dd>List with identifiers of acceptable solution statuses.
+(consult ILOG-CPLEX documentation for information on them).
+Default: feasibleStatuses=[1]</dd>
+<dt><strong><code>try_unscaling_if_sol_status_is_five</code></strong> :&ensp;<code>bool</code></dt>
+<dd>If true; the problem will be attempted to be solved without scaling,
+if the scaled problem is feasible but the solution is not feasible
+after unscaling (CPLEX solution-status 5).
+Default: try_unscaling_if_sol_status_is_five=True</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>maximum feasible growth rate as float.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def findMaxGrowthRate(self, precision=0.001, max=4, start_value=None, recording=False, loggingIntermediateSteps=False, omit_objective=False, feasibleStatuses=[1], try_unscaling_if_sol_status_is_five=True):
+    &#34;&#34;&#34;
+    Applies dichotomy-search to find the maximal feasible growth-rate.
+
+    Parameters
+    ----------
+    precision : float
+        Numberic precision with which maximum is approximated.
+        Default : 0.00001
+    max : float
+        Defines the highest growth rate to be screened for.
+        Default=4
+    recording : bool
+        Records intermediate feasible solutions
+        while approaching the maximum growth-rate.
+        Default : False
+    feasibleStatuses : list of int
+        List with identifiers of acceptable solution statuses.
+        (consult ILOG-CPLEX documentation for information on them).
+        Default: feasibleStatuses=[1]
+    try_unscaling_if_sol_status_is_five : bool
+            If true; the problem will be attempted to be solved without scaling,
+            if the scaled problem is feasible but the solution is not feasible
+            after unscaling (CPLEX solution-status 5).
+            Default: try_unscaling_if_sol_status_is_five=True
+
+    Returns
+    -------
+    maximum feasible growth rate as float.
+    &#34;&#34;&#34;
+
+    minMu = 0
+    maxMu = max
+    if start_value is None:
+        testMu = maxMu
+    else:
+        testMu = start_value
+    iteration = 0
+
+    if omit_objective:
+        old_Obj = self.Problem.getObjective()
+        self.Problem.clearObjective()
+
+    while (maxMu - minMu) &gt; precision:
+        self.setMu(Mu=testMu)
+        self.Problem.solveLP(feasibleStatuses=feasibleStatuses,try_unscaling_if_sol_status_is_five=try_unscaling_if_sol_status_is_five,logging=loggingIntermediateSteps)
+        if self.Problem.Solved:
+            iteration += 1
+            if recording:
+                self.recordResults(&#39;DichotomyMu_iteration_&#39;+str(iteration))
+            minMu = testMu
+        else:
+            maxMu = testMu
+        testMu = numpy.mean([maxMu, minMu])
+    self.LogBook.addEntry(&#39;Maximal growth-rate found to be: {}.&#39;.format(minMu))
+    if minMu == max:
+        print(&#39;Warning: Maximum growth rate might exceed specified range. Try rerunning this method with larger max-argument.&#39;)
+
+    if omit_objective:
+        self.Problem.setObjectiveCoefficients(old_Obj)
+    self.setMu(Mu=minMu)
+    self.Problem.solveLP(feasibleStatuses=feasibleStatuses,try_unscaling_if_sol_status_is_five=try_unscaling_if_sol_status_is_five,logging=False)
+    return(minMu)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.rebuild_from_model"><code class="name flex">
+<span>def <span class="ident">rebuild_from_model</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Rebuilds computational model-representation from own attribute "model" (rba.RbaModel-object).</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def rebuild_from_model(self):
+    &#34;&#34;&#34;
+    Rebuilds computational model-representation from own attribute &#34;model&#34; (rba.RbaModel-object).
+    &#34;&#34;&#34;
+    self.LogBook.addEntry(&#39;Model rebuilt.&#39;)
+    self.matrices = rba.ConstraintMatrix(model=self.model)
+    self.solver = rba.Solver(matrix=self.matrices)
+    self.Problem = RBA_Problem(solver=self.solver)
+    self.setMedium(changes=self.Medium)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.recordParameters"><code class="name flex">
+<span>def <span class="ident">recordParameters</span></span>(<span>self, runName)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Records Simulation parameters (LP-coefficients etc.) for further use.
+and strores them in own 'Parameters'-attribute as pandas.DataFrames in a dictionary with the respective run-name being a column in all DataFrames.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>runName</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of observation.
+Serves as ID for all Data, originating from these.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def recordParameters(self, runName):
+    &#34;&#34;&#34;
+    Records Simulation parameters (LP-coefficients etc.) for further use.
+    and strores them in own &#39;Parameters&#39;-attribute as pandas.DataFrames in a dictionary with the respective run-name being a column in all DataFrames.
+
+    Parameters
+    ----------
+    runName : str
+        Name of observation.
+        Serves as ID for all Data, originating from these.
+    &#34;&#34;&#34;
+    self.LogBook.addEntry(&#39;Coefficients recorded under {}.&#39;.format(runName))
+    EnzymeCapacities = self.Problem.getEnzymeCapacities()
+    ProcessCapacities = self.Problem.getProcessCapacities()
+    CompartmentCapacities = self.Problem.getCompartmentCapacities()
+    if not hasattr(self, &#39;Parameters&#39;):
+        self.Parameters = {&#39;EnzymeEfficiencies_FW&#39;: pandas.DataFrame(index=list(EnzymeCapacities.keys())),
+                           &#39;EnzymeEfficiencies_BW&#39;: pandas.DataFrame(index=list(EnzymeCapacities.keys())),
+                           &#39;NetProcessEfficiencies&#39;: pandas.DataFrame(index=list(ProcessCapacities.keys())),
+                           &#39;CompartmentCapacities&#39;: pandas.DataFrame(index=list(CompartmentCapacities.keys()))}
+
+    self.Parameters[&#39;EnzymeEfficiencies_FW&#39;][runName] = [
+        EnzymeCapacities[i][&#39;Forward&#39;] for i in list(EnzymeCapacities.keys())]
+    self.Parameters[&#39;EnzymeEfficiencies_BW&#39;][runName] = [
+        EnzymeCapacities[i][&#39;Backward&#39;] for i in list(EnzymeCapacities.keys())]
+    self.Parameters[&#39;NetProcessEfficiencies&#39;][runName] = [ProcessCapacities[i]
+                                                          for i in list(ProcessCapacities.keys())]
+    self.Parameters[&#39;CompartmentCapacities&#39;][runName] = [CompartmentCapacities[i]
+                                                         for i in list(CompartmentCapacities.keys())]</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.recordResults"><code class="name flex">
+<span>def <span class="ident">recordResults</span></span>(<span>self, runName)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Records Simulation output for further use.
+and strores them in own 'Results'-attribute as pandas.DataFrames in a dictionary with the respective run-name being a column in all DataFrames.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>runName</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of observation.
+Serves as ID for all Data, originating from these.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def recordResults(self, runName):
+    &#34;&#34;&#34;
+    Records Simulation output for further use.
+    and strores them in own &#39;Results&#39;-attribute as pandas.DataFrames in a dictionary with the respective run-name being a column in all DataFrames.
+
+    Parameters
+    ----------
+    runName : str
+        Name of observation.
+        Serves as ID for all Data, originating from these.
+    &#34;&#34;&#34;
+    self.LogBook.addEntry(&#39;Solution recorded under {}.&#39;.format(runName))
+    if not hasattr(self, &#39;Results&#39;):
+        self.Results = {&#39;Reactions&#39;: pandas.DataFrame(index=list(self.ModelStructure.ReactionInfo.Elements.keys())),
+                        &#39;Enzymes&#39;: pandas.DataFrame(index=list(self.ModelStructure.EnzymeInfo.Elements.keys())),
+                        &#39;Processes&#39;: pandas.DataFrame(index=[self.ModelStructure.ProcessInfo.Elements[i][&#39;ID&#39;]+&#39;_machinery&#39; for i in self.ModelStructure.ProcessInfo.Elements.keys()]),
+                        &#39;Proteins&#39;: pandas.DataFrame(index=list(self.ModelStructure.ProteinMatrix[&#39;Proteins&#39;])),
+                        &#39;ProtoProteins&#39;: pandas.DataFrame(index=list(self.ModelStructure.ProteinGeneMatrix[&#39;ProtoProteins&#39;])),
+                        &#39;Constraints&#39;: pandas.DataFrame(index=self.Problem.LP.row_names),
+                        &#39;SolutionType&#39;: pandas.DataFrame(index=[&#39;SolutionType&#39;]),
+                        &#39;ObjectiveFunction&#39;: pandas.DataFrame(index=self.Problem.LP.col_names),
+                        &#39;Mu&#39;: pandas.DataFrame(index=[&#39;Mu&#39;]),
+                        &#39;ObjectiveValue&#39;: pandas.DataFrame(index=[&#39;ObjectiveValue&#39;]),
+                        &#39;ExchangeFluxes&#39;: pandas.DataFrame(index=list(self.ExchangeMap.keys()))}
+
+    Exchanges = self.returnExchangeFluxes()
+    for i in Exchanges.keys():
+        self.Results[&#39;ExchangeFluxes&#39;].loc[i, runName] = checkwithsolutionfeasibility(
+            Value=Exchanges[i], Session=self)
+
+    self.Results[&#39;Reactions&#39;][runName] = [checkwithsolutionfeasibility(
+        Value=self.Problem.SolutionValues[i], Session=self) for i in list(self.Results[&#39;Reactions&#39;].index)]
+    self.Results[&#39;Enzymes&#39;][runName] = [checkwithsolutionfeasibility(
+        Value=self.Problem.SolutionValues[i], Session=self) for i in list(self.Results[&#39;Enzymes&#39;].index)]
+    self.Results[&#39;Processes&#39;][runName] = [checkwithsolutionfeasibility(
+        Value=self.Problem.SolutionValues[i], Session=self) for i in list(self.Results[&#39;Processes&#39;].index)]
+    self.Results[&#39;Constraints&#39;][runName] = [checkwithsolutionfeasibility(
+        Value=self.Problem.DualValues[i], Session=self) for i in self.Problem.LP.row_names]
+    self.Results[&#39;Proteins&#39;][runName] = ProteomeRecording(self, runName)
+    self.Results[&#39;ProtoProteins&#39;][runName] = ProtoProteomeRecording(
+        self, runName, self.Results[&#39;Proteins&#39;])
+    self.Results[&#39;SolutionType&#39;][runName] = checkwithsolutionfeasibility(Value=self.Problem.SolutionType, Session=self)
+    self.Results[&#39;Mu&#39;][runName] = checkwithsolutionfeasibility(Value=self.Problem.Mu, Session=self)
+    self.Results[&#39;ObjectiveValue&#39;][runName] = checkwithsolutionfeasibility(
+        Value=self.Problem.ObjectiveValue, Session=self)
+    self.Results[&#39;ObjectiveFunction&#39;][runName] = list(self.Problem.getObjective().values())</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.reloadModel"><code class="name flex">
+<span>def <span class="ident">reloadModel</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Reloads model from xml-files and then rebuild computational model-representation.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def reloadModel(self):
+    &#34;&#34;&#34;
+    Reloads model from xml-files and then rebuild computational model-representation.
+    &#34;&#34;&#34;
+    self.LogBook.addEntry(&#39;Model reloaded from {}.&#39;.format(self.xml_dir))
+    self.model = rba.RbaModel.from_xml(input_dir=self.xml_dir)
+    self.rebuild_from_model()</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.returnExchangeFluxes"><code class="name flex">
+<span>def <span class="ident">returnExchangeFluxes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generates a dictonary with the exchang-rates of boundary-metabolites.</p>
+<h2 id="returns">Returns</h2>
+<p>Dictonary with exchange-keys and respective -rates.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def returnExchangeFluxes(self):
+    &#34;&#34;&#34;
+    Generates a dictonary with the exchang-rates of boundary-metabolites.
+
+    Returns
+    -------
+    Dictonary with exchange-keys and respective -rates.
+    &#34;&#34;&#34;
+    out = {}
+    for j in self.ExchangeMap.keys():
+        netflux = 0
+        for k in self.ExchangeMap[j].keys():
+            netflux += self.ExchangeMap[j][k]*self.Problem.SolutionValues[k]
+        if netflux != 0:
+            out[j] = netflux
+    return(out)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.setMedium"><code class="name flex">
+<span>def <span class="ident">setMedium</span></span>(<span>self, changes, loggingIntermediateSteps=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the concentration of specified growth-substrate(s) in medium.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>changes</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Keys : ID of metabolite(s) in medium.
+Values : New concention(s)</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setMedium(self, changes, loggingIntermediateSteps=False):
+    &#34;&#34;&#34;
+    Sets the concentration of specified growth-substrate(s) in medium.
+
+    Parameters
+    ----------
+    changes : dict
+        Keys : ID of metabolite(s) in medium.
+        Values : New concention(s)
+    &#34;&#34;&#34;
+
+    for species in (changes.keys()):
+        self.Medium[species] = float(changes[species])
+
+    self.Problem.ClassicRBAmatrix.set_medium(self.Medium)
+    self.Problem.ClassicRBAmatrix.build_matrices(self.Mu)
+
+    inputMatrix = RBA_Matrix()
+    inputMatrix.loadMatrix(matrix=self.Problem.ClassicRBAmatrix)
+    self.Problem.LP.updateMatrix(matrix=inputMatrix, Ainds=MediumDependentCoefficients_A(
+        self), Binds=[], CTinds=[], LBinds=None, UBinds=None)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.setMu"><code class="name flex">
+<span>def <span class="ident">setMu</span></span>(<span>self, Mu, loggingIntermediateSteps=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets growth-rate to desired value.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>Mu</code></strong> :&ensp;<code>float</code></dt>
+<dd>Growth rate</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setMu(self, Mu, loggingIntermediateSteps=False):
+    &#34;&#34;&#34;
+    Sets growth-rate to desired value.
+
+    Parameters
+    ----------
+    Mu : float
+        Growth rate
+    &#34;&#34;&#34;
+    self.LogBook.addEntry(&#39;Growth-rate changed:{} --&gt; {}&#39;.format(self.Mu, float(Mu)))
+    self.Problem.setMu(Mu=float(Mu), ModelStructure=self.ModelStructure,
+                       logging=loggingIntermediateSteps)
+    self.Mu = float(Mu)</code></pre>
+</details>
+</dd>
+<dt id="rbatools.rba_Session.RBA_Session.writeResults"><code class="name flex">
+<span>def <span class="ident">writeResults</span></span>(<span>self, session_name=&#39;&#39;, digits=10, loggingIntermediateSteps=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Creates SimulationData and SimulationParameters objects from recordings ('Results'.'Parameters').</p>
+<p>Stores them as rbatools.RBA_SimulationData
+and rbatools.RBA_SimulationParameters objects as attributes.
+Access via attributes .SimulationData and SimulationParameters respectively.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>digits</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of decimal places in the numeric results
+Default: 10</dd>
+<dt><strong><code>session_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of Simulation session.
+Default: ''</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def writeResults(self, session_name=&#39;&#39;, digits=10, loggingIntermediateSteps=False):
+    &#34;&#34;&#34;
+    Creates SimulationData and SimulationParameters objects from recordings (&#39;Results&#39;.&#39;Parameters&#39;).
+
+    Stores them as rbatools.RBA_SimulationData
+    and rbatools.RBA_SimulationParameters objects as attributes.
+    Access via attributes .SimulationData and SimulationParameters respectively.
+
+    Parameters
+    ----------
+    digits : int
+        Number of decimal places in the numeric results
+        Default: 10
+    session_name : str
+        Name of Simulation session.
+        Default: &#39;&#39;
+    &#34;&#34;&#34;
+    self.LogBook.addEntry(&#39;Data written under {}.&#39;.format(session_name))
+    if hasattr(self, &#39;Results&#39;):
+        self.Results[&#39;uniqueReactions&#39;] = mapIsoReactions(Controller=self)
+        self.Results[&#39;Mu&#39;] = self.Results[&#39;Mu&#39;].round(digits)
+        self.Results[&#39;ObjectiveValue&#39;] = self.Results[&#39;ObjectiveValue&#39;].round(digits)
+        self.Results[&#39;Proteins&#39;] = self.Results[&#39;Proteins&#39;].round(digits)
+        self.Results[&#39;uniqueReactions&#39;] = self.Results[&#39;uniqueReactions&#39;].round(digits)
+        self.Results[&#39;Reactions&#39;] = self.Results[&#39;Reactions&#39;].round(digits)
+        self.Results[&#39;Enzymes&#39;] = self.Results[&#39;Enzymes&#39;].round(digits)
+        self.Results[&#39;Processes&#39;] = self.Results[&#39;Processes&#39;].round(digits)
+        self.Results[&#39;Constraints&#39;] = self.Results[&#39;Constraints&#39;].round(digits)
+        self.Results[&#39;ExchangeFluxes&#39;] = self.Results[&#39;ExchangeFluxes&#39;].round(digits)
+
+        self.SimulationData = RBA_SimulationData(StaticData=self.ModelStructure)
+        self.SimulationData.fromSimulationResults(Controller=self, session_name=session_name)
+
+    if hasattr(self, &#39;Parameters&#39;):
+        self.Parameters[&#39;EnzymeEfficiencies_FW&#39;] = self.Parameters[&#39;EnzymeEfficiencies_FW&#39;].round(
+            digits)
+        self.Parameters[&#39;EnzymeEfficiencies_BW&#39;] = self.Parameters[&#39;EnzymeEfficiencies_BW&#39;].round(
+            digits)
+        self.Parameters[&#39;NetProcessEfficiencies&#39;] = self.Parameters[&#39;NetProcessEfficiencies&#39;].round(
+            digits)
+        self.Parameters[&#39;CompartmentCapacities&#39;] = self.Parameters[&#39;CompartmentCapacities&#39;].round(
+            digits)
+        self.SimulationParameters = RBA_SimulationParameters(StaticData=self.ModelStructure)
+        self.SimulationParameters.fromSimulationResults(Controller=self)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="rbatools" href="index.html">rbatools</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="rbatools.rba_Session.MediumDependentCoefficients_A" href="#rbatools.rba_Session.MediumDependentCoefficients_A">MediumDependentCoefficients_A</a></code></li>
+<li><code><a title="rbatools.rba_Session.ProteomeRecording" href="#rbatools.rba_Session.ProteomeRecording">ProteomeRecording</a></code></li>
+<li><code><a title="rbatools.rba_Session.ProtoProteomeRecording" href="#rbatools.rba_Session.ProtoProteomeRecording">ProtoProteomeRecording</a></code></li>
+<li><code><a title="rbatools.rba_Session.QualitativeMediumChange" href="#rbatools.rba_Session.QualitativeMediumChange">QualitativeMediumChange</a></code></li>
+<li><code><a title="rbatools.rba_Session.buildExchangeMap" href="#rbatools.rba_Session.buildExchangeMap">buildExchangeMap</a></code></li>
+<li><code><a title="rbatools.rba_Session.checkwithsolutionfeasibility" href="#rbatools.rba_Session.checkwithsolutionfeasibility">checkwithsolutionfeasibility</a></code></li>
+<li><code><a title="rbatools.rba_Session.determineCoefficient" href="#rbatools.rba_Session.determineCoefficient">determineCoefficient</a></code></li>
+<li><code><a title="rbatools.rba_Session.findExchangeMetInMedium" href="#rbatools.rba_Session.findExchangeMetInMedium">findExchangeMetInMedium</a></code></li>
+<li><code><a title="rbatools.rba_Session.findExchangeReactions" href="#rbatools.rba_Session.findExchangeReactions">findExchangeReactions</a></code></li>
+<li><code><a title="rbatools.rba_Session.mapIsoReactions" href="#rbatools.rba_Session.mapIsoReactions">mapIsoReactions</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="rbatools.rba_Session.RBA_Session" href="#rbatools.rba_Session.RBA_Session">RBA_Session</a></code></h4>
+<ul class="">
+<li><code><a title="rbatools.rba_Session.RBA_Session.__init__" href="#rbatools.rba_Session.RBA_Session.__init__">__init__</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.ConstraintSaturation" href="#rbatools.rba_Session.RBA_Session.ConstraintSaturation">ConstraintSaturation</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.FeasibleRange" href="#rbatools.rba_Session.RBA_Session.FeasibleRange">FeasibleRange</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.addExchangeReactions" href="#rbatools.rba_Session.RBA_Session.addExchangeReactions">addExchangeReactions</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.build_ModelStructure" href="#rbatools.rba_Session.RBA_Session.build_ModelStructure">build_ModelStructure</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.clearParameters" href="#rbatools.rba_Session.RBA_Session.clearParameters">clearParameters</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.clearResults" href="#rbatools.rba_Session.RBA_Session.clearResults">clearResults</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.doSolve" href="#rbatools.rba_Session.RBA_Session.doSolve">doSolve</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.findMaxGrowthRate" href="#rbatools.rba_Session.RBA_Session.findMaxGrowthRate">findMaxGrowthRate</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.rebuild_from_model" href="#rbatools.rba_Session.RBA_Session.rebuild_from_model">rebuild_from_model</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.recordParameters" href="#rbatools.rba_Session.RBA_Session.recordParameters">recordParameters</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.recordResults" href="#rbatools.rba_Session.RBA_Session.recordResults">recordResults</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.reloadModel" href="#rbatools.rba_Session.RBA_Session.reloadModel">reloadModel</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.returnExchangeFluxes" href="#rbatools.rba_Session.RBA_Session.returnExchangeFluxes">returnExchangeFluxes</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.setMedium" href="#rbatools.rba_Session.RBA_Session.setMedium">setMedium</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.setMu" href="#rbatools.rba_Session.RBA_Session.setMu">setMu</a></code></li>
+<li><code><a title="rbatools.rba_Session.RBA_Session.writeResults" href="#rbatools.rba_Session.RBA_Session.writeResults">writeResults</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.5.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
